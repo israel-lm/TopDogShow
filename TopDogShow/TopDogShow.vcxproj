@@ -132,6 +132,8 @@
     <ClCompile Include="Treadmil.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="HighJump.h" />
     <ClInclude Include="IDiscipline.h" />
     <ClInclude Include="DisciplineFactory.h" />
     <ClInclude Include="Home.h">

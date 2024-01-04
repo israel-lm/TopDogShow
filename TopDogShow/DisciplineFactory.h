@@ -4,6 +4,7 @@
 #include <string>
 
 #include "IDiscipline.h"
+#include "Constants.h"
 
 namespace TopDogShow 
 {
@@ -11,8 +12,16 @@ namespace TopDogShow
 
 	class DisciplineFactory
 	{
+	private:
+		static DisciplineFactory* instance;
+
+		DisciplineFactory();
+
 	public:
-		Form^ createDiscipline(std::string disciplineType);
+		DisciplineFactory(const DisciplineFactory& instance) = delete;
+
+		Form^ createDiscipline(DisciplineType disciplineType);
+		static DisciplineFactory* getInstance();
 		virtual ~DisciplineFactory() {}
 	};
 }

@@ -1,42 +1,49 @@
 #include "Home.h"
+#include "Constants.h"
+#include "DisciplineFactory.h"
 
 
 TopDogShow::Home::Home()
 {
 	InitializeComponent();
 	preDisciplineScreen = gcnew PreDiscipline();
-	resultsScreen = gcnew Results();
-	treadmilScreen = gcnew Treadmil();
-	registrationScreen = gcnew Registration();
+	resultsScreen = gcnew Results();	
+	
+	disciplineFactory = DisciplineFactory::getInstance();
 }
 
 
 TopDogShow::Home::~Home()
 {
 	if (components)
-	{
 		delete components;
-	}
+
+	if (disciplineFactory)
+		delete disciplineFactory;
 }
 
 
 System::Void TopDogShow::Home::wallClimbButton_Click(System::Object^ sender, System::EventArgs^ e)
 {
+	preDisciplineScreen->setDisciplineType(DisciplineType::WallClimb);
 	preDisciplineScreen->ShowDialog();
 }
 
 System::Void TopDogShow::Home::highJumpButton_Click(System::Object^ sender, System::EventArgs^ e)
 {
+	preDisciplineScreen->setDisciplineType(DisciplineType::HighJump);
 	preDisciplineScreen->ShowDialog();
 }
 
 System::Void TopDogShow::Home::longJumpButton_Click(System::Object^ sender, System::EventArgs^ e)
 {
+	preDisciplineScreen->setDisciplineType(DisciplineType::LongJump);
 	preDisciplineScreen->ShowDialog();
 }
 
 System::Void TopDogShow::Home::treadmilButton_Click(System::Object^ sender, System::EventArgs^ e)
 {
+	treadmilScreen = disciplineFactory->createDiscipline(DisciplineType::Treadmil);
 	treadmilScreen->Show();
 }
 
@@ -47,6 +54,7 @@ System::Void TopDogShow::Home::leaveButton_Click(System::Object^ sender, System:
 
 System::Void TopDogShow::Home::registrationButton_Click(System::Object^ sender, System::EventArgs^ e)
 {
+	registrationScreen = gcnew Registration();
 	registrationScreen->Show();
 }
 

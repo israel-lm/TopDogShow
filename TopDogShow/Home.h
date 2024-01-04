@@ -37,9 +37,11 @@ namespace TopDogShow {
 		System::ComponentModel::Container ^components;
 
 		PreDiscipline^ preDisciplineScreen = nullptr;
-		Treadmil^ treadmilScreen = nullptr;
+		Form^ treadmilScreen = nullptr;
 		Results^ resultsScreen = nullptr;
 		Registration^ registrationScreen = nullptr;
+
+		DisciplineFactory* disciplineFactory;
 
 		System::Void wallClimbButton_Click(System::Object^ sender, System::EventArgs^ e);
 		System::Void highJumpButton_Click(System::Object^ sender, System::EventArgs^ e);

@@ -1,5 +1,6 @@
 #pragma once
 #include "DisciplineFactory.h"
+#include "Constants.h"
 
 namespace TopDogShow {
 
@@ -10,22 +11,26 @@ namespace TopDogShow {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	/// <summary>
-	/// Summary for PreDiscipline
-	/// </summary>
+	
+
 	public ref class PreDiscipline : public System::Windows::Forms::Form
 	{
 	public:
 		PreDiscipline(void)
 		{
 			InitializeComponent();
-			disciplineFactory = new DisciplineFactory();
+			disciplineFactory = DisciplineFactory::getInstance();
+			disciplineType = DisciplineType::Undefined;
+			
+		}
+
+		void setDisciplineType(DisciplineType type)
+		{
+			disciplineType = type;
 		}
 
 	protected:
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
+
 		~PreDiscipline()
 		{
 			if (components)
@@ -34,28 +39,18 @@ namespace TopDogShow {
 			if (disciplineFactory)
 				delete disciplineFactory;
 		}
-	private: System::Windows::Forms::Label^ headerLabel;
-	protected:
-	private: System::Windows::Forms::Label^ categoryLabel;
-	private: System::Windows::Forms::Label^ dogLabel;
-	private: System::Windows::Forms::ComboBox^ categoryCombo;
-	private: System::Windows::Forms::ComboBox^ dogCombo;
-	private: System::Windows::Forms::Button^ startButton;
-	private: System::Windows::Forms::Button^ cancelButton;
-
-
-
 	private:
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
+		System::Windows::Forms::Label^ headerLabel;
+		System::Windows::Forms::Label^ categoryLabel;
+		System::Windows::Forms::Label^ dogLabel;
+		System::Windows::Forms::ComboBox^ categoryCombo;
+		System::Windows::Forms::ComboBox^ dogCombo;
+		System::Windows::Forms::Button^ startButton;
+		System::Windows::Forms::Button^ cancelButton;
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
+		
 		void InitializeComponent(void)
 		{
 			this->headerLabel = (gcnew System::Windows::Forms::Label());
@@ -174,18 +169,24 @@ namespace TopDogShow {
 
 		}
 #pragma endregion
-	private:
+
 		DisciplineFactory* disciplineFactory = nullptr;
+		DisciplineType disciplineType;
 		
 		System::Void startButton_Click(System::Object^ sender, System::EventArgs^ e) 
 		{
-			if (disciplineFactory)
+			if ((disciplineType != DisciplineType::Undefined) && disciplineFactory)
 			{
-				Form^ discipline = disciplineFactory->createDiscipline("anything");
+				Form^ discipline = disciplineFactory->createDiscipline(disciplineType);
 				discipline->TopMost = true;
 				discipline->Show();
+				this->Close();
 			}
-			this->Close();
+			else
+			{
+				//TODO: log and error out
+			}	
+			
 		}
 };
 }
