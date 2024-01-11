@@ -8,3 +8,11 @@ enum class DisciplineType
 	LongJump,
 	Treadmil
 };
+
+
+enum class Categories
+{
+	LIGHT_WEIGHT = 10,
+	MEDIUM_WEIGHT = 20,
+	HEAVY_WEIGTH = 30
+};

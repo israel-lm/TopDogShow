@@ -26,7 +26,9 @@ System::Void TopDogShow::Login::canecelButton_Click(System::Object^ sender, Syst
 
 System::Void TopDogShow::Login::okButton_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	String^ name = usernameText->Text;
+	loginSuccessful = true;
+	this->Close();
+	/*String^ name = usernameText->Text;
 	String^ password = passwordText->Text;
 
 	if ((name->Length == 0) || (password->Length == 0))
@@ -72,7 +74,7 @@ System::Void TopDogShow::Login::okButton_Click(System::Object^ sender, System::E
 			);
 		}
 
-	}
+	}*/
 }
 
 

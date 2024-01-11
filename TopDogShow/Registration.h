@@ -1,4 +1,6 @@
 #pragma once
+#include "Constants.h"
+
 
 namespace TopDogShow {
 
@@ -8,6 +10,7 @@ namespace TopDogShow {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Data::SqlClient;
 
 	/// <summary>
 	/// Summary for Registration
@@ -51,7 +54,8 @@ namespace TopDogShow {
 	private: System::Windows::Forms::TextBox^ nameBox;
 
 	private: System::Windows::Forms::Label^ weightLabel;
-	private: System::Windows::Forms::TextBox^ weghtBox;
+	private: System::Windows::Forms::TextBox^ weightBox;
+
 
 
 	private: System::Windows::Forms::Label^ label4;
@@ -80,7 +84,7 @@ namespace TopDogShow {
 			this->ownerBox = (gcnew System::Windows::Forms::TextBox());
 			this->nameBox = (gcnew System::Windows::Forms::TextBox());
 			this->weightLabel = (gcnew System::Windows::Forms::Label());
-			this->weghtBox = (gcnew System::Windows::Forms::TextBox());
+			this->weightBox = (gcnew System::Windows::Forms::TextBox());
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->dogPicture = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dogPicture))->BeginInit();
@@ -90,36 +94,36 @@ namespace TopDogShow {
 			// 
 			this->headerLabel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
+			this->headerLabel->AutoSize = true;
 			this->headerLabel->Font = (gcnew System::Drawing::Font(L"Verdana", 18, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->headerLabel->ForeColor = System::Drawing::Color::White;
-			this->headerLabel->Location = System::Drawing::Point(314, 58);
+			this->headerLabel->Location = System::Drawing::Point(227, 35);
 			this->headerLabel->Name = L"headerLabel";
 			this->headerLabel->Size = System::Drawing::Size(358, 44);
 			this->headerLabel->TabIndex = 1;
 			this->headerLabel->Text = L"Dog Registration";
 			this->headerLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-			this->headerLabel->Click += gcnew System::EventHandler(this, &Registration::loginLabel_Click);
 			// 
 			// saveButton
 			// 
 			this->saveButton->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
 			this->saveButton->BackColor = System::Drawing::Color::White;
-			this->saveButton->Location = System::Drawing::Point(501, 710);
+			this->saveButton->Location = System::Drawing::Point(577, 534);
 			this->saveButton->Name = L"saveButton";
-			this->saveButton->Size = System::Drawing::Size(171, 72);
+			this->saveButton->Size = System::Drawing::Size(164, 48);
 			this->saveButton->TabIndex = 0;
 			this->saveButton->Text = L"Save";
 			this->saveButton->UseVisualStyleBackColor = false;
+			this->saveButton->Click += gcnew System::EventHandler(this, &Registration::saveButton_Click);
 			// 
 			// cancelButton
 			// 
 			this->cancelButton->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
-			this->cancelButton->AutoSize = true;
 			this->cancelButton->BackColor = System::Drawing::Color::White;
-			this->cancelButton->Location = System::Drawing::Point(753, 710);
+			this->cancelButton->Location = System::Drawing::Point(379, 534);
 			this->cancelButton->Name = L"cancelButton";
-			this->cancelButton->Size = System::Drawing::Size(171, 72);
+			this->cancelButton->Size = System::Drawing::Size(164, 48);
 			this->cancelButton->TabIndex = 1;
 			this->cancelButton->Text = L"Cancel";
 			this->cancelButton->UseVisualStyleBackColor = false;
@@ -131,7 +135,7 @@ namespace TopDogShow {
 			this->ownerLabel->Font = (gcnew System::Drawing::Font(L"Verdana", 12, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->ownerLabel->ForeColor = System::Drawing::Color::White;
-			this->ownerLabel->Location = System::Drawing::Point(23, 310);
+			this->ownerLabel->Location = System::Drawing::Point(23, 210);
 			this->ownerLabel->Name = L"ownerLabel";
 			this->ownerLabel->Size = System::Drawing::Size(102, 29);
 			this->ownerLabel->TabIndex = 9;
@@ -144,7 +148,7 @@ namespace TopDogShow {
 			this->nameLabel->Font = (gcnew System::Drawing::Font(L"Verdana", 12, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->nameLabel->ForeColor = System::Drawing::Color::White;
-			this->nameLabel->Location = System::Drawing::Point(23, 195);
+			this->nameLabel->Location = System::Drawing::Point(23, 95);
 			this->nameLabel->Name = L"nameLabel";
 			this->nameLabel->Size = System::Drawing::Size(90, 29);
 			this->nameLabel->TabIndex = 8;
@@ -155,7 +159,7 @@ namespace TopDogShow {
 			this->ownerBox->Anchor = System::Windows::Forms::AnchorStyles::Left;
 			this->ownerBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->ownerBox->Location = System::Drawing::Point(20, 353);
+			this->ownerBox->Location = System::Drawing::Point(20, 253);
 			this->ownerBox->Name = L"ownerBox";
 			this->ownerBox->Size = System::Drawing::Size(396, 35);
 			this->ownerBox->TabIndex = 7;
@@ -165,7 +169,7 @@ namespace TopDogShow {
 			this->nameBox->Anchor = System::Windows::Forms::AnchorStyles::Left;
 			this->nameBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->nameBox->Location = System::Drawing::Point(20, 240);
+			this->nameBox->Location = System::Drawing::Point(20, 140);
 			this->nameBox->Name = L"nameBox";
 			this->nameBox->Size = System::Drawing::Size(396, 35);
 			this->nameBox->TabIndex = 6;
@@ -177,21 +181,21 @@ namespace TopDogShow {
 			this->weightLabel->Font = (gcnew System::Drawing::Font(L"Verdana", 12, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->weightLabel->ForeColor = System::Drawing::Color::White;
-			this->weightLabel->Location = System::Drawing::Point(23, 431);
+			this->weightLabel->Location = System::Drawing::Point(23, 331);
 			this->weightLabel->Name = L"weightLabel";
 			this->weightLabel->Size = System::Drawing::Size(176, 29);
 			this->weightLabel->TabIndex = 12;
 			this->weightLabel->Text = L"Weight (kg)";
 			// 
-			// weghtBox
+			// weightBox
 			// 
-			this->weghtBox->Anchor = System::Windows::Forms::AnchorStyles::Left;
-			this->weghtBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->weightBox->Anchor = System::Windows::Forms::AnchorStyles::Left;
+			this->weightBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->weghtBox->Location = System::Drawing::Point(20, 475);
-			this->weghtBox->Name = L"weghtBox";
-			this->weghtBox->Size = System::Drawing::Size(396, 35);
-			this->weghtBox->TabIndex = 11;
+			this->weightBox->Location = System::Drawing::Point(20, 375);
+			this->weightBox->Name = L"weightBox";
+			this->weightBox->Size = System::Drawing::Size(396, 35);
+			this->weightBox->TabIndex = 11;
 			// 
 			// label4
 			// 
@@ -200,7 +204,7 @@ namespace TopDogShow {
 			this->label4->Font = (gcnew System::Drawing::Font(L"Verdana", 12, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->label4->ForeColor = System::Drawing::Color::White;
-			this->label4->Location = System::Drawing::Point(496, 195);
+			this->label4->Location = System::Drawing::Point(494, 95);
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(91, 29);
 			this->label4->TabIndex = 13;
@@ -209,9 +213,9 @@ namespace TopDogShow {
 			// dogPicture
 			// 
 			this->dogPicture->Anchor = System::Windows::Forms::AnchorStyles::Right;
-			this->dogPicture->Location = System::Drawing::Point(501, 240);
+			this->dogPicture->Location = System::Drawing::Point(499, 140);
 			this->dogPicture->Name = L"dogPicture";
-			this->dogPicture->Size = System::Drawing::Size(423, 440);
+			this->dogPicture->Size = System::Drawing::Size(242, 270);
 			this->dogPicture->TabIndex = 14;
 			this->dogPicture->TabStop = false;
 			// 
@@ -220,19 +224,19 @@ namespace TopDogShow {
 			this->AutoScaleDimensions = System::Drawing::SizeF(9, 20);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::MenuHighlight;
-			this->ClientSize = System::Drawing::Size(948, 794);
+			this->ClientSize = System::Drawing::Size(778, 594);
 			this->Controls->Add(this->saveButton);
 			this->Controls->Add(this->dogPicture);
 			this->Controls->Add(this->cancelButton);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->weightLabel);
-			this->Controls->Add(this->weghtBox);
+			this->Controls->Add(this->weightBox);
 			this->Controls->Add(this->ownerLabel);
 			this->Controls->Add(this->nameLabel);
 			this->Controls->Add(this->ownerBox);
 			this->Controls->Add(this->nameBox);
 			this->Controls->Add(this->headerLabel);
-			this->MinimumSize = System::Drawing::Size(970, 850);
+			this->MinimumSize = System::Drawing::Size(750, 650);
 			this->Name = L"Registration";
 			this->Text = L"Top Dog Show";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dogPicture))->EndInit();
@@ -241,7 +245,83 @@ namespace TopDogShow {
 
 		}
 #pragma endregion
-	private: System::Void loginLabel_Click(System::Object^ sender, System::EventArgs^ e) {
+
+private: 
+	System::Void showError(String^ message)
+	{
+		MessageBox::Show(
+			message,
+			"Registration error",
+			MessageBoxButtons::OK);
 	}
+
+	Categories getCategory(int weight)
+	{
+		Categories category;
+		if (weight < 2000)
+		{
+			category = Categories::LIGHT_WEIGHT;
+		}
+		else if ((weight >= 2000) && (weight < 2500))
+		{
+			category = Categories::MEDIUM_WEIGHT;
+		}
+		else
+			category = Categories::HEAVY_WEIGTH;
+
+		return category;
+	}
+
+
+private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	int dogWeight = 0;
+	String^ dogName = nameBox->Text;
+	String^ ownerName = ownerBox->Text;
+	Categories category;
+	try
+	{
+		dogWeight = (float)((Convert::ToDouble(weightBox->Text)));
+	}
+	catch (Exception^ e)
+	{
+		showError("Weight value not valid");
+		return;
+	}
+
+	category = getCategory((int)(100*dogWeight));
+
+	String^ connectionString = "Data Source=ENCSABCAMLT1115\\SQLEXPRESS;Initial Catalog=top_dog_show;Integrated Security=True;Encrypt=False";
+	try
+	{
+		SqlConnection sqlConnection(connectionString);
+		sqlConnection.Open();
+
+		String^ sqlOperation = String::Format("INSERT INTO dogs (name, owner, weight, category) VALUES ('{0}', '{1}', {2}, {3})", dogName, ownerName, dogWeight, (int)category);
+		
+		SqlCommand command(sqlOperation, % sqlConnection);
+
+		int result = command.ExecuteNonQuery();
+
+		if (result < 1)
+		{
+			MessageBox::Show(
+				"Failed to save data",
+				"Database failure",
+				MessageBoxButtons::OK
+			);
+		}
+			
+	}
+	catch (Exception^ e)
+	{
+		MessageBox::Show(
+			e->Message,
+			"Exception",
+			MessageBoxButtons::OK
+		);
+	}
+	
+}
 };
 }
