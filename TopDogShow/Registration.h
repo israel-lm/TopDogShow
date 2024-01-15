@@ -259,21 +259,11 @@ private:
 		);
 	}
 
-	Categories getCategory(int weight)
+	void resetTextBoxes()
 	{
-		Categories category;
-		if (weight < 2000)
-		{
-			category = Categories::LIGHT_WEIGHT;
-		}
-		else if ((weight >= 2000) && (weight < 2500))
-		{
-			category = Categories::MEDIUM_WEIGHT;
-		}
-		else
-			category = Categories::HEAVY_WEIGTH;
-
-		return category;
+		nameBox->Text = "";
+		ownerBox->Text = "";
+		weightBox->Text = "";
 	}
 
 
@@ -299,6 +289,7 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 
 	if (result == DBErrorType::OK)
 	{
+		resetTextBoxes();
 		MessageBox::Show(
 			"Dog succesfully registered",
 			"Registration info",
@@ -306,11 +297,15 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 		);
 	}
 	else
+	{
+		resetTextBoxes();
 		MessageBox::Show(
-			"Registration failed",
+			marshal_as<String^>(DBHandler::ErrorString.at(result)),
 			"Registration error",
 			MessageBoxButtons::OK
 		);
+	}
+		
 }
 };
 }

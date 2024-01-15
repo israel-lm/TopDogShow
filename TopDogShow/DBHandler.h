@@ -1,5 +1,6 @@
 #pragma once
 #include <msclr\marshal_cppstd.h>
+#include <map>
 
 #include "Dog.h"
 #include "User.h"
@@ -36,9 +37,17 @@ namespace TopDogShow
 		DBErrorType getUserInfo(std::string username, User& user);
 		DBErrorType saveUserInfo(User& user);
 
+		static std::map<DBErrorType, std::string> ErrorString;
+
 	private:
 		static std::string connectionString;
 		static DBHandler* instance;
+
+		static DBErrorType executeNonQuery(String^ operation);
+
+		static bool checkEntryExists(std::string searchName, std::string tableName);
+		static bool checkDogExists(std::string dogName);
+		static bool checkUserExists(std::string username);
 
 		DBHandler();
 	};

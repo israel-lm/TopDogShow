@@ -12,7 +12,9 @@ namespace TopDogShow
 		std::string owner;
 		float weight;
 		Categories category;
+
 		void defineCategory();
+		void escapeChar(std::string& str, std::string toEscape);
 	public:
 		Dog() {}
 		Dog(std::string dogName, std::string ownerName, float dogWeight);
