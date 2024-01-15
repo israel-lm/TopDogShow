@@ -120,7 +120,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DBHandler.cpp" />
     <ClCompile Include="DisciplineFactory.cpp" />
+    <ClCompile Include="Dog.cpp" />
     <ClCompile Include="Home.cpp" />
     <ClCompile Include="Login.cpp" />
     <ClCompile Include="LongJump.cpp" />
@@ -133,6 +135,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="DBHandler.h" />
+    <ClInclude Include="Dog.h" />
     <ClInclude Include="HighJump.h" />
     <ClInclude Include="IDiscipline.h" />
     <ClInclude Include="DisciplineFactory.h" />
@@ -160,6 +164,7 @@
     <ClInclude Include="Treadmil.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="User.h" />
     <ClInclude Include="WallClimb.h" />
   </ItemGroup>
   <ItemGroup>

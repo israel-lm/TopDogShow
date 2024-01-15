@@ -1,5 +1,6 @@
 #include "Login.h"
 #include "Home.h"
+#include "DBHandler.h"
 
 
 using namespace System;
@@ -13,6 +14,7 @@ void main(array<String^>^ args)
 
 	Login^ loginScreen = gcnew Login();
 	Home^ homeScreen = gcnew Home();
+	DBHandler* dbHandler = DBHandler::getInstance();
 
 	loginScreen->ShowDialog();
 
@@ -22,4 +24,6 @@ void main(array<String^>^ args)
 		Application::Run(homeScreen);
 	}
 
+	if (dbHandler)
+		delete dbHandler;
 }

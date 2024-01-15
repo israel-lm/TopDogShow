@@ -1,4 +1,7 @@
 #pragma once
+#include <msclr\marshal_cppstd.h>
+
+#include "DBHandler.h"
 
 namespace TopDogShow {
 
@@ -9,6 +12,7 @@ namespace TopDogShow {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	using namespace System::Data::SqlClient;
+	using namespace msclr::interop;
 
 
 	public ref class Login : public System::Windows::Forms::Form
@@ -33,6 +37,7 @@ namespace TopDogShow {
 		System::ComponentModel::Container ^components;
 
 		bool loginSuccessful = false;
+		DBHandler* dbHandler;
 
 		
 		void InitializeComponent(void);

@@ -1,5 +1,7 @@
 #pragma once
+#include <msclr\marshal_cppstd.h>
 #include "Constants.h"
+#include "DBHandler.h"
 
 
 namespace TopDogShow {
@@ -11,6 +13,7 @@ namespace TopDogShow {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	using namespace System::Data::SqlClient;
+	using namespace msclr::interop;
 
 	/// <summary>
 	/// Summary for Registration
@@ -21,9 +24,7 @@ namespace TopDogShow {
 		Registration(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+			dbHandler = DBHandler::getInstance();
 		}
 
 	protected:
@@ -61,13 +62,15 @@ namespace TopDogShow {
 	private: System::Windows::Forms::Label^ label4;
 	private: System::Windows::Forms::PictureBox^ dogPicture;
 
-	protected:
+	
 
 	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		System::ComponentModel::Container ^components;
+
+		DBHandler* dbHandler;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -252,7 +255,8 @@ private:
 		MessageBox::Show(
 			message,
 			"Registration error",
-			MessageBoxButtons::OK);
+			MessageBoxButtons::OK
+		);
 	}
 
 	Categories getCategory(int weight)
@@ -275,10 +279,10 @@ private:
 
 private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	int dogWeight = 0;
+	float dogWeight = 0;
 	String^ dogName = nameBox->Text;
 	String^ ownerName = ownerBox->Text;
-	Categories category;
+	
 	try
 	{
 		dogWeight = (float)((Convert::ToDouble(weightBox->Text)));
@@ -289,39 +293,24 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 		return;
 	}
 
-	category = getCategory((int)(100*dogWeight));
+	Dog dog{ marshal_as<std::string>(dogName), marshal_as<std::string>(ownerName), dogWeight };
+	
+	DBErrorType result = dbHandler->saveDogInfo(dog);
 
-	String^ connectionString = "Data Source=ENCSABCAMLT1115\\SQLEXPRESS;Initial Catalog=top_dog_show;Integrated Security=True;Encrypt=False";
-	try
-	{
-		SqlConnection sqlConnection(connectionString);
-		sqlConnection.Open();
-
-		String^ sqlOperation = String::Format("INSERT INTO dogs (name, owner, weight, category) VALUES ('{0}', '{1}', {2}, {3})", dogName, ownerName, dogWeight, (int)category);
-		
-		SqlCommand command(sqlOperation, % sqlConnection);
-
-		int result = command.ExecuteNonQuery();
-
-		if (result < 1)
-		{
-			MessageBox::Show(
-				"Failed to save data",
-				"Database failure",
-				MessageBoxButtons::OK
-			);
-		}
-			
-	}
-	catch (Exception^ e)
+	if (result == DBErrorType::OK)
 	{
 		MessageBox::Show(
-			e->Message,
-			"Exception",
+			"Dog succesfully registered",
+			"Registration info",
 			MessageBoxButtons::OK
 		);
 	}
-	
+	else
+		MessageBox::Show(
+			"Registration failed",
+			"Registration error",
+			MessageBoxButtons::OK
+		);
 }
 };
 }

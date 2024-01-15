@@ -3,15 +3,15 @@
 TopDogShow::Login::Login(void)
 {
 	InitializeComponent();
+	dbHandler = DBHandler::getInstance();
 }
 
 
 TopDogShow::Login::~Login()
 {
 	if (components)
-	{
 		delete components;
-	}
+	
 }
 
 
@@ -30,6 +30,7 @@ System::Void TopDogShow::Login::okButton_Click(System::Object^ sender, System::E
 	this->Close();
 	/*String^ name = usernameText->Text;
 	String^ password = passwordText->Text;
+	User user;
 
 	if ((name->Length == 0) || (password->Length == 0))
 	{
@@ -40,38 +41,29 @@ System::Void TopDogShow::Login::okButton_Click(System::Object^ sender, System::E
 	}
 	else
 	{
-		String^ connectionString = "Data Source=ENCSABCAMLT1115\\SQLEXPRESS;Initial Catalog=top_dog_show;Integrated Security=True;Encrypt=False";
-		try
+		DBErrorType result = dbHandler->getUserInfo(marshal_as<std::string>(name), user);
+		if (result == DBErrorType::OK)
 		{
-			SqlConnection sqlConnection(connectionString);
-			sqlConnection.Open();
-
-			String^ sqlQuery = "SELECT * from users WHERE name=@name AND password=@password;";
-			SqlCommand command(sqlQuery, % sqlConnection);
-			command.Parameters->AddWithValue("@name", name);
-			command.Parameters->AddWithValue("@password", password);
-
-			SqlDataReader^ reader = command.ExecuteReader();
-
-			if (reader->Read())
+			if (user.getPassword() == marshal_as<std::string>(password))
 			{
 				loginSuccessful = true;
 				this->Close();
 			}
 			else
+			{
 				MessageBox::Show(
-					"Wrong name or password.",
-					"Authentication Failed.",
-					MessageBoxButtons::OK
-				);
+					"Wrong password",
+					"Information error",
+					MessageBoxButtons::OK);
+			}
+
 		}
-		catch (Exception^ e)
+		else
 		{
 			MessageBox::Show(
-				e->Message,
-				"Exception",
-				MessageBoxButtons::OK
-			);
+				"Wrong username",
+				"Information error",
+				MessageBoxButtons::OK);
 		}
 
 	}*/
