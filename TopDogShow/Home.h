@@ -4,6 +4,7 @@
 #include "Results.h"
 #include "Registration.h"
 #include "Treadmil.h"
+#include "Competitors.h"
 
 namespace TopDogShow {
 
@@ -24,16 +25,25 @@ namespace TopDogShow {
 			preDisciplineScreen = gcnew PreDiscipline();
 			resultsScreen = gcnew Results();
 			disciplineFactory = DisciplineFactory::getInstance();
+			dbHandler = DBHandler::Instance;
+			competitors = Competitors::Instance;
 		}
 
 	protected:
 		~Home()
 		{
 			if (components)
+			if (components)
 				delete components;
 
 			if (disciplineFactory)
 				delete disciplineFactory;
+
+			if (dbHandler)
+				delete dbHandler;
+
+			if (competitors)
+				delete competitors;
 		}
 
 	private: 
@@ -55,6 +65,9 @@ namespace TopDogShow {
 		Registration^ registrationScreen;
 
 		DisciplineFactory* disciplineFactory;
+
+		DBHandler^ dbHandler;
+		Competitors^ competitors;
 
 		System::Void wallClimbButton_Click(System::Object^ sender, System::EventArgs^ e)
 		{

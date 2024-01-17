@@ -5,25 +5,27 @@
 
 namespace TopDogShow
 {
-	class Dog
+	using namespace System;
+
+	public ref class Dog
 	{
 	private:
-		std::string name;
-		std::string owner;
+		String^ name;
+		String^ owner;
 		float weight;
 		Categories category;
 
 		void defineCategory();
-		void escapeChar(std::string& str, std::string toEscape);
+		String^ escapeChar(String^ original, String^ toEscape);
 	public:
 		Dog() {}
-		Dog(std::string dogName, std::string ownerName, float dogWeight);
+		Dog(String^ dogName, String^ ownerName, float dogWeight);
 
-		std::string getName() { return name; }
-		std::string getOwner() { return owner; }
+		String^ getName() { return name; }
+		String^ getOwner() { return owner; }
 
-		void setName(std::string name) { this->name = name; }
-		void setOwner(std::string owner) { this->owner = owner; }
+		void setName(String^ name) { this->name = name; }
+		void setOwner(String^ owner) { this->owner = owner; }
 		void setWeight(float weight) { this->weight = weight; defineCategory(); }
 
 		float getWeight() { return weight; }

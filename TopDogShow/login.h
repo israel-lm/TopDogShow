@@ -37,7 +37,7 @@ namespace TopDogShow {
 		System::ComponentModel::Container ^components;
 
 		bool loginSuccessful = false;
-		DBHandler* dbHandler;
+		DBHandler^ dbHandler;
 
 		
 		void InitializeComponent(void);

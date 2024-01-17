@@ -120,6 +120,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Competitors.cpp" />
     <ClCompile Include="DBHandler.cpp" />
     <ClCompile Include="DisciplineFactory.cpp" />
     <ClCompile Include="Dog.cpp" />
@@ -134,6 +135,7 @@
     <ClCompile Include="Treadmil.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Competitors.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DBHandler.h" />
     <ClInclude Include="Dog.h" />

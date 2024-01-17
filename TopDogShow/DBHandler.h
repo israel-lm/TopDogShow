@@ -1,21 +1,18 @@
 #pragma once
-#include <msclr\marshal_cppstd.h>
-#include <map>
+#include <list>
 
 #include "Dog.h"
 #include "User.h"
-
-
 
 
 namespace TopDogShow
 {
 	using namespace System;
 	using namespace System::Data::SqlClient;
-	using namespace msclr::interop;
 	using namespace System::Windows::Forms;
+	using namespace System::Collections::Generic;
 
-	typedef enum
+	enum class DBErrorType
 	{
 		UNKNOWN = -1,
 		OK = 1,
@@ -23,31 +20,48 @@ namespace TopDogShow
 		USER_DOESNT_EXIST,
 		DOG_ALREADY_EXISTS,
 		DOG_DOESNT_EXIST
-	} DBErrorType;
+	};
 
-	class DBHandler
+	static std::map<DBErrorType, std::string> DBErrorString = {
+			{DBErrorType::UNKNOWN, "Unknown"},
+			{DBErrorType::USER_ALREADY_EXISTS, "User already exists."},
+			{DBErrorType::USER_DOESNT_EXIST, "User doesn't exist."},
+			{DBErrorType::DOG_ALREADY_EXISTS, "Dog already registered."},
+			{DBErrorType::DOG_DOESNT_EXIST, "Dog not registered."}
+	};
+
+	
+	public ref class DBHandler
 	{
 	public:
 		~DBHandler();
-		static DBHandler* getInstance();
 
-		DBErrorType getDogInfo(std::string dogName, Dog& dog);
-		DBErrorType saveDogInfo(Dog& dog);
+		DBErrorType getDogInfo(String^ dogName, Dog^ dog);
+		DBErrorType saveDogInfo(Dog^ dog);
 
-		DBErrorType getUserInfo(std::string username, User& user);
-		DBErrorType saveUserInfo(User& user);
+		DBErrorType getUserInfo(String^ username, User^ user);
+		DBErrorType saveUserInfo(User^ user);
 
-		static std::map<DBErrorType, std::string> ErrorString;
+		DBErrorType getAllDogs(List<Dog^>^ dogs);
+
+		static property DBHandler^ Instance 
+		{ 
+			DBHandler^ get() 
+			{ 
+				return instance; 
+			}
+		}
+		static String^ connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=top_dog_show;Integrated Security=True;Encrypt=False";
 
 	private:
-		static std::string connectionString;
-		static DBHandler* instance;
+		
+		static DBHandler^ instance = gcnew DBHandler;
 
 		static DBErrorType executeNonQuery(String^ operation);
 
-		static bool checkEntryExists(std::string searchName, std::string tableName);
-		static bool checkDogExists(std::string dogName);
-		static bool checkUserExists(std::string username);
+		static bool checkEntryExists(String^ searchName, String^ tableName);
+		static bool checkDogExists(String^ dogName);
+		static bool checkUserExists(String^ username);
 
 		DBHandler();
 	};

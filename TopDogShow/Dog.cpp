@@ -1,6 +1,6 @@
 #include "Dog.h"
 
-TopDogShow::Dog::Dog(std::string dogName, std::string ownerName, float dogWeight)
+TopDogShow::Dog::Dog(String^ dogName, String^ ownerName, float dogWeight)
 {
 	name = dogName;
 	escapeChar(name, "'");
@@ -17,15 +17,10 @@ void TopDogShow::Dog::defineCategory()
 	else if ((weight_int >= 2000) && (weight_int < 2500))
 		category = Categories::MEDIUM_WEIGHT;
 	else
-		category = Categories::HEAVY_WEIGTH;
+		category = Categories::HEAVY_WEIGHT;
 }
 
-void TopDogShow::Dog::escapeChar(std::string& str, std::string toEscape)
+System::String^ TopDogShow::Dog::escapeChar(String^ original, String^ toEscape)
 {
-	auto position = str.find(toEscape);
-	if (position != std::string::npos)
-	{
-		std::string newChar = "\\" + toEscape;
-		str.replace(position, 1, newChar);
-	}
+	return original->Replace(toEscape, String::Format("\{0}", toEscape));
 }

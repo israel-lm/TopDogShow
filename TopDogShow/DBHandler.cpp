@@ -1,33 +1,19 @@
 #include "DBHandler.h"
 
-TopDogShow::DBHandler* TopDogShow::DBHandler::instance = nullptr;
+using namespace System;
+using namespace Collections::Generic;
+using namespace TopDogShow;
 
-std::string TopDogShow::DBHandler::connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=top_dog_show;Integrated Security=True;Encrypt=False";
 
-std::map<TopDogShow::DBErrorType, std::string> TopDogShow::DBHandler::ErrorString = {
-		{UNKNOWN, "Unknown"},
-		{USER_ALREADY_EXISTS, "User already exists."},
-		{USER_DOESNT_EXIST, "User doesn't exist."},
-		{DOG_ALREADY_EXISTS, "Dog already registered."},
-		{DOG_DOESNT_EXIST, "Dog not registered."}
-};
+DBHandler::DBHandler(){}
 
-TopDogShow::DBHandler::DBHandler(){}
+DBHandler::~DBHandler(){}
 
-TopDogShow::DBHandler::~DBHandler(){}
 
-TopDogShow::DBHandler* TopDogShow::DBHandler::getInstance()
+DBErrorType DBHandler::getUserInfo(String^ username, User^ user)
 {
-	if (!instance)
-		instance = new DBHandler();
-
-	return instance;
-}
-
-TopDogShow::DBErrorType TopDogShow::DBHandler::getUserInfo(std::string username, User& user)
-{
-	String^ sqlQuery = String::Format("SELECT * from users WHERE name='{0}'", marshal_as<String^>(username));
-	SqlConnection sqlConnection(marshal_as<String^>(connectionString));
+	String^ sqlQuery = String::Format("SELECT * from users WHERE name='{0}'", username);
+	SqlConnection sqlConnection(DBHandler::connectionString);
 	SqlCommand command(sqlQuery, % sqlConnection);
 	
 	try
@@ -39,8 +25,8 @@ TopDogShow::DBErrorType TopDogShow::DBHandler::getUserInfo(std::string username,
 		{
 			String^ name = reader->GetString(0);
 			String^ password = reader->GetString(1);
-			user.setName(marshal_as<std::string>(name));
-			user.setPassword(marshal_as<std::string>(password));
+			user->setName(name);
+			user->setPassword(password);
 			return DBErrorType::OK;
 		}
 		else
@@ -57,10 +43,10 @@ TopDogShow::DBErrorType TopDogShow::DBHandler::getUserInfo(std::string username,
 	
 }
 
-TopDogShow::DBErrorType TopDogShow::DBHandler::getDogInfo(std::string dogName, Dog& dog)
+DBErrorType DBHandler::getDogInfo(String^ dogName, Dog^ dog)
 {
-	String^ sqlQuery = String::Format("SELECT * from dogs WHERE name='{0}'", marshal_as<String^>(dogName));
-	SqlConnection sqlConnection(marshal_as<String^>(connectionString));
+	String^ sqlQuery = String::Format("SELECT * from dogs WHERE name='{0}'", dogName);
+	SqlConnection sqlConnection(DBHandler::connectionString);
 	SqlCommand command(sqlQuery, % sqlConnection);
 
 	try
@@ -74,9 +60,9 @@ TopDogShow::DBErrorType TopDogShow::DBHandler::getDogInfo(std::string dogName, D
 			String^ owner = reader->GetString(1);
 			float weight = reader->GetFloat(2);
 
-			dog.setName(marshal_as<std::string>(name));
-			dog.setOwner(marshal_as<std::string>(owner));
-			dog.setWeight(weight);
+			dog->setName(name);
+			dog->setOwner(owner);
+			dog->setWeight(weight);
 			return DBErrorType::OK;
 		}
 		else
@@ -92,10 +78,10 @@ TopDogShow::DBErrorType TopDogShow::DBHandler::getDogInfo(std::string dogName, D
 	}	
 }
 
-TopDogShow::DBErrorType TopDogShow::DBHandler::saveDogInfo(Dog& dog)
+DBErrorType DBHandler::saveDogInfo(Dog^ dog)
 {
 
-	if (DBHandler::checkDogExists(dog.getName()))
+	if (DBHandler::checkDogExists(dog->getName()))
 	{
 		return DBErrorType::DOG_ALREADY_EXISTS;
 	}
@@ -103,19 +89,19 @@ TopDogShow::DBErrorType TopDogShow::DBHandler::saveDogInfo(Dog& dog)
 	{
 		String^ sqlOperation = String::Format(
 			"INSERT INTO dogs (name, owner, weight, category) VALUES ('{0}', '{1}', {2}, {3})",
-			marshal_as<String^>(dog.getName()),
-			marshal_as<String^>(dog.getOwner()),
-			dog.getWeight(),
-			(int)dog.getCategory()
+			(dog->getName()),
+			(dog->getOwner()),
+			dog->getWeight(),
+			(int)dog->getCategory()
 		);
 
 		return DBHandler::executeNonQuery(sqlOperation);
 	}	
 }
 
-TopDogShow::DBErrorType TopDogShow::DBHandler::saveUserInfo(User& user)
+DBErrorType DBHandler::saveUserInfo(User^ user)
 {
-	if (DBHandler::checkUserExists(user.getName()))
+	if (DBHandler::checkUserExists(user->getName()))
 	{
 		return DBErrorType::USER_ALREADY_EXISTS;
 	}
@@ -123,20 +109,55 @@ TopDogShow::DBErrorType TopDogShow::DBHandler::saveUserInfo(User& user)
 	{
 		String^ sqlOperation = String::Format(
 			"INSERT INTO users (name, password) VALUES ('{0}', '{1}')",
-			marshal_as<String^>(user.getName()),
-			marshal_as<String^>(user.getPassword())
+			(user->getName()),
+			(user->getPassword())
 		);
 
 		return DBHandler::executeNonQuery(sqlOperation);
 	}		
 }
 
+DBErrorType DBHandler::getAllDogs(List<Dog^>^ dogs)
+{
+	String^ sqlQuery = "SELECT * from dogs";
+	SqlConnection sqlConnection(DBHandler::connectionString);
+	SqlCommand command(sqlQuery, % sqlConnection);
 
- TopDogShow::DBErrorType TopDogShow::DBHandler::executeNonQuery(String^ operation)
+	try
+	{
+		sqlConnection.Open();
+		SqlDataReader^ reader = command.ExecuteReader();
+
+		while (reader->Read())
+		{
+			String^ name = reader->GetString(0);
+			String^ owner = reader->GetString(1);
+			float weight = (float)reader->GetDouble(2);
+
+			Dog^ dog = gcnew Dog(name, owner, weight);
+			dogs->Add(dog);
+		}
+
+	}
+	catch (Exception^ e)
+	{
+		//TODO: log error
+		MessageBox::Show(
+			e->StackTrace,
+			e->Message,
+			MessageBoxButtons::OK
+		);
+		return DBErrorType::UNKNOWN;
+	}
+	return DBErrorType::OK;
+}
+
+
+ DBErrorType DBHandler::executeNonQuery(String^ operation)
 {
 	try
 	{
-		SqlConnection sqlConnection(marshal_as<String^>(connectionString));
+		SqlConnection sqlConnection(DBHandler::connectionString);
 		sqlConnection.Open();
 
 		SqlCommand command(operation, % sqlConnection);
@@ -158,16 +179,16 @@ TopDogShow::DBErrorType TopDogShow::DBHandler::saveUserInfo(User& user)
 	return DBErrorType::OK;
 }
 
-bool TopDogShow::DBHandler::checkEntryExists(std::string searchName, std::string tableName)
+bool DBHandler::checkEntryExists(String^ searchName, String^ tableName)
 {
 	String^ sqlOperation = String::Format(
 		"SELECT * FROM {0} WHERE name LIKE '{1}'",
-		marshal_as<String^>(tableName),
-		marshal_as<String^>(searchName)
+		tableName,
+		searchName
 	);
 
 
-	SqlConnection sqlConnection(marshal_as<String^>(connectionString));
+	SqlConnection sqlConnection(DBHandler::connectionString);
 	SqlCommand command(sqlOperation, % sqlConnection);
 
 	try
@@ -191,11 +212,12 @@ bool TopDogShow::DBHandler::checkEntryExists(std::string searchName, std::string
 	}
 }
 
-bool TopDogShow::DBHandler::checkDogExists(std::string dogName)
+bool DBHandler::checkDogExists(String^ dogName)
 {
 	return DBHandler::checkEntryExists(dogName, "dogs");	
 }
-bool TopDogShow::DBHandler::checkUserExists(std::string username)
+bool DBHandler::checkUserExists(String^ username)
 {
 	return DBHandler::checkEntryExists(username, "users");
 }
+

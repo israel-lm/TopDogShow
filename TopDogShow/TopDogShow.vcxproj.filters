@@ -51,6 +51,9 @@
     <ClCompile Include="Dog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Competitors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Login.h">
@@ -99,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="User.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Competitors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

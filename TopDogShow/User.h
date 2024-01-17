@@ -3,23 +3,25 @@
 
 namespace TopDogShow
 {
-	class User
+	using namespace System;
+
+	public ref class User
 	{
 	private:
-		std::string name;
-		std::string passHash;
+		String^ name;
+		String^ passHash;
 	public:
 		User() {}
-		User(std::string name, std::string password)
+		User(String^ name, String^ password)
 		{
 			this->name = name;
 			this->passHash = password;
 		}
-		std::string getName() { return name; }
-		std::string getPassword() { return passHash; }
+		String^ getName() { return name; }
+		String^ getPassword() { return passHash; }
 
-		void setName(std::string name) { this->name = name; }
-		void setPassword(std::string password) { this->passHash = password; }
+		void setName(String^ name) { this->name = name; }
+		void setPassword(String^ password) { this->passHash = password; }
 	};
 }
 

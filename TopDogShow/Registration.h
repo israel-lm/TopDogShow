@@ -24,7 +24,7 @@ namespace TopDogShow {
 		Registration(void)
 		{
 			InitializeComponent();
-			dbHandler = DBHandler::getInstance();
+			dbHandler = DBHandler::Instance;
 		}
 
 	protected:
@@ -70,7 +70,7 @@ namespace TopDogShow {
 		/// </summary>
 		System::ComponentModel::Container ^components;
 
-		DBHandler* dbHandler;
+		DBHandler^ dbHandler;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -283,7 +283,11 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 		return;
 	}
 
-	Dog dog{ marshal_as<std::string>(dogName), marshal_as<std::string>(ownerName), dogWeight };
+	Dog^ dog = gcnew Dog(
+		dogName, 
+		ownerName, 
+		dogWeight 
+	);
 	
 	DBErrorType result = dbHandler->saveDogInfo(dog);
 
@@ -300,7 +304,7 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 	{
 		resetTextBoxes();
 		MessageBox::Show(
-			marshal_as<String^>(DBHandler::ErrorString.at(result)),
+			marshal_as<String^>(DBErrorString.at(result)),
 			"Registration error",
 			MessageBoxButtons::OK
 		);

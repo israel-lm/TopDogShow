@@ -1,6 +1,7 @@
 #pragma once
 #include "DisciplineFactory.h"
 #include "Constants.h"
+#include "Competitors.h"
 
 namespace TopDogShow {
 
@@ -18,10 +19,10 @@ namespace TopDogShow {
 	public:
 		PreDiscipline(void)
 		{
-			InitializeComponent();
 			disciplineFactory = DisciplineFactory::getInstance();
 			disciplineType = DisciplineType::Undefined;
-			
+			competitors = Competitors::Instance;
+			InitializeComponent();
 		}
 
 		void setDisciplineType(DisciplineType type)
@@ -172,6 +173,7 @@ namespace TopDogShow {
 
 		DisciplineFactory* disciplineFactory = nullptr;
 		DisciplineType disciplineType;
+		Competitors^ competitors;
 		
 		System::Void startButton_Click(System::Object^ sender, System::EventArgs^ e) 
 		{

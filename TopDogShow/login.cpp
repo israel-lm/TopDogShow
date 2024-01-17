@@ -3,7 +3,7 @@
 TopDogShow::Login::Login(void)
 {
 	InitializeComponent();
-	dbHandler = DBHandler::getInstance();
+	dbHandler = DBHandler::Instance;
 }
 
 
@@ -26,11 +26,11 @@ System::Void TopDogShow::Login::canecelButton_Click(System::Object^ sender, Syst
 
 System::Void TopDogShow::Login::okButton_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	/*loginSuccessful = true;
-	this->Close();*/
-	String^ name = usernameText->Text;
+	loginSuccessful = true;
+	this->Close();
+	/*String^ name = usernameText->Text;
 	String^ password = passwordText->Text;
-	User user;
+	User^ user;
 
 	if ((name->Length == 0) || (password->Length == 0))
 	{
@@ -41,10 +41,10 @@ System::Void TopDogShow::Login::okButton_Click(System::Object^ sender, System::E
 	}
 	else
 	{
-		DBErrorType result = dbHandler->getUserInfo(marshal_as<std::string>(name), user);
+		DBErrorType result = dbHandler->getUserInfo(name, user);
 		if (result == DBErrorType::OK)
 		{
-			if (user.getPassword() == marshal_as<std::string>(password))
+			if (user->getPassword() == password)
 			{
 				loginSuccessful = true;
 				this->Close();
@@ -66,7 +66,7 @@ System::Void TopDogShow::Login::okButton_Click(System::Object^ sender, System::E
 				MessageBoxButtons::OK);
 		}
 
-	}
+	}*/
 }
 
 
