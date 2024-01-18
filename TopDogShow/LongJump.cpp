@@ -1,9 +1,10 @@
 #include "LongJump.h"
 
 
-TopDogShow::LongJump::LongJump(void)
+TopDogShow::LongJump::LongJump(String^ dogName)
 {
 	InitializeComponent();
+    this->dogName->Text = dogName;
 }
 
 

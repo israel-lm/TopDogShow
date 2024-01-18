@@ -37,7 +37,8 @@ System::Void TopDogShow::Login::okButton_Click(System::Object^ sender, System::E
 		MessageBox::Show(
 			"Missing username or password.",
 			"Information error",
-			MessageBoxButtons::OK);
+			MessageBoxButtons::OK
+		);
 	}
 	else
 	{
@@ -54,7 +55,8 @@ System::Void TopDogShow::Login::okButton_Click(System::Object^ sender, System::E
 				MessageBox::Show(
 					"Wrong password",
 					"Information error",
-					MessageBoxButtons::OK);
+					MessageBoxButtons::OK
+				);
 			}
 
 		}
@@ -63,7 +65,8 @@ System::Void TopDogShow::Login::okButton_Click(System::Object^ sender, System::E
 			MessageBox::Show(
 				"Wrong username",
 				"Information error",
-				MessageBoxButtons::OK);
+				MessageBoxButtons::OK
+			);
 		}
 
 	}*/

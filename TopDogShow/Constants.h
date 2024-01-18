@@ -16,19 +16,12 @@ namespace TopDogShow
 		Treadmil
 	};
 
-
-	public enum class Categories: int
+	public ref class Categories
 	{
-		LIGHT_WEIGHT = 10,
-		MEDIUM_WEIGHT = 20,
-		HEAVY_WEIGHT = 30
-	};
-
-
-	static std::map<int, std::string> CategoryString = {
-		{(int)Categories::LIGHT_WEIGHT, "Lightweight"},
-		{(int)Categories::MEDIUM_WEIGHT, "Middleweight"},
-		{(int)Categories::HEAVY_WEIGHT, "Heavyweight"}
+	public:
+		literal String^ LIGHT_WEIGHT = "Lightweight";
+		literal String^ MIDDLE_WEIGHT = "Middleweight";
+		literal String^ HEAVY_WEIGHT = "Heavyweight";
 	};
 }
 

@@ -7,8 +7,9 @@ namespace TopDogShow
 	public ref class WallClimb : public MarkTableDiscipline
 	{
 	public:
-		WallClimb()
+		WallClimb(String^ dogName): MarkTableDiscipline(dogName)
 		{
+
 			headerLabel->Text = L"Wall Climb";
 		}
 

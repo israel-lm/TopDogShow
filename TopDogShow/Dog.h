@@ -13,7 +13,7 @@ namespace TopDogShow
 		String^ name;
 		String^ owner;
 		float weight;
-		Categories category;
+		String^ category;
 
 		void defineCategory();
 		String^ escapeChar(String^ original, String^ toEscape);
@@ -29,7 +29,7 @@ namespace TopDogShow
 		void setWeight(float weight) { this->weight = weight; defineCategory(); }
 
 		float getWeight() { return weight; }
-		Categories getCategory() { return category; }
+		String^ getCategory() { return category; }
 	};
 }
 

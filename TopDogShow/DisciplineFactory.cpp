@@ -11,16 +11,16 @@ TopDogShow::DisciplineFactory::DisciplineFactory()
 
 }
 
-System::Windows::Forms::Form^ TopDogShow::DisciplineFactory::createDiscipline(DisciplineType disciplineType)
+System::Windows::Forms::Form^ TopDogShow::DisciplineFactory::createDiscipline(DisciplineType disciplineType, String^ dogName)
 {
 	switch (disciplineType)
 	{
 		case DisciplineType::WallClimb:
-			return (gcnew WallClimb());
+			return (gcnew WallClimb(dogName));
 		case DisciplineType::HighJump:
-			return (gcnew HighJump());
+			return (gcnew HighJump(dogName));
 		case DisciplineType::LongJump:
-			return (gcnew LongJump());
+			return (gcnew LongJump(dogName));
 		case DisciplineType::Treadmil:
 			return (gcnew Treadmil());
 	}
@@ -29,8 +29,8 @@ System::Windows::Forms::Form^ TopDogShow::DisciplineFactory::createDiscipline(Di
 
 TopDogShow::DisciplineFactory* TopDogShow::DisciplineFactory::getInstance()
 {
-	if (instance == nullptr)
-		return (new DisciplineFactory());
-	else
-		return instance;
+	if (!instance)
+		instance = new DisciplineFactory();
+	
+	return instance;
 }

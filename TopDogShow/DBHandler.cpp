@@ -89,10 +89,10 @@ DBErrorType DBHandler::saveDogInfo(Dog^ dog)
 	{
 		String^ sqlOperation = String::Format(
 			"INSERT INTO dogs (name, owner, weight, category) VALUES ('{0}', '{1}', {2}, {3})",
-			(dog->getName()),
-			(dog->getOwner()),
+			dog->getName(),
+			dog->getOwner(),
 			dog->getWeight(),
-			(int)dog->getCategory()
+			dog->getCategory()
 		);
 
 		return DBHandler::executeNonQuery(sqlOperation);

@@ -86,7 +86,7 @@ namespace TopDogShow {
 		}
 		System::Void treadmilButton_Click(System::Object^ sender, System::EventArgs^ e)
 		{
-			treadmilScreen = disciplineFactory->createDiscipline(DisciplineType::Treadmil);
+			treadmilScreen = disciplineFactory->createDiscipline(DisciplineType::Treadmil, nullptr);
 			treadmilScreen->Show();
 		}
 		System::Void leaveButton_Click(System::Object^ sender, System::EventArgs^ e)

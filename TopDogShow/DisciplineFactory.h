@@ -20,7 +20,7 @@ namespace TopDogShow
 	public:
 		DisciplineFactory(const DisciplineFactory& instance) = delete;
 
-		Form^ createDiscipline(DisciplineType disciplineType);
+		Form^ createDiscipline(DisciplineType disciplineType, String^ dogName);
 		static DisciplineFactory* getInstance();
 		virtual ~DisciplineFactory() {}
 	};

@@ -1,6 +1,7 @@
 #include "Competitors.h"
 
 using namespace System::Collections::Generic;
+using namespace System;
 
 
 TopDogShow::Competitors::Competitors()
@@ -15,7 +16,7 @@ void TopDogShow::Competitors::loadCompetitors()
 	List<TopDogShow::Dog^>^ dogs = gcnew List<TopDogShow::Dog^>;
 
 	if (!competitors)
-		competitors = gcnew Dictionary<Categories, List<Dog^>^>();
+		competitors = gcnew Dictionary<String^, List<Dog^>^>();
 
 	if (handler)
 	{
@@ -42,7 +43,7 @@ void TopDogShow::Competitors::loadCompetitors()
 	}
 }
 
-Dictionary<TopDogShow::Categories, List<TopDogShow::Dog^>^>^ TopDogShow::Competitors::getCompetitors()
+Dictionary<String^, List<TopDogShow::Dog^>^>^ TopDogShow::Competitors::getCompetitors()
 {
 	return competitors;
 }

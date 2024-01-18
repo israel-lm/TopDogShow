@@ -23,6 +23,9 @@ namespace TopDogShow {
 			disciplineType = DisciplineType::Undefined;
 			competitors = Competitors::Instance;
 			InitializeComponent();
+			updateCategoryList();
+			updatedogsByCategory();
+			setCategories();
 		}
 
 		void setDisciplineType(DisciplineType type)
@@ -34,6 +37,7 @@ namespace TopDogShow {
 
 		~PreDiscipline()
 		{
+			resetComboBoxes();
 			if (components)
 				delete components;		
 
@@ -49,6 +53,69 @@ namespace TopDogShow {
 		System::Windows::Forms::Button^ startButton;
 		System::Windows::Forms::Button^ cancelButton;
 		System::ComponentModel::Container ^components;
+
+		DisciplineFactory* disciplineFactory = nullptr;
+		DisciplineType disciplineType;
+		Competitors^ competitors = nullptr;
+		Dictionary<String^, array<Object^>^>^ dogsByCategory = nullptr;
+		array<Object^>^ categoryList = nullptr;
+		String^ selectedDog = nullptr;
+
+		void updateCategoryList()
+		{
+			Dictionary<String^, List<Dog^>^>^ categoriesAndDogs = competitors->getCompetitors();
+			categoryList = gcnew array<Object^>(categoriesAndDogs->Count);
+			Dictionary<String^, List<Dog^>^>::KeyCollection^ keys = categoriesAndDogs->Keys;
+			int idx = 0;
+
+			for each (String^ key in keys)
+			{
+				categoryList[idx++] = key;
+			}
+		}
+
+		void updatedogsByCategory()
+		{
+			Dictionary<String^, List<Dog^>^>^ categoriesAndDogs = competitors->getCompetitors();
+			dogsByCategory = gcnew Dictionary<String^, array<Object^>^>();
+
+			for each (KeyValuePair<String^, List<Dog^>^> item in categoriesAndDogs)
+			{
+				String^ currentKey = item.Key;
+				if (!dogsByCategory->ContainsKey(currentKey))
+				{
+					dogsByCategory[currentKey] = gcnew array<Object^>(item.Value->Count);
+				}
+				
+				int idx = 0;
+				array<Object^>^ currentDogList = dogsByCategory[currentKey];
+				for each (Dog^ dog in item.Value)
+				{
+					currentDogList[idx++] = dog->getName();
+				}
+			}
+		}
+
+		void setCategories()
+		{
+			if (categoryList)
+			{
+				categoryCombo->Items->Clear();
+				categoryCombo->Items->AddRange(categoryList);
+			}
+				
+		}
+
+		void setDogs(String^ category)
+		{
+			if (dogsByCategory)
+			{
+				dogCombo->Items->Clear();
+				dogCombo->Items->AddRange(dogsByCategory[category]);
+			}
+		}
+
+		
 
 #pragma region Windows Form Designer generated code
 		
@@ -106,6 +173,7 @@ namespace TopDogShow {
 			this->categoryCombo->Name = L"categoryCombo";
 			this->categoryCombo->Size = System::Drawing::Size(494, 52);
 			this->categoryCombo->TabIndex = 3;
+			this->categoryCombo->SelectedValueChanged += gcnew System::EventHandler(this, &PreDiscipline::categoryCombo_SelectedValueChanged);
 			// 
 			// dogCombo
 			// 
@@ -115,6 +183,7 @@ namespace TopDogShow {
 			this->dogCombo->Name = L"dogCombo";
 			this->dogCombo->Size = System::Drawing::Size(494, 52);
 			this->dogCombo->TabIndex = 4;
+			this->dogCombo->SelectedValueChanged += gcnew System::EventHandler(this, &PreDiscipline::dogCombo_SelectedValueChanged);
 			// 
 			// startButton
 			// 
@@ -144,6 +213,7 @@ namespace TopDogShow {
 			this->cancelButton->TabIndex = 6;
 			this->cancelButton->Text = L"Cancel";
 			this->cancelButton->UseVisualStyleBackColor = false;
+			this->cancelButton->Click += gcnew System::EventHandler(this, &PreDiscipline::cancelButton_Click);
 			// 
 			// PreDiscipline
 			// 
@@ -171,24 +241,59 @@ namespace TopDogShow {
 		}
 #pragma endregion
 
-		DisciplineFactory* disciplineFactory = nullptr;
-		DisciplineType disciplineType;
-		Competitors^ competitors;
-		
-		System::Void startButton_Click(System::Object^ sender, System::EventArgs^ e) 
+		void resetComboBoxes()
+		{
+			dogCombo->SelectedIndex = -1;
+			categoryCombo->SelectedIndex = -1;
+		}
+ 
+		System::Void categoryCombo_SelectedValueChanged(System::Object^ sender, System::EventArgs^ e) 
+		{
+			ComboBox^ box = (ComboBox^)sender;
+			String^ selectedCategory = box->SelectedItem->ToString();
+			setDogs(selectedCategory);
+			selectedDog = nullptr;
+		}
+
+
+		System::Void dogCombo_SelectedValueChanged(System::Object^ sender, System::EventArgs^ e) 
+		{
+			ComboBox^ box = (ComboBox^)sender;
+			selectedDog = box->SelectedItem->ToString();
+		}
+
+
+		System::Void cancelButton_Click(System::Object^ sender, System::EventArgs^ e) 
+		{
+			this->Close();
+		}
+
+
+		System::Void startButton_Click(System::Object^ sender, System::EventArgs^ e)
 		{
 			if ((disciplineType != DisciplineType::Undefined) && disciplineFactory)
 			{
-				Form^ discipline = disciplineFactory->createDiscipline(disciplineType);
-				discipline->TopMost = true;
-				discipline->Show();
-				this->Close();
+				if (selectedDog)
+				{
+					Form^ discipline = disciplineFactory->createDiscipline(disciplineType, selectedDog);
+					discipline->TopMost = true;
+					discipline->Show();
+					this->Close();
+				}
+				else
+				{
+					MessageBox::Show(
+						"Select category and dog",
+						"Information error",
+						MessageBoxButtons::OK
+					);
+				}
+			
 			}
 			else
 			{
 				//TODO: log and error out
-			}	
-			
+			}
 		}
 };
 }

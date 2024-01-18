@@ -15,7 +15,7 @@ void TopDogShow::Dog::defineCategory()
 	if (weight_int  < 2000)
 		category = Categories::LIGHT_WEIGHT;
 	else if ((weight_int >= 2000) && (weight_int < 2500))
-		category = Categories::MEDIUM_WEIGHT;
+		category = Categories::MIDDLE_WEIGHT;
 	else
 		category = Categories::HEAVY_WEIGHT;
 }

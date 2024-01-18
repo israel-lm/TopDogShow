@@ -12,15 +12,18 @@ namespace TopDogShow {
 	using namespace System::Drawing;
 
 	
-	public ref class MarkTableDiscipline : public Form, public IDiscipline
+	public ref class MarkTableDiscipline : public Form
 	{
 	public:
-		MarkTableDiscipline(void)
+		MarkTableDiscipline(String^ dogName)
 		{
 			InitializeComponent();
+			dogNameLabel->Text = dogName;
 		}
 
 		virtual void saveMarks() {}
+	private: System::Windows::Forms::Label^ dogNameLabel;
+	public:
 
 	protected:
 		System::Windows::Forms::Label^ headerLabel;
@@ -108,40 +111,41 @@ namespace TopDogShow {
 			this->cancelButton = (gcnew System::Windows::Forms::Button());
 			this->finishButton = (gcnew System::Windows::Forms::Button());
 			this->attemptsPanel = (gcnew System::Windows::Forms::Panel());
+			this->mark10Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark10Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark10Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark9Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark9Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark9Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark8Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark8Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark8Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark7Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark7Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark7Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark6Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark6Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark6Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark5Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark5Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark5Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark4Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark4Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark4Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark3Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark3Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark3Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark2Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark2Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark2Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
 			this->attemptsLabel = (gcnew System::Windows::Forms::Label());
+			this->mark1Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->mark1Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
 			this->attempt1Label = (gcnew System::Windows::Forms::Label());
 			this->attempt2Label = (gcnew System::Windows::Forms::Label());
 			this->attempt3Label = (gcnew System::Windows::Forms::Label());
 			this->mark1Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark1Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark1Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark2Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark2Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark2Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark3Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark3Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark3Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark4Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark4Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark4Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark5Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark5Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark5Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark6Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark6Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark6Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark7Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark7Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark7Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark8Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark8Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark8Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark9Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark9Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark9Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark10Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark10Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
-			this->mark10Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->dogNameLabel = (gcnew System::Windows::Forms::Label());
 			this->marksPanel->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dogPicture))->BeginInit();
 			this->attemptsPanel->SuspendLayout();
@@ -156,7 +160,7 @@ namespace TopDogShow {
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->headerLabel->Location = System::Drawing::Point(353, 26);
 			this->headerLabel->Name = L"headerLabel";
-			this->headerLabel->Size = System::Drawing::Size(220, 29);
+			this->headerLabel->Size = System::Drawing::Size(330, 44);
 			this->headerLabel->TabIndex = 0;
 			this->headerLabel->Text = L"DisciplineName";
 			// 
@@ -184,7 +188,7 @@ namespace TopDogShow {
 				static_cast<System::Byte>(0)));
 			this->mark10Box->Location = System::Drawing::Point(3, 418);
 			this->mark10Box->Name = L"mark10Box";
-			this->mark10Box->Size = System::Drawing::Size(50, 26);
+			this->mark10Box->Size = System::Drawing::Size(50, 35);
 			this->mark10Box->TabIndex = 10;
 			// 
 			// mark9Box
@@ -193,7 +197,7 @@ namespace TopDogShow {
 				static_cast<System::Byte>(0)));
 			this->mark9Box->Location = System::Drawing::Point(3, 375);
 			this->mark9Box->Name = L"mark9Box";
-			this->mark9Box->Size = System::Drawing::Size(50, 26);
+			this->mark9Box->Size = System::Drawing::Size(50, 35);
 			this->mark9Box->TabIndex = 9;
 			// 
 			// mark8Box
@@ -202,7 +206,7 @@ namespace TopDogShow {
 				static_cast<System::Byte>(0)));
 			this->mark8Box->Location = System::Drawing::Point(3, 332);
 			this->mark8Box->Name = L"mark8Box";
-			this->mark8Box->Size = System::Drawing::Size(50, 26);
+			this->mark8Box->Size = System::Drawing::Size(50, 35);
 			this->mark8Box->TabIndex = 8;
 			// 
 			// mark7Box
@@ -211,7 +215,7 @@ namespace TopDogShow {
 				static_cast<System::Byte>(0)));
 			this->mark7Box->Location = System::Drawing::Point(3, 289);
 			this->mark7Box->Name = L"mark7Box";
-			this->mark7Box->Size = System::Drawing::Size(50, 26);
+			this->mark7Box->Size = System::Drawing::Size(50, 35);
 			this->mark7Box->TabIndex = 7;
 			// 
 			// mark6Box
@@ -220,7 +224,7 @@ namespace TopDogShow {
 				static_cast<System::Byte>(0)));
 			this->mark6Box->Location = System::Drawing::Point(3, 246);
 			this->mark6Box->Name = L"mark6Box";
-			this->mark6Box->Size = System::Drawing::Size(50, 26);
+			this->mark6Box->Size = System::Drawing::Size(50, 35);
 			this->mark6Box->TabIndex = 6;
 			// 
 			// mark5Box
@@ -229,7 +233,7 @@ namespace TopDogShow {
 				static_cast<System::Byte>(0)));
 			this->mark5Box->Location = System::Drawing::Point(3, 203);
 			this->mark5Box->Name = L"mark5Box";
-			this->mark5Box->Size = System::Drawing::Size(50, 26);
+			this->mark5Box->Size = System::Drawing::Size(50, 35);
 			this->mark5Box->TabIndex = 5;
 			// 
 			// mark4Box
@@ -238,7 +242,7 @@ namespace TopDogShow {
 				static_cast<System::Byte>(0)));
 			this->mark4Box->Location = System::Drawing::Point(3, 160);
 			this->mark4Box->Name = L"mark4Box";
-			this->mark4Box->Size = System::Drawing::Size(50, 26);
+			this->mark4Box->Size = System::Drawing::Size(50, 35);
 			this->mark4Box->TabIndex = 4;
 			// 
 			// mark3Box
@@ -247,7 +251,7 @@ namespace TopDogShow {
 				static_cast<System::Byte>(0)));
 			this->mark3Box->Location = System::Drawing::Point(3, 117);
 			this->mark3Box->Name = L"mark3Box";
-			this->mark3Box->Size = System::Drawing::Size(50, 26);
+			this->mark3Box->Size = System::Drawing::Size(50, 35);
 			this->mark3Box->TabIndex = 3;
 			// 
 			// mark2Box
@@ -256,7 +260,7 @@ namespace TopDogShow {
 				static_cast<System::Byte>(0)));
 			this->mark2Box->Location = System::Drawing::Point(3, 74);
 			this->mark2Box->Name = L"mark2Box";
-			this->mark2Box->Size = System::Drawing::Size(50, 26);
+			this->mark2Box->Size = System::Drawing::Size(50, 35);
 			this->mark2Box->TabIndex = 2;
 			// 
 			// mark1Box
@@ -265,7 +269,7 @@ namespace TopDogShow {
 				static_cast<System::Byte>(0)));
 			this->mark1Box->Location = System::Drawing::Point(3, 31);
 			this->mark1Box->Name = L"mark1Box";
-			this->mark1Box->Size = System::Drawing::Size(50, 26);
+			this->mark1Box->Size = System::Drawing::Size(50, 35);
 			this->mark1Box->TabIndex = 1;
 			// 
 			// marksLabel
@@ -273,7 +277,7 @@ namespace TopDogShow {
 			this->marksLabel->AutoSize = true;
 			this->marksLabel->Location = System::Drawing::Point(3, 10);
 			this->marksLabel->Name = L"marksLabel";
-			this->marksLabel->Size = System::Drawing::Size(61, 18);
+			this->marksLabel->Size = System::Drawing::Size(94, 29);
 			this->marksLabel->TabIndex = 0;
 			this->marksLabel->Text = L"Marks";
 			// 
@@ -295,7 +299,7 @@ namespace TopDogShow {
 			this->cancelButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->cancelButton->ForeColor = System::Drawing::SystemColors::ControlText;
-			this->cancelButton->Location = System::Drawing::Point(452, 546);
+			this->cancelButton->Location = System::Drawing::Point(452, 619);
 			this->cancelButton->Name = L"cancelButton";
 			this->cancelButton->Size = System::Drawing::Size(150, 30);
 			this->cancelButton->TabIndex = 4;
@@ -309,7 +313,7 @@ namespace TopDogShow {
 			this->finishButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->finishButton->ForeColor = System::Drawing::SystemColors::ControlText;
-			this->finishButton->Location = System::Drawing::Point(659, 546);
+			this->finishButton->Location = System::Drawing::Point(659, 619);
 			this->finishButton->Name = L"finishButton";
 			this->finishButton->Size = System::Drawing::Size(150, 30);
 			this->finishButton->TabIndex = 5;
@@ -357,14 +361,333 @@ namespace TopDogShow {
 			this->attemptsPanel->Size = System::Drawing::Size(324, 497);
 			this->attemptsPanel->TabIndex = 6;
 			// 
+			// mark10Attempt3Combo
+			// 
+			this->mark10Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->mark10Attempt3Combo->FormattingEnabled = true;
+			this->mark10Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark10Attempt3Combo->Location = System::Drawing::Point(229, 465);
+			this->mark10Attempt3Combo->Name = L"mark10Attempt3Combo";
+			this->mark10Attempt3Combo->Size = System::Drawing::Size(88, 37);
+			this->mark10Attempt3Combo->TabIndex = 32;
+			// 
+			// mark10Attempt2Combo
+			// 
+			this->mark10Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->mark10Attempt2Combo->FormattingEnabled = true;
+			this->mark10Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark10Attempt2Combo->Location = System::Drawing::Point(113, 465);
+			this->mark10Attempt2Combo->Name = L"mark10Attempt2Combo";
+			this->mark10Attempt2Combo->Size = System::Drawing::Size(88, 37);
+			this->mark10Attempt2Combo->TabIndex = 31;
+			// 
+			// mark10Attempt1Combo
+			// 
+			this->mark10Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->mark10Attempt1Combo->FormattingEnabled = true;
+			this->mark10Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark10Attempt1Combo->Location = System::Drawing::Point(3, 465);
+			this->mark10Attempt1Combo->Name = L"mark10Attempt1Combo";
+			this->mark10Attempt1Combo->Size = System::Drawing::Size(88, 37);
+			this->mark10Attempt1Combo->TabIndex = 30;
+			// 
+			// mark9Attempt3Combo
+			// 
+			this->mark9Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark9Attempt3Combo->FormattingEnabled = true;
+			this->mark9Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark9Attempt3Combo->Location = System::Drawing::Point(229, 423);
+			this->mark9Attempt3Combo->Name = L"mark9Attempt3Combo";
+			this->mark9Attempt3Combo->Size = System::Drawing::Size(88, 37);
+			this->mark9Attempt3Combo->TabIndex = 29;
+			// 
+			// mark9Attempt2Combo
+			// 
+			this->mark9Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark9Attempt2Combo->FormattingEnabled = true;
+			this->mark9Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark9Attempt2Combo->Location = System::Drawing::Point(113, 423);
+			this->mark9Attempt2Combo->Name = L"mark9Attempt2Combo";
+			this->mark9Attempt2Combo->Size = System::Drawing::Size(88, 37);
+			this->mark9Attempt2Combo->TabIndex = 28;
+			// 
+			// mark9Attempt1Combo
+			// 
+			this->mark9Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark9Attempt1Combo->FormattingEnabled = true;
+			this->mark9Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark9Attempt1Combo->Location = System::Drawing::Point(0, 423);
+			this->mark9Attempt1Combo->Name = L"mark9Attempt1Combo";
+			this->mark9Attempt1Combo->Size = System::Drawing::Size(88, 37);
+			this->mark9Attempt1Combo->TabIndex = 27;
+			// 
+			// mark8Attempt3Combo
+			// 
+			this->mark8Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark8Attempt3Combo->FormattingEnabled = true;
+			this->mark8Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark8Attempt3Combo->Location = System::Drawing::Point(229, 380);
+			this->mark8Attempt3Combo->Name = L"mark8Attempt3Combo";
+			this->mark8Attempt3Combo->Size = System::Drawing::Size(88, 37);
+			this->mark8Attempt3Combo->TabIndex = 26;
+			// 
+			// mark8Attempt2Combo
+			// 
+			this->mark8Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark8Attempt2Combo->FormattingEnabled = true;
+			this->mark8Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark8Attempt2Combo->Location = System::Drawing::Point(113, 379);
+			this->mark8Attempt2Combo->Name = L"mark8Attempt2Combo";
+			this->mark8Attempt2Combo->Size = System::Drawing::Size(88, 37);
+			this->mark8Attempt2Combo->TabIndex = 25;
+			// 
+			// mark8Attempt1Combo
+			// 
+			this->mark8Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark8Attempt1Combo->FormattingEnabled = true;
+			this->mark8Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark8Attempt1Combo->Location = System::Drawing::Point(0, 380);
+			this->mark8Attempt1Combo->Name = L"mark8Attempt1Combo";
+			this->mark8Attempt1Combo->Size = System::Drawing::Size(88, 37);
+			this->mark8Attempt1Combo->TabIndex = 24;
+			// 
+			// mark7Attempt3Combo
+			// 
+			this->mark7Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark7Attempt3Combo->FormattingEnabled = true;
+			this->mark7Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark7Attempt3Combo->Location = System::Drawing::Point(229, 337);
+			this->mark7Attempt3Combo->Name = L"mark7Attempt3Combo";
+			this->mark7Attempt3Combo->Size = System::Drawing::Size(88, 37);
+			this->mark7Attempt3Combo->TabIndex = 23;
+			// 
+			// mark7Attempt2Combo
+			// 
+			this->mark7Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark7Attempt2Combo->FormattingEnabled = true;
+			this->mark7Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark7Attempt2Combo->Location = System::Drawing::Point(113, 336);
+			this->mark7Attempt2Combo->Name = L"mark7Attempt2Combo";
+			this->mark7Attempt2Combo->Size = System::Drawing::Size(88, 37);
+			this->mark7Attempt2Combo->TabIndex = 22;
+			// 
+			// mark7Attempt1Combo
+			// 
+			this->mark7Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark7Attempt1Combo->FormattingEnabled = true;
+			this->mark7Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark7Attempt1Combo->Location = System::Drawing::Point(0, 337);
+			this->mark7Attempt1Combo->Name = L"mark7Attempt1Combo";
+			this->mark7Attempt1Combo->Size = System::Drawing::Size(88, 37);
+			this->mark7Attempt1Combo->TabIndex = 21;
+			// 
+			// mark6Attempt3Combo
+			// 
+			this->mark6Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark6Attempt3Combo->FormattingEnabled = true;
+			this->mark6Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark6Attempt3Combo->Location = System::Drawing::Point(229, 294);
+			this->mark6Attempt3Combo->Name = L"mark6Attempt3Combo";
+			this->mark6Attempt3Combo->Size = System::Drawing::Size(88, 37);
+			this->mark6Attempt3Combo->TabIndex = 20;
+			// 
+			// mark6Attempt2Combo
+			// 
+			this->mark6Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark6Attempt2Combo->FormattingEnabled = true;
+			this->mark6Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark6Attempt2Combo->Location = System::Drawing::Point(113, 294);
+			this->mark6Attempt2Combo->Name = L"mark6Attempt2Combo";
+			this->mark6Attempt2Combo->Size = System::Drawing::Size(88, 37);
+			this->mark6Attempt2Combo->TabIndex = 19;
+			// 
+			// mark6Attempt1Combo
+			// 
+			this->mark6Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark6Attempt1Combo->FormattingEnabled = true;
+			this->mark6Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark6Attempt1Combo->Location = System::Drawing::Point(0, 294);
+			this->mark6Attempt1Combo->Name = L"mark6Attempt1Combo";
+			this->mark6Attempt1Combo->Size = System::Drawing::Size(88, 37);
+			this->mark6Attempt1Combo->TabIndex = 18;
+			// 
+			// mark5Attempt3Combo
+			// 
+			this->mark5Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark5Attempt3Combo->FormattingEnabled = true;
+			this->mark5Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark5Attempt3Combo->Location = System::Drawing::Point(229, 251);
+			this->mark5Attempt3Combo->Name = L"mark5Attempt3Combo";
+			this->mark5Attempt3Combo->Size = System::Drawing::Size(88, 37);
+			this->mark5Attempt3Combo->TabIndex = 17;
+			// 
+			// mark5Attempt2Combo
+			// 
+			this->mark5Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark5Attempt2Combo->FormattingEnabled = true;
+			this->mark5Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark5Attempt2Combo->Location = System::Drawing::Point(113, 251);
+			this->mark5Attempt2Combo->Name = L"mark5Attempt2Combo";
+			this->mark5Attempt2Combo->Size = System::Drawing::Size(88, 37);
+			this->mark5Attempt2Combo->TabIndex = 16;
+			// 
+			// mark5Attempt1Combo
+			// 
+			this->mark5Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark5Attempt1Combo->FormattingEnabled = true;
+			this->mark5Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark5Attempt1Combo->Location = System::Drawing::Point(0, 251);
+			this->mark5Attempt1Combo->Name = L"mark5Attempt1Combo";
+			this->mark5Attempt1Combo->Size = System::Drawing::Size(88, 37);
+			this->mark5Attempt1Combo->TabIndex = 15;
+			// 
+			// mark4Attempt3Combo
+			// 
+			this->mark4Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark4Attempt3Combo->FormattingEnabled = true;
+			this->mark4Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark4Attempt3Combo->Location = System::Drawing::Point(229, 208);
+			this->mark4Attempt3Combo->Name = L"mark4Attempt3Combo";
+			this->mark4Attempt3Combo->Size = System::Drawing::Size(88, 37);
+			this->mark4Attempt3Combo->TabIndex = 14;
+			// 
+			// mark4Attempt2Combo
+			// 
+			this->mark4Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark4Attempt2Combo->FormattingEnabled = true;
+			this->mark4Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark4Attempt2Combo->Location = System::Drawing::Point(113, 208);
+			this->mark4Attempt2Combo->Name = L"mark4Attempt2Combo";
+			this->mark4Attempt2Combo->Size = System::Drawing::Size(88, 37);
+			this->mark4Attempt2Combo->TabIndex = 13;
+			// 
+			// mark4Attempt1Combo
+			// 
+			this->mark4Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark4Attempt1Combo->FormattingEnabled = true;
+			this->mark4Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark4Attempt1Combo->Location = System::Drawing::Point(0, 208);
+			this->mark4Attempt1Combo->Name = L"mark4Attempt1Combo";
+			this->mark4Attempt1Combo->Size = System::Drawing::Size(88, 37);
+			this->mark4Attempt1Combo->TabIndex = 12;
+			// 
+			// mark3Attempt3Combo
+			// 
+			this->mark3Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark3Attempt3Combo->FormattingEnabled = true;
+			this->mark3Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark3Attempt3Combo->Location = System::Drawing::Point(229, 165);
+			this->mark3Attempt3Combo->Name = L"mark3Attempt3Combo";
+			this->mark3Attempt3Combo->Size = System::Drawing::Size(88, 37);
+			this->mark3Attempt3Combo->TabIndex = 11;
+			// 
+			// mark3Attempt2Combo
+			// 
+			this->mark3Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark3Attempt2Combo->FormattingEnabled = true;
+			this->mark3Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark3Attempt2Combo->Location = System::Drawing::Point(113, 165);
+			this->mark3Attempt2Combo->Name = L"mark3Attempt2Combo";
+			this->mark3Attempt2Combo->Size = System::Drawing::Size(88, 37);
+			this->mark3Attempt2Combo->TabIndex = 10;
+			// 
+			// mark3Attempt1Combo
+			// 
+			this->mark3Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark3Attempt1Combo->FormattingEnabled = true;
+			this->mark3Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark3Attempt1Combo->Location = System::Drawing::Point(0, 165);
+			this->mark3Attempt1Combo->Name = L"mark3Attempt1Combo";
+			this->mark3Attempt1Combo->Size = System::Drawing::Size(88, 37);
+			this->mark3Attempt1Combo->TabIndex = 9;
+			// 
+			// mark2Attempt3Combo
+			// 
+			this->mark2Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark2Attempt3Combo->FormattingEnabled = true;
+			this->mark2Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark2Attempt3Combo->Location = System::Drawing::Point(229, 121);
+			this->mark2Attempt3Combo->Name = L"mark2Attempt3Combo";
+			this->mark2Attempt3Combo->Size = System::Drawing::Size(88, 37);
+			this->mark2Attempt3Combo->TabIndex = 8;
+			// 
+			// mark2Attempt2Combo
+			// 
+			this->mark2Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark2Attempt2Combo->FormattingEnabled = true;
+			this->mark2Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark2Attempt2Combo->Location = System::Drawing::Point(113, 122);
+			this->mark2Attempt2Combo->Name = L"mark2Attempt2Combo";
+			this->mark2Attempt2Combo->Size = System::Drawing::Size(88, 37);
+			this->mark2Attempt2Combo->TabIndex = 7;
+			// 
+			// mark2Attempt1Combo
+			// 
+			this->mark2Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark2Attempt1Combo->FormattingEnabled = true;
+			this->mark2Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark2Attempt1Combo->Location = System::Drawing::Point(0, 122);
+			this->mark2Attempt1Combo->Name = L"mark2Attempt1Combo";
+			this->mark2Attempt1Combo->Size = System::Drawing::Size(88, 37);
+			this->mark2Attempt1Combo->TabIndex = 6;
+			// 
 			// attemptsLabel
 			// 
 			this->attemptsLabel->AutoSize = true;
 			this->attemptsLabel->Location = System::Drawing::Point(113, 6);
 			this->attemptsLabel->Name = L"attemptsLabel";
-			this->attemptsLabel->Size = System::Drawing::Size(88, 18);
+			this->attemptsLabel->Size = System::Drawing::Size(137, 29);
 			this->attemptsLabel->TabIndex = 0;
 			this->attemptsLabel->Text = L"Attempts";
+			// 
+			// mark1Attempt3Combo
+			// 
+			this->mark1Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark1Attempt3Combo->FormattingEnabled = true;
+			this->mark1Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark1Attempt3Combo->Location = System::Drawing::Point(229, 80);
+			this->mark1Attempt3Combo->Name = L"mark1Attempt3Combo";
+			this->mark1Attempt3Combo->Size = System::Drawing::Size(88, 37);
+			this->mark1Attempt3Combo->TabIndex = 5;
+			// 
+			// mark1Attempt2Combo
+			// 
+			this->mark1Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->mark1Attempt2Combo->FormattingEnabled = true;
+			this->mark1Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
+			this->mark1Attempt2Combo->Location = System::Drawing::Point(113, 80);
+			this->mark1Attempt2Combo->Name = L"mark1Attempt2Combo";
+			this->mark1Attempt2Combo->Size = System::Drawing::Size(88, 37);
+			this->mark1Attempt2Combo->TabIndex = 4;
 			// 
 			// attempt1Label
 			// 
@@ -407,334 +730,26 @@ namespace TopDogShow {
 			this->mark1Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
 			this->mark1Attempt1Combo->Location = System::Drawing::Point(0, 79);
 			this->mark1Attempt1Combo->Name = L"mark1Attempt1Combo";
-			this->mark1Attempt1Combo->Size = System::Drawing::Size(88, 28);
+			this->mark1Attempt1Combo->Size = System::Drawing::Size(88, 37);
 			this->mark1Attempt1Combo->TabIndex = 3;
 			// 
-			// mark1Attempt2Combo
+			// dogNameLabel
 			// 
-			this->mark1Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark1Attempt2Combo->FormattingEnabled = true;
-			this->mark1Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark1Attempt2Combo->Location = System::Drawing::Point(113, 80);
-			this->mark1Attempt2Combo->Name = L"mark1Attempt2Combo";
-			this->mark1Attempt2Combo->Size = System::Drawing::Size(88, 28);
-			this->mark1Attempt2Combo->TabIndex = 4;
-			// 
-			// mark1Attempt3Combo
-			// 
-			this->mark1Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark1Attempt3Combo->FormattingEnabled = true;
-			this->mark1Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark1Attempt3Combo->Location = System::Drawing::Point(229, 80);
-			this->mark1Attempt3Combo->Name = L"mark1Attempt3Combo";
-			this->mark1Attempt3Combo->Size = System::Drawing::Size(88, 28);
-			this->mark1Attempt3Combo->TabIndex = 5;
-			// 
-			// mark2Attempt1Combo
-			// 
-			this->mark2Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark2Attempt1Combo->FormattingEnabled = true;
-			this->mark2Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark2Attempt1Combo->Location = System::Drawing::Point(0, 122);
-			this->mark2Attempt1Combo->Name = L"mark2Attempt1Combo";
-			this->mark2Attempt1Combo->Size = System::Drawing::Size(88, 28);
-			this->mark2Attempt1Combo->TabIndex = 6;
-			// 
-			// mark2Attempt2Combo
-			// 
-			this->mark2Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark2Attempt2Combo->FormattingEnabled = true;
-			this->mark2Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark2Attempt2Combo->Location = System::Drawing::Point(113, 122);
-			this->mark2Attempt2Combo->Name = L"mark2Attempt2Combo";
-			this->mark2Attempt2Combo->Size = System::Drawing::Size(88, 28);
-			this->mark2Attempt2Combo->TabIndex = 7;
-			// 
-			// mark2Attempt3Combo
-			// 
-			this->mark2Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark2Attempt3Combo->FormattingEnabled = true;
-			this->mark2Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark2Attempt3Combo->Location = System::Drawing::Point(229, 121);
-			this->mark2Attempt3Combo->Name = L"mark2Attempt3Combo";
-			this->mark2Attempt3Combo->Size = System::Drawing::Size(88, 28);
-			this->mark2Attempt3Combo->TabIndex = 8;
-			// 
-			// mark3Attempt1Combo
-			// 
-			this->mark3Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark3Attempt1Combo->FormattingEnabled = true;
-			this->mark3Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark3Attempt1Combo->Location = System::Drawing::Point(0, 165);
-			this->mark3Attempt1Combo->Name = L"mark3Attempt1Combo";
-			this->mark3Attempt1Combo->Size = System::Drawing::Size(88, 28);
-			this->mark3Attempt1Combo->TabIndex = 9;
-			// 
-			// mark3Attempt2Combo
-			// 
-			this->mark3Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark3Attempt2Combo->FormattingEnabled = true;
-			this->mark3Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark3Attempt2Combo->Location = System::Drawing::Point(113, 165);
-			this->mark3Attempt2Combo->Name = L"mark3Attempt2Combo";
-			this->mark3Attempt2Combo->Size = System::Drawing::Size(88, 28);
-			this->mark3Attempt2Combo->TabIndex = 10;
-			// 
-			// mark3Attempt3Combo
-			// 
-			this->mark3Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark3Attempt3Combo->FormattingEnabled = true;
-			this->mark3Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark3Attempt3Combo->Location = System::Drawing::Point(229, 165);
-			this->mark3Attempt3Combo->Name = L"mark3Attempt3Combo";
-			this->mark3Attempt3Combo->Size = System::Drawing::Size(88, 28);
-			this->mark3Attempt3Combo->TabIndex = 11;
-			// 
-			// mark4Attempt1Combo
-			// 
-			this->mark4Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark4Attempt1Combo->FormattingEnabled = true;
-			this->mark4Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark4Attempt1Combo->Location = System::Drawing::Point(0, 208);
-			this->mark4Attempt1Combo->Name = L"mark4Attempt1Combo";
-			this->mark4Attempt1Combo->Size = System::Drawing::Size(88, 28);
-			this->mark4Attempt1Combo->TabIndex = 12;
-			// 
-			// mark4Attempt2Combo
-			// 
-			this->mark4Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark4Attempt2Combo->FormattingEnabled = true;
-			this->mark4Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark4Attempt2Combo->Location = System::Drawing::Point(113, 208);
-			this->mark4Attempt2Combo->Name = L"mark4Attempt2Combo";
-			this->mark4Attempt2Combo->Size = System::Drawing::Size(88, 28);
-			this->mark4Attempt2Combo->TabIndex = 13;
-			// 
-			// mark4Attempt3Combo
-			// 
-			this->mark4Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark4Attempt3Combo->FormattingEnabled = true;
-			this->mark4Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark4Attempt3Combo->Location = System::Drawing::Point(229, 208);
-			this->mark4Attempt3Combo->Name = L"mark4Attempt3Combo";
-			this->mark4Attempt3Combo->Size = System::Drawing::Size(88, 28);
-			this->mark4Attempt3Combo->TabIndex = 14;
-			// 
-			// mark5Attempt1Combo
-			// 
-			this->mark5Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark5Attempt1Combo->FormattingEnabled = true;
-			this->mark5Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark5Attempt1Combo->Location = System::Drawing::Point(0, 251);
-			this->mark5Attempt1Combo->Name = L"mark5Attempt1Combo";
-			this->mark5Attempt1Combo->Size = System::Drawing::Size(88, 28);
-			this->mark5Attempt1Combo->TabIndex = 15;
-			// 
-			// mark5Attempt2Combo
-			// 
-			this->mark5Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark5Attempt2Combo->FormattingEnabled = true;
-			this->mark5Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark5Attempt2Combo->Location = System::Drawing::Point(113, 251);
-			this->mark5Attempt2Combo->Name = L"mark5Attempt2Combo";
-			this->mark5Attempt2Combo->Size = System::Drawing::Size(88, 28);
-			this->mark5Attempt2Combo->TabIndex = 16;
-			// 
-			// mark5Attempt3Combo
-			// 
-			this->mark5Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark5Attempt3Combo->FormattingEnabled = true;
-			this->mark5Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark5Attempt3Combo->Location = System::Drawing::Point(229, 251);
-			this->mark5Attempt3Combo->Name = L"mark5Attempt3Combo";
-			this->mark5Attempt3Combo->Size = System::Drawing::Size(88, 28);
-			this->mark5Attempt3Combo->TabIndex = 17;
-			// 
-			// mark6Attempt1Combo
-			// 
-			this->mark6Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark6Attempt1Combo->FormattingEnabled = true;
-			this->mark6Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark6Attempt1Combo->Location = System::Drawing::Point(0, 294);
-			this->mark6Attempt1Combo->Name = L"mark6Attempt1Combo";
-			this->mark6Attempt1Combo->Size = System::Drawing::Size(88, 28);
-			this->mark6Attempt1Combo->TabIndex = 18;
-			// 
-			// mark6Attempt2Combo
-			// 
-			this->mark6Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark6Attempt2Combo->FormattingEnabled = true;
-			this->mark6Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark6Attempt2Combo->Location = System::Drawing::Point(113, 294);
-			this->mark6Attempt2Combo->Name = L"mark6Attempt2Combo";
-			this->mark6Attempt2Combo->Size = System::Drawing::Size(88, 28);
-			this->mark6Attempt2Combo->TabIndex = 19;
-			// 
-			// mark6Attempt3Combo
-			// 
-			this->mark6Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark6Attempt3Combo->FormattingEnabled = true;
-			this->mark6Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark6Attempt3Combo->Location = System::Drawing::Point(229, 294);
-			this->mark6Attempt3Combo->Name = L"mark6Attempt3Combo";
-			this->mark6Attempt3Combo->Size = System::Drawing::Size(88, 28);
-			this->mark6Attempt3Combo->TabIndex = 20;
-			// 
-			// mark7Attempt1Combo
-			// 
-			this->mark7Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark7Attempt1Combo->FormattingEnabled = true;
-			this->mark7Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark7Attempt1Combo->Location = System::Drawing::Point(0, 337);
-			this->mark7Attempt1Combo->Name = L"mark7Attempt1Combo";
-			this->mark7Attempt1Combo->Size = System::Drawing::Size(88, 28);
-			this->mark7Attempt1Combo->TabIndex = 21;
-			// 
-			// mark7Attempt2Combo
-			// 
-			this->mark7Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark7Attempt2Combo->FormattingEnabled = true;
-			this->mark7Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark7Attempt2Combo->Location = System::Drawing::Point(113, 336);
-			this->mark7Attempt2Combo->Name = L"mark7Attempt2Combo";
-			this->mark7Attempt2Combo->Size = System::Drawing::Size(88, 28);
-			this->mark7Attempt2Combo->TabIndex = 22;
-			// 
-			// mark7Attempt3Combo
-			// 
-			this->mark7Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark7Attempt3Combo->FormattingEnabled = true;
-			this->mark7Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark7Attempt3Combo->Location = System::Drawing::Point(229, 337);
-			this->mark7Attempt3Combo->Name = L"mark7Attempt3Combo";
-			this->mark7Attempt3Combo->Size = System::Drawing::Size(88, 28);
-			this->mark7Attempt3Combo->TabIndex = 23;
-			// 
-			// mark8Attempt1Combo
-			// 
-			this->mark8Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark8Attempt1Combo->FormattingEnabled = true;
-			this->mark8Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark8Attempt1Combo->Location = System::Drawing::Point(0, 380);
-			this->mark8Attempt1Combo->Name = L"mark8Attempt1Combo";
-			this->mark8Attempt1Combo->Size = System::Drawing::Size(88, 28);
-			this->mark8Attempt1Combo->TabIndex = 24;
-			// 
-			// mark8Attempt2Combo
-			// 
-			this->mark8Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark8Attempt2Combo->FormattingEnabled = true;
-			this->mark8Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark8Attempt2Combo->Location = System::Drawing::Point(113, 379);
-			this->mark8Attempt2Combo->Name = L"mark8Attempt2Combo";
-			this->mark8Attempt2Combo->Size = System::Drawing::Size(88, 28);
-			this->mark8Attempt2Combo->TabIndex = 25;
-			// 
-			// mark8Attempt3Combo
-			// 
-			this->mark8Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark8Attempt3Combo->FormattingEnabled = true;
-			this->mark8Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark8Attempt3Combo->Location = System::Drawing::Point(229, 380);
-			this->mark8Attempt3Combo->Name = L"mark8Attempt3Combo";
-			this->mark8Attempt3Combo->Size = System::Drawing::Size(88, 28);
-			this->mark8Attempt3Combo->TabIndex = 26;
-			// 
-			// mark9Attempt1Combo
-			// 
-			this->mark9Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark9Attempt1Combo->FormattingEnabled = true;
-			this->mark9Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark9Attempt1Combo->Location = System::Drawing::Point(0, 423);
-			this->mark9Attempt1Combo->Name = L"mark9Attempt1Combo";
-			this->mark9Attempt1Combo->Size = System::Drawing::Size(88, 28);
-			this->mark9Attempt1Combo->TabIndex = 27;
-			// 
-			// mark9Attempt2Combo
-			// 
-			this->mark9Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark9Attempt2Combo->FormattingEnabled = true;
-			this->mark9Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark9Attempt2Combo->Location = System::Drawing::Point(113, 423);
-			this->mark9Attempt2Combo->Name = L"mark9Attempt2Combo";
-			this->mark9Attempt2Combo->Size = System::Drawing::Size(88, 28);
-			this->mark9Attempt2Combo->TabIndex = 28;
-			// 
-			// mark9Attempt3Combo
-			// 
-			this->mark9Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->mark9Attempt3Combo->FormattingEnabled = true;
-			this->mark9Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark9Attempt3Combo->Location = System::Drawing::Point(229, 423);
-			this->mark9Attempt3Combo->Name = L"mark9Attempt3Combo";
-			this->mark9Attempt3Combo->Size = System::Drawing::Size(88, 28);
-			this->mark9Attempt3Combo->TabIndex = 29;
-			// 
-			// mark10Attempt1Combo
-			// 
-			this->mark10Attempt1Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->mark10Attempt1Combo->FormattingEnabled = true;
-			this->mark10Attempt1Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark10Attempt1Combo->Location = System::Drawing::Point(3, 465);
-			this->mark10Attempt1Combo->Name = L"mark10Attempt1Combo";
-			this->mark10Attempt1Combo->Size = System::Drawing::Size(88, 28);
-			this->mark10Attempt1Combo->TabIndex = 30;
-			// 
-			// mark10Attempt2Combo
-			// 
-			this->mark10Attempt2Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->mark10Attempt2Combo->FormattingEnabled = true;
-			this->mark10Attempt2Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark10Attempt2Combo->Location = System::Drawing::Point(113, 465);
-			this->mark10Attempt2Combo->Name = L"mark10Attempt2Combo";
-			this->mark10Attempt2Combo->Size = System::Drawing::Size(88, 28);
-			this->mark10Attempt2Combo->TabIndex = 31;
-			// 
-			// mark10Attempt3Combo
-			// 
-			this->mark10Attempt3Combo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->mark10Attempt3Combo->FormattingEnabled = true;
-			this->mark10Attempt3Combo->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Success", L"Failure" });
-			this->mark10Attempt3Combo->Location = System::Drawing::Point(229, 465);
-			this->mark10Attempt3Combo->Name = L"mark10Attempt3Combo";
-			this->mark10Attempt3Combo->Size = System::Drawing::Size(88, 28);
-			this->mark10Attempt3Combo->TabIndex = 32;
+			this->dogNameLabel->Anchor = System::Windows::Forms::AnchorStyles::Right;
+			this->dogNameLabel->AutoSize = true;
+			this->dogNameLabel->Location = System::Drawing::Point(458, 524);
+			this->dogNameLabel->Name = L"dogNameLabel";
+			this->dogNameLabel->Size = System::Drawing::Size(227, 44);
+			this->dogNameLabel->TabIndex = 7;
+			this->dogNameLabel->Text = L"Dog Name";
 			// 
 			// MarkTableDiscipline
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(11, 18);
+			this->AutoScaleDimensions = System::Drawing::SizeF(17, 29);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::DodgerBlue;
-			this->ClientSize = System::Drawing::Size(821, 595);
+			this->ClientSize = System::Drawing::Size(821, 668);
+			this->Controls->Add(this->dogNameLabel);
 			this->Controls->Add(this->attemptsPanel);
 			this->Controls->Add(this->finishButton);
 			this->Controls->Add(this->cancelButton);

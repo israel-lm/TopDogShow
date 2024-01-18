@@ -13,7 +13,7 @@ namespace TopDogShow {
 	public ref class LongJump : public System::Windows::Forms::Form
 	{
 	public:
-		LongJump(void);
+		LongJump(String^ dogName);
 
 	protected:
 		~LongJump();

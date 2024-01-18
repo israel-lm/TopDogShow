@@ -15,12 +15,9 @@ namespace TopDogShow {
 	public ref class Treadmil : public System::Windows::Forms::Form
 	{
 	public:
-		Treadmil(void)
+		Treadmil()
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
 		}
 
 	protected:
@@ -43,6 +40,8 @@ namespace TopDogShow {
 	private: System::Windows::Forms::Button^ saveButton;
 	private: System::Windows::Forms::Button^ finishButton;
 	private: System::Windows::Forms::Button^ cancelButton;
+	private: System::Windows::Forms::Label^ dogNameLabel;
+
 
 
 	protected:
@@ -70,6 +69,7 @@ namespace TopDogShow {
 			this->saveButton = (gcnew System::Windows::Forms::Button());
 			this->finishButton = (gcnew System::Windows::Forms::Button());
 			this->cancelButton = (gcnew System::Windows::Forms::Button());
+			this->dogNameLabel = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dogPicture))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -78,7 +78,7 @@ namespace TopDogShow {
 			this->headerLabel->AutoSize = true;
 			this->headerLabel->Location = System::Drawing::Point(238, 24);
 			this->headerLabel->Name = L"headerLabel";
-			this->headerLabel->Size = System::Drawing::Size(131, 29);
+			this->headerLabel->Size = System::Drawing::Size(197, 44);
 			this->headerLabel->TabIndex = 0;
 			this->headerLabel->Text = L"Treadmil";
 			// 
@@ -88,7 +88,7 @@ namespace TopDogShow {
 			this->dogCombo->FormattingEnabled = true;
 			this->dogCombo->Location = System::Drawing::Point(21, 129);
 			this->dogCombo->Name = L"dogCombo";
-			this->dogCombo->Size = System::Drawing::Size(338, 37);
+			this->dogCombo->Size = System::Drawing::Size(338, 52);
 			this->dogCombo->TabIndex = 6;
 			// 
 			// dogLabel
@@ -99,7 +99,7 @@ namespace TopDogShow {
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->dogLabel->Location = System::Drawing::Point(18, 108);
 			this->dogLabel->Name = L"dogLabel";
-			this->dogLabel->Size = System::Drawing::Size(43, 18);
+			this->dogLabel->Size = System::Drawing::Size(66, 29);
 			this->dogLabel->TabIndex = 5;
 			this->dogLabel->Text = L"Dog";
 			// 
@@ -122,7 +122,7 @@ namespace TopDogShow {
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->markLabel->Location = System::Drawing::Point(18, 185);
 			this->markLabel->Name = L"markLabel";
-			this->markLabel->Size = System::Drawing::Size(52, 18);
+			this->markLabel->Size = System::Drawing::Size(80, 29);
 			this->markLabel->TabIndex = 8;
 			this->markLabel->Text = L"Mark";
 			// 
@@ -131,7 +131,7 @@ namespace TopDogShow {
 			this->markBox->Anchor = System::Windows::Forms::AnchorStyles::Left;
 			this->markBox->Location = System::Drawing::Point(21, 215);
 			this->markBox->Name = L"markBox";
-			this->markBox->Size = System::Drawing::Size(100, 37);
+			this->markBox->Size = System::Drawing::Size(100, 51);
 			this->markBox->TabIndex = 9;
 			// 
 			// saveButton
@@ -176,12 +176,24 @@ namespace TopDogShow {
 			this->cancelButton->Text = L"Cancel";
 			this->cancelButton->UseVisualStyleBackColor = false;
 			// 
+			// dogNameLabel
+			// 
+			this->dogNameLabel->Anchor = System::Windows::Forms::AnchorStyles::Right;
+			this->dogNameLabel->AutoSize = true;
+			this->dogNameLabel->Font = (gcnew System::Drawing::Font(L"Verdana", 12, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic))));
+			this->dogNameLabel->Location = System::Drawing::Point(369, 417);
+			this->dogNameLabel->Name = L"dogNameLabel";
+			this->dogNameLabel->Size = System::Drawing::Size(227, 44);
+			this->dogNameLabel->TabIndex = 13;
+			this->dogNameLabel->Text = L"Dog Name";
+			// 
 			// Treadmil
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(17, 29);
+			this->AutoScaleDimensions = System::Drawing::SizeF(25, 44);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::DodgerBlue;
 			this->ClientSize = System::Drawing::Size(650, 528);
+			this->Controls->Add(this->dogNameLabel);
 			this->Controls->Add(this->cancelButton);
 			this->Controls->Add(this->finishButton);
 			this->Controls->Add(this->saveButton);
