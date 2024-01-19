@@ -37,7 +37,6 @@ namespace TopDogShow {
 
 		~PreDiscipline()
 		{
-			resetComboBoxes();
 			if (components)
 				delete components;		
 
@@ -243,28 +242,38 @@ namespace TopDogShow {
 
 		void resetComboBoxes()
 		{
-			dogCombo->SelectedIndex = -1;
-			categoryCombo->SelectedIndex = -1;
+			if (dogCombo)
+				dogCombo->SelectedIndex = -1;
+
+			if (categoryCombo)
+				categoryCombo->SelectedIndex = -1;
 		}
  
 		System::Void categoryCombo_SelectedValueChanged(System::Object^ sender, System::EventArgs^ e) 
 		{
 			ComboBox^ box = (ComboBox^)sender;
-			String^ selectedCategory = box->SelectedItem->ToString();
-			setDogs(selectedCategory);
-			selectedDog = nullptr;
+			if (box->SelectedIndex >= 0)
+			{
+				String^ selectedCategory = (String^)box->SelectedItem;
+				setDogs(selectedCategory);
+				selectedDog = nullptr;
+			}			
 		}
 
 
 		System::Void dogCombo_SelectedValueChanged(System::Object^ sender, System::EventArgs^ e) 
 		{
 			ComboBox^ box = (ComboBox^)sender;
-			selectedDog = box->SelectedItem->ToString();
+			if (box->SelectedIndex >= 0)
+			{
+				selectedDog = (String^)box->SelectedItem;
+			}
 		}
 
 
 		System::Void cancelButton_Click(System::Object^ sender, System::EventArgs^ e) 
 		{
+			resetComboBoxes();
 			this->Close();
 		}
 
@@ -294,6 +303,7 @@ namespace TopDogShow {
 			{
 				//TODO: log and error out
 			}
+			resetComboBoxes();
 		}
 };
 }

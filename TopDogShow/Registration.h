@@ -261,21 +261,30 @@ private:
 
 	void resetTextBoxes()
 	{
-		nameBox->Text = "";
-		ownerBox->Text = "";
-		weightBox->Text = "";
+		if (nameBox)
+			nameBox->Text = "";
+		if (ownerBox)
+			ownerBox->Text = "";
+		if (weightBox)
+			weightBox->Text = "";
 	}
 
 
 private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	float dogWeight = 0;
+	float weightValue = 0;
 	String^ dogName = nameBox->Text;
 	String^ ownerName = ownerBox->Text;
+	String^ dogWeight = weightBox->Text;
 	
+	if (dogName->Length == 0 || ownerName->Length == 0 || dogWeight->Length == 0)
+	{
+		showError("Fill all fields");
+	}
+
 	try
 	{
-		dogWeight = (float)((Convert::ToDouble(weightBox->Text)));
+		weightValue = (float)((Convert::ToDouble(dogWeight)));
 	}
 	catch (Exception^ e)
 	{
@@ -286,7 +295,7 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 	Dog^ dog = gcnew Dog(
 		dogName, 
 		ownerName, 
-		dogWeight 
+		weightValue 
 	);
 	
 	DBErrorType result = dbHandler->saveDogInfo(dog);
@@ -294,20 +303,12 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 	if (result == DBErrorType::OK)
 	{
 		resetTextBoxes();
-		MessageBox::Show(
-			"Dog succesfully registered",
-			"Registration info",
-			MessageBoxButtons::OK
-		);
+		showError("Dog succesfully registered");
 	}
 	else
 	{
 		resetTextBoxes();
-		MessageBox::Show(
-			marshal_as<String^>(DBErrorString.at(result)),
-			"Registration error",
-			MessageBoxButtons::OK
-		);
+		showError(marshal_as<String^>(DBErrorString.at(result)));
 	}
 		
 }
