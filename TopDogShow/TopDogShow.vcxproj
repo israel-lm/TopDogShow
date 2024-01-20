@@ -129,6 +129,7 @@
     <ClCompile Include="LongJump.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MarkTableDiscipline.cpp" />
+    <ClCompile Include="PerformanceData.cpp" />
     <ClCompile Include="PreDiscipline.cpp" />
     <ClCompile Include="Registration.cpp" />
     <ClCompile Include="Results.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="MarkTableDiscipline.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="PerformanceData.h" />
     <ClInclude Include="PreDiscipline.h">
       <FileType>CppForm</FileType>
     </ClInclude>
