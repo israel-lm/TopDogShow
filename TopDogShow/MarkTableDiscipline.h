@@ -17,9 +17,13 @@ namespace TopDogShow {
 	{
 	public:
 		MarkTableDiscipline(String^ dogName)
-		{
+		{	
+			allCombos = gcnew List<ComboBox^>();
 			InitializeComponent();
 			dogNameLabel->Text = dogName;
+			setComboHandlers();
+			performanceData = gcnew MarkTablePerformanceData();
+			dbHandler = DBHandler::Instance;
 		}
 
 		virtual void saveMarks() {}
@@ -34,30 +38,6 @@ namespace TopDogShow {
 	private: System::Windows::Forms::TableLayoutPanel^ markPanel8;
 	private: System::Windows::Forms::TableLayoutPanel^ markPanel9;
 	private: System::Windows::Forms::TableLayoutPanel^ markPanel10;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	public:
@@ -126,7 +106,12 @@ namespace TopDogShow {
 		System::Windows::Forms::ComboBox^ mark5Attempt3Combo;
 		System::ComponentModel::Container ^components;
 
+		MarkTablePerformanceData^ performanceData = nullptr;
+		DBHandler^ dbHandler;
+		List<ComboBox^>^ allCombos;
+
 #pragma region Windows Form Designer generated code
+		
 
 		void InitializeComponent(void)
 		{
@@ -146,40 +131,71 @@ namespace TopDogShow {
 			this->dogPicture = (gcnew System::Windows::Forms::PictureBox());
 			this->cancelButton = (gcnew System::Windows::Forms::Button());
 			this->finishButton = (gcnew System::Windows::Forms::Button());
+
 			this->mark10Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark10Attempt3Combo);
 			this->mark10Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark10Attempt2Combo);
 			this->mark10Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark10Attempt1Combo);
 			this->mark9Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark9Attempt3Combo);
 			this->mark9Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark9Attempt2Combo);
 			this->mark9Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark9Attempt1Combo);
 			this->mark8Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark8Attempt3Combo);
 			this->mark8Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark8Attempt2Combo);
 			this->mark8Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark8Attempt1Combo);
 			this->mark7Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark7Attempt3Combo);
 			this->mark7Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark7Attempt2Combo);
 			this->mark7Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark7Attempt1Combo);
 			this->mark6Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark6Attempt3Combo);
 			this->mark6Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark6Attempt2Combo);
 			this->mark6Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark6Attempt1Combo);
 			this->mark5Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark5Attempt3Combo);
 			this->mark5Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark5Attempt2Combo);
 			this->mark5Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark5Attempt1Combo);
 			this->mark4Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark4Attempt3Combo);
 			this->mark4Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark4Attempt2Combo);
 			this->mark4Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark4Attempt1Combo);
 			this->mark3Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark3Attempt3Combo);
 			this->mark3Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark3Attempt2Combo);
 			this->mark3Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark3Attempt1Combo);
 			this->mark2Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark2Attempt3Combo);
 			this->mark2Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark2Attempt2Combo);
 			this->mark2Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark2Attempt1Combo);
 			this->attemptsLabel = (gcnew System::Windows::Forms::Label());
 			this->mark1Attempt3Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark1Attempt3Combo);
 			this->mark1Attempt2Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark1Attempt2Combo);
 			this->attempt1Label = (gcnew System::Windows::Forms::Label());
 			this->attempt2Label = (gcnew System::Windows::Forms::Label());
 			this->attempt3Label = (gcnew System::Windows::Forms::Label());
 			this->mark1Attempt1Combo = (gcnew System::Windows::Forms::ComboBox());
+			this->allCombos->Add(mark1Attempt1Combo);
 			this->dogNameLabel = (gcnew System::Windows::Forms::Label());
 			this->markPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->markPanel2 = (gcnew System::Windows::Forms::TableLayoutPanel());
@@ -754,7 +770,7 @@ namespace TopDogShow {
 			this->markPanel1->Name = L"markPanel1";
 			this->markPanel1->RowCount = 1;
 			this->markPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-			this->markPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
+			this->markPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 39)));
 			this->markPanel1->Size = System::Drawing::Size(404, 39);
 			this->markPanel1->TabIndex = 8;
 			// 
@@ -773,7 +789,7 @@ namespace TopDogShow {
 			this->markPanel2->Name = L"markPanel2";
 			this->markPanel2->RowCount = 1;
 			this->markPanel2->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-			this->markPanel2->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
+			this->markPanel2->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 39)));
 			this->markPanel2->Size = System::Drawing::Size(404, 39);
 			this->markPanel2->TabIndex = 9;
 			// 
@@ -792,7 +808,7 @@ namespace TopDogShow {
 			this->markPanel3->Name = L"markPanel3";
 			this->markPanel3->RowCount = 1;
 			this->markPanel3->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-			this->markPanel3->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
+			this->markPanel3->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 39)));
 			this->markPanel3->Size = System::Drawing::Size(404, 39);
 			this->markPanel3->TabIndex = 10;
 			// 
@@ -811,7 +827,7 @@ namespace TopDogShow {
 			this->markPanel4->Name = L"markPanel4";
 			this->markPanel4->RowCount = 1;
 			this->markPanel4->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-			this->markPanel4->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
+			this->markPanel4->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 39)));
 			this->markPanel4->Size = System::Drawing::Size(404, 39);
 			this->markPanel4->TabIndex = 11;
 			// 
@@ -830,7 +846,7 @@ namespace TopDogShow {
 			this->markPanel5->Name = L"markPanel5";
 			this->markPanel5->RowCount = 1;
 			this->markPanel5->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-			this->markPanel5->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
+			this->markPanel5->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 39)));
 			this->markPanel5->Size = System::Drawing::Size(404, 39);
 			this->markPanel5->TabIndex = 12;
 			// 
@@ -849,7 +865,7 @@ namespace TopDogShow {
 			this->markPanel6->Name = L"markPanel6";
 			this->markPanel6->RowCount = 1;
 			this->markPanel6->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-			this->markPanel6->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
+			this->markPanel6->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 39)));
 			this->markPanel6->Size = System::Drawing::Size(404, 39);
 			this->markPanel6->TabIndex = 13;
 			// 
@@ -868,7 +884,7 @@ namespace TopDogShow {
 			this->markPanel7->Name = L"markPanel7";
 			this->markPanel7->RowCount = 1;
 			this->markPanel7->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-			this->markPanel7->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
+			this->markPanel7->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 39)));
 			this->markPanel7->Size = System::Drawing::Size(404, 39);
 			this->markPanel7->TabIndex = 14;
 			// 
@@ -887,7 +903,7 @@ namespace TopDogShow {
 			this->markPanel8->Name = L"markPanel8";
 			this->markPanel8->RowCount = 1;
 			this->markPanel8->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-			this->markPanel8->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
+			this->markPanel8->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 39)));
 			this->markPanel8->Size = System::Drawing::Size(404, 39);
 			this->markPanel8->TabIndex = 15;
 			// 
@@ -906,7 +922,7 @@ namespace TopDogShow {
 			this->markPanel9->Name = L"markPanel9";
 			this->markPanel9->RowCount = 1;
 			this->markPanel9->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-			this->markPanel9->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
+			this->markPanel9->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 39)));
 			this->markPanel9->Size = System::Drawing::Size(404, 39);
 			this->markPanel9->TabIndex = 16;
 			// 
@@ -925,7 +941,7 @@ namespace TopDogShow {
 			this->markPanel10->Name = L"markPanel10";
 			this->markPanel10->RowCount = 1;
 			this->markPanel10->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-			this->markPanel10->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
+			this->markPanel10->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 39)));
 			this->markPanel10->Size = System::Drawing::Size(404, 39);
 			this->markPanel10->TabIndex = 17;
 			// 
@@ -988,7 +1004,6 @@ namespace TopDogShow {
 
 		}
 #pragma endregion
-		MarkTablePerformanceData^ performanceData;
 	
 	System::Void cancelButton_Click(System::Object^ sender, System::EventArgs^ e) 
 	{
@@ -997,7 +1012,90 @@ namespace TopDogShow {
 
 	System::Void finishButton_Click(System::Object^ sender, System::EventArgs^ e) 
 	{
+		if (performanceData)
+		{
+			if (headerLabel->Text == L"High Jump")
+				dbHandler->saveHighJumpResults(performanceData);
+			else
+				dbHandler->saveWallClimbResults(performanceData);
+		}
+		else
+			MessageBox::Show(
+				"No performance data",
+				"Information error",
+				MessageBoxButtons::OK
+			);
+		resetFields();
+	}
 
+	void resetFields()
+	{
+		for each (ComboBox^ box in allCombos)
+		{
+			if (box)
+				box->SelectedIndex = -1;
+		}
+	}
+
+	System::Void setComboHandlers()
+	{
+		for each (ComboBox ^ box in allCombos)
+		{
+			if (box)
+				box->SelectedIndexChanged += gcnew System::EventHandler(this, &MarkTableDiscipline::enter_attempt);
+		}	
+	}
+
+	System::Void enter_attempt(System::Object^ sender, System::EventArgs^ e)
+	{
+		ComboBox^ box = (ComboBox^)sender;
+
+		if (box && box->SelectedIndex >= 0)
+		{
+			TableLayoutPanel^ currentPanel = (TableLayoutPanel^)box->Parent;
+			if (currentPanel)
+			{
+				int controlIndex = 0;
+				int mark = 0;
+				int attempts = 0;
+				bool positiveResult = false;
+
+				for each (Control^ control in currentPanel->Controls)
+				{
+					switch (controlIndex)
+					{
+					case 0: // read the mark
+						mark = (int)(Convert::ToDouble(control->Text)*10); //convert to cm
+						break;
+					case 1: // read result of 1st attempt
+					case 2: // read result of 2nd attempt
+					case 3: //read result of 3rd attempt
+						ComboBox^ currentBox = (ComboBox^)control;
+						int selectedIndex = currentBox->SelectedIndex;
+						if (selectedIndex > -1)
+						{
+							attempts++;
+							if (selectedIndex == 0)
+								positiveResult = true;
+						}
+							
+						break;
+					}
+					controlIndex++;
+				}
+				if (performanceData)
+				{
+					if (!performanceData->marks->ContainsKey(mark))
+					{
+						MarksData^ data = gcnew MarksData();
+						performanceData->marks[mark] = data;
+					}
+					performanceData->dogName = dogNameLabel->Text;
+					performanceData->marks[mark]->attempts = attempts;
+					performanceData->marks[mark]->result = positiveResult;
+				}				
+			}
+		}
 	}
 };
 }

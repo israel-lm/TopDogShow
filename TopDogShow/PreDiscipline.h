@@ -264,7 +264,7 @@ namespace TopDogShow {
 		System::Void dogCombo_SelectedValueChanged(System::Object^ sender, System::EventArgs^ e) 
 		{
 			ComboBox^ box = (ComboBox^)sender;
-			if (box->SelectedIndex >= 0)
+			if (box && box->SelectedIndex >= 0)
 			{
 				selectedDog = (String^)box->SelectedItem;
 			}
@@ -285,7 +285,6 @@ namespace TopDogShow {
 				if (selectedDog)
 				{
 					Form^ discipline = disciplineFactory->createDiscipline(disciplineType, selectedDog);
-					discipline->TopMost = true;
 					discipline->Show();
 					this->Close();
 				}

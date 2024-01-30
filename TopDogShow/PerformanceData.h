@@ -5,31 +5,50 @@ namespace TopDogShow
 	using namespace System;
 	using namespace System::Collections::Generic;
 
-	public ref struct MarksData
+	public ref class MarksData
 	{
-		float mark;
+	public:
+		int mark;
 		bool result;
 		int attempts;
 	};
 
-	public ref struct PerformanceData
+	[Serializable]
+	public ref class PerformanceData
 	{
+	public:
 		String^ dogName;
 	};
 
-	public ref struct MarkTablePerformanceData : public PerformanceData
+	[Serializable]
+	public ref class MarkTablePerformanceData : public PerformanceData
 	{
-		List<MarksData^>^ marks;
+	public:
+		Dictionary<int, MarksData^>^ marks;
+
+		MarkTablePerformanceData()
+		{
+			marks = gcnew Dictionary<int, MarksData^>();
+		}		
 	};
 
-	public ref struct LongJumpPerformanceData : PerformanceData
+	[Serializable]
+	public ref class LongJumpPerformanceData : PerformanceData
 	{
-		List<float> marks;
+	public:
+		List<int>^ marks;
+
+		LongJumpPerformanceData()
+		{
+			marks = gcnew List<int>();
+		}
 	};
 
-	public ref struct TreadmillPerformanceData : PerformanceData
+	[Serializable]
+	public ref class TreadmillPerformanceData : PerformanceData
 	{
-		float distance;
+	public:
+		int distance;
 	};
 }
 

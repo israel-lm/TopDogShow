@@ -3,6 +3,7 @@
 
 #include "Dog.h"
 #include "User.h"
+#include "PerformanceData.h"
 
 
 namespace TopDogShow
@@ -44,6 +45,12 @@ namespace TopDogShow
 
 		DBErrorType getAllDogs(List<Dog^>^ dogs);
 
+		DBErrorType saveWallClimbResults(MarkTablePerformanceData^ data);
+		DBErrorType saveHighJumpResults(MarkTablePerformanceData^ data);
+		DBErrorType saveLongJumpResults(LongJumpPerformanceData^ data);
+		DBErrorType saveTreadmillResults(TreadmillPerformanceData^ data);
+		
+
 		static property DBHandler^ Instance 
 		{ 
 			DBHandler^ get() 
@@ -59,9 +66,12 @@ namespace TopDogShow
 
 		static DBErrorType executeNonQuery(String^ operation);
 
-		static bool checkEntryExists(String^ searchName, String^ tableName);
+		static bool checkEntryExists(String^ query);
 		static bool checkDogExists(String^ dogName);
 		static bool checkUserExists(String^ username);
+		static bool checkTableExists(String^ tableName);
+		DBErrorType createTableMarkTableResults(String^ tableName);
+		DBErrorType saveResults(PerformanceData^ data, String^ fileNameAppend);
 
 		DBHandler();
 	};

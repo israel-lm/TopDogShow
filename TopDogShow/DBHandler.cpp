@@ -3,6 +3,8 @@
 using namespace System;
 using namespace Collections::Generic;
 using namespace TopDogShow;
+using namespace System::IO;
+using namespace Newtonsoft::Json;
 
 
 DBHandler::DBHandler(){}
@@ -152,6 +154,56 @@ DBErrorType DBHandler::getAllDogs(List<Dog^>^ dogs)
 	return DBErrorType::OK;
 }
 
+DBErrorType DBHandler::saveResults(PerformanceData^ data, String^ fileNameAppend)
+{
+	String^ filePath = String::Format("C:\\WINDOWS\\Temp\\{0}_{1}.json", data->dogName, fileNameAppend);
+	
+	try
+	{
+		String^ jsonData = JsonConvert::SerializeObject(data);
+		File::WriteAllText(filePath, jsonData);
+	}
+	catch (Exception^ e)
+	{
+		return DBErrorType::UNKNOWN;
+	}
+	
+	return DBErrorType::OK;
+}
+
+DBErrorType  DBHandler::saveWallClimbResults(MarkTablePerformanceData^ data)
+{
+	return this->saveResults(data, "WallClimbResults");
+}
+
+DBErrorType  DBHandler::saveHighJumpResults(MarkTablePerformanceData^ data)
+{
+	return this->saveResults(data, "HighJumpResults");
+}
+
+DBErrorType  DBHandler::saveLongJumpResults(LongJumpPerformanceData^ data)
+{
+	return this->saveResults(data, "LongJumpResults");
+}
+
+DBErrorType  DBHandler::saveTreadmillResults(TreadmillPerformanceData^ data)
+{
+	return this->saveResults(data, "TreadmillResults");
+}
+
+DBErrorType DBHandler::createTableMarkTableResults(String^ tableName)
+{
+	String^ sqlOperation = String::Format(
+		"CREATE TABLE {0} (\
+			mark int,\
+			attempts int,\
+			result int\
+		);",
+		tableName
+	);
+
+	return DBHandler::executeNonQuery(sqlOperation);
+}
 
  DBErrorType DBHandler::executeNonQuery(String^ operation)
 {
@@ -179,17 +231,10 @@ DBErrorType DBHandler::getAllDogs(List<Dog^>^ dogs)
 	return DBErrorType::OK;
 }
 
-bool DBHandler::checkEntryExists(String^ searchName, String^ tableName)
+bool DBHandler::checkEntryExists(String^ query)
 {
-	String^ sqlOperation = String::Format(
-		"SELECT * FROM {0} WHERE name LIKE '{1}'",
-		tableName,
-		searchName
-	);
-
-
 	SqlConnection sqlConnection(DBHandler::connectionString);
-	SqlCommand command(sqlOperation, % sqlConnection);
+	SqlCommand command(query, % sqlConnection);
 
 	try
 	{
@@ -212,12 +257,24 @@ bool DBHandler::checkEntryExists(String^ searchName, String^ tableName)
 	}
 }
 
+bool DBHandler::checkTableExists(String^ tableName)
+{
+	String^ operation = String::Format(
+		"SELECT * FROM INFORMATION_SCHEMA.TABLES \
+		WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = '{0}'",
+		tableName);
+	return DBHandler::checkEntryExists(operation);
+}
+
 bool DBHandler::checkDogExists(String^ dogName)
 {
-	return DBHandler::checkEntryExists(dogName, "dogs");	
+	String^ operation = String::Format("SELECT * FROM dogs WHERE name LIKE '{0}'", dogName);
+	return DBHandler::checkEntryExists(operation);	
 }
+
 bool DBHandler::checkUserExists(String^ username)
 {
-	return DBHandler::checkEntryExists(username, "users");
+	String^ operation = String::Format("SELECT * FROM users WHERE name LIKE '{0}'", username);
+	return DBHandler::checkEntryExists(operation);
 }
 
