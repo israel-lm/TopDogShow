@@ -3,7 +3,7 @@
 #include "PreDiscipline.h"
 #include "Results.h"
 #include "Registration.h"
-#include "Treadmil.h"
+#include "Treadmill.h"
 #include "Competitors.h"
 
 namespace TopDogShow {
@@ -51,7 +51,7 @@ namespace TopDogShow {
 		System::Windows::Forms::Button^ wallClimbButton;
 		System::Windows::Forms::Button^ highJumpButton;
 		System::Windows::Forms::Button^ longJumpButton;
-		System::Windows::Forms::Button^ treadmilButton;
+		System::Windows::Forms::Button^ TreadmillButton;
 		System::Windows::Forms::Button^ registrationButton;
 		System::Windows::Forms::Button^ configButton;
 		System::Windows::Forms::Button^ leaveButton;
@@ -60,7 +60,7 @@ namespace TopDogShow {
 		System::ComponentModel::Container ^components;
 
 		PreDiscipline^ preDisciplineScreen;
-		Form^ treadmilScreen;
+		Form^ TreadmillScreen;
 		Results^ resultsScreen;
 		Registration^ registrationScreen;
 
@@ -84,10 +84,10 @@ namespace TopDogShow {
 			preDisciplineScreen->setDisciplineType(DisciplineType::LongJump);
 			preDisciplineScreen->ShowDialog();
 		}
-		System::Void treadmilButton_Click(System::Object^ sender, System::EventArgs^ e)
+		System::Void TreadmillButton_Click(System::Object^ sender, System::EventArgs^ e)
 		{
-			treadmilScreen = disciplineFactory->createDiscipline(DisciplineType::Treadmil, nullptr);
-			treadmilScreen->Show();
+			TreadmillScreen = disciplineFactory->createDiscipline(DisciplineType::Treadmill, nullptr);
+			TreadmillScreen->Show();
 		}
 		System::Void leaveButton_Click(System::Object^ sender, System::EventArgs^ e)
 		{
@@ -104,7 +104,7 @@ namespace TopDogShow {
 			this->wallClimbButton = (gcnew System::Windows::Forms::Button());
 			this->highJumpButton = (gcnew System::Windows::Forms::Button());
 			this->longJumpButton = (gcnew System::Windows::Forms::Button());
-			this->treadmilButton = (gcnew System::Windows::Forms::Button());
+			this->TreadmillButton = (gcnew System::Windows::Forms::Button());
 			this->registrationButton = (gcnew System::Windows::Forms::Button());
 			this->configButton = (gcnew System::Windows::Forms::Button());
 			this->leaveButton = (gcnew System::Windows::Forms::Button());
@@ -159,16 +159,16 @@ namespace TopDogShow {
 			this->longJumpButton->UseVisualStyleBackColor = false;
 			this->longJumpButton->Click += gcnew System::EventHandler(this, &Home::longJumpButton_Click);
 			// 
-			// treadmilButton
+			// TreadmillButton
 			// 
-			this->treadmilButton->BackColor = System::Drawing::Color::White;
-			this->treadmilButton->Location = System::Drawing::Point(183, 261);
-			this->treadmilButton->Name = L"treadmilButton";
-			this->treadmilButton->Size = System::Drawing::Size(138, 79);
-			this->treadmilButton->TabIndex = 5;
-			this->treadmilButton->Text = L"Treadmil";
-			this->treadmilButton->UseVisualStyleBackColor = false;
-			this->treadmilButton->Click += gcnew System::EventHandler(this, &Home::treadmilButton_Click);
+			this->TreadmillButton->BackColor = System::Drawing::Color::White;
+			this->TreadmillButton->Location = System::Drawing::Point(183, 261);
+			this->TreadmillButton->Name = L"TreadmillButton";
+			this->TreadmillButton->Size = System::Drawing::Size(138, 79);
+			this->TreadmillButton->TabIndex = 5;
+			this->TreadmillButton->Text = L"Treadmill";
+			this->TreadmillButton->UseVisualStyleBackColor = false;
+			this->TreadmillButton->Click += gcnew System::EventHandler(this, &Home::TreadmillButton_Click);
 			// 
 			// registrationButton
 			// 
@@ -238,7 +238,7 @@ namespace TopDogShow {
 			this->Controls->Add(this->leaveButton);
 			this->Controls->Add(this->configButton);
 			this->Controls->Add(this->registrationButton);
-			this->Controls->Add(this->treadmilButton);
+			this->Controls->Add(this->TreadmillButton);
 			this->Controls->Add(this->longJumpButton);
 			this->Controls->Add(this->highJumpButton);
 			this->Controls->Add(this->wallClimbButton);

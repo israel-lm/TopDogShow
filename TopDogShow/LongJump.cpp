@@ -1,14 +1,18 @@
 #include "LongJump.h"
 
 
-TopDogShow::LongJump::LongJump(String^ dogName)
+using namespace TopDogShow;
+
+LongJump::LongJump(String^ dogName)
 {
+    allTexts = gcnew List<TextBox^>();
 	InitializeComponent();
     this->dogName->Text = dogName;
+    dbHandler = DBHandler::Instance;
 }
 
 
-TopDogShow::LongJump::~LongJump()
+LongJump::~LongJump()
 {
 	if (components)
 	{
@@ -17,17 +21,37 @@ TopDogShow::LongJump::~LongJump()
 }
 
 
-System::Void TopDogShow::LongJump::cancelButton_Click(System::Object^ sender, System::EventArgs^ e)
+System::Void LongJump::cancelButton_Click(System::Object^ sender, System::EventArgs^ e)
 {
-
+    resetFields();
+    this->Close();
 }
 
-System::Void TopDogShow::LongJump::finishButton_Click(System::Object^ sender, System::EventArgs^ e)
+System::Void LongJump::finishButton_Click(System::Object^ sender, System::EventArgs^ e)
 {
-
+    if (allTexts)
+    {
+        LongJumpPerformanceData^ performanceData = gcnew LongJumpPerformanceData();
+        performanceData->dogName = dogName->Text;
+        for each (TextBox^ text in allTexts)
+        {
+            performanceData->marks->Add((int)(Convert::ToDouble(text->Text) * 100)); //convert to cm
+        }
+        dbHandler->saveLongJumpResults(performanceData);
+    }
+    resetFields();
+    this->Close();
 }
 
-void TopDogShow::LongJump::InitializeComponent(void)
+void LongJump::resetFields()
+{
+    for each (TextBox ^ text in allTexts)
+    {
+        text->Text = "";
+    }
+}
+
+void LongJump::InitializeComponent(void)
 {
     System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(LongJump::typeid));
     this->headerLabel = (gcnew System::Windows::Forms::Label());
@@ -40,10 +64,15 @@ void TopDogShow::LongJump::InitializeComponent(void)
     this->attempt4Label = (gcnew System::Windows::Forms::Label());
     this->attempt5Label = (gcnew System::Windows::Forms::Label());
     this->mark1Box = (gcnew System::Windows::Forms::TextBox());
+    this->allTexts->Add(mark1Box);
     this->mark2Box = (gcnew System::Windows::Forms::TextBox());
+    this->allTexts->Add(mark2Box);
     this->mark3Box = (gcnew System::Windows::Forms::TextBox());
+    this->allTexts->Add(mark3Box);
     this->mark4Box = (gcnew System::Windows::Forms::TextBox());
+    this->allTexts->Add(mark4Box);
     this->mark5Box = (gcnew System::Windows::Forms::TextBox());
+    this->allTexts->Add(mark5Box);
     this->markPanel = (gcnew System::Windows::Forms::Panel());
     this->finishButton = (gcnew System::Windows::Forms::Button());
     this->cancelButton = (gcnew System::Windows::Forms::Button());

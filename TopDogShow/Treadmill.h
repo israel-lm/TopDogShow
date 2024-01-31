@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DBHandler.h"
+
 namespace TopDogShow {
 
 	using namespace System;
@@ -10,47 +12,62 @@ namespace TopDogShow {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// Summary for Treadmil
+	/// Summary for Treadmill
 	/// </summary>
-	public ref class Treadmil : public System::Windows::Forms::Form
+	public ref class Treadmill : public System::Windows::Forms::Form
 	{
 	public:
-		Treadmil()
+		Treadmill()
 		{
+			dbHandler = DBHandler::Instance;
 			InitializeComponent();
+			updateDogList();
 		}
 
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		~Treadmil()
+		~Treadmill()
 		{
 			if (components)
 			{
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Label^ headerLabel;
-	private: System::Windows::Forms::ComboBox^ dogCombo;
-	private: System::Windows::Forms::Label^ dogLabel;
-	private: System::Windows::Forms::PictureBox^ dogPicture;
-	private: System::Windows::Forms::Label^ markLabel;
-	private: System::Windows::Forms::TextBox^ markBox;
-	private: System::Windows::Forms::Button^ saveButton;
-	private: System::Windows::Forms::Button^ finishButton;
-	private: System::Windows::Forms::Button^ cancelButton;
-	private: System::Windows::Forms::Label^ dogNameLabel;
-
-
-
-	protected:
-
-	private:
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
+	private: 
+		System::Windows::Forms::Label^ headerLabel;
+		System::Windows::Forms::ComboBox^ dogCombo;
+		System::Windows::Forms::Label^ dogLabel;
+		System::Windows::Forms::PictureBox^ dogPicture;
+		System::Windows::Forms::Label^ markLabel;
+		System::Windows::Forms::TextBox^ markBox;
+		System::Windows::Forms::Button^ saveButton;
+		System::Windows::Forms::Button^ finishButton;
+		System::Windows::Forms::Button^ cancelButton;
+		System::Windows::Forms::Label^ dogNameLabel;
 		System::ComponentModel::Container ^components;
+
+		DBHandler^ dbHandler = nullptr;
+		array<Object^>^ dogNames = nullptr;
+
+
+		void updateDogList()
+		{
+			List<Dog^>^ dogList = gcnew List<Dog^>();
+			dogNames = gcnew array<Object^>(dogList->Count);
+
+			if (dbHandler->getAllDogs(dogList) == DBErrorType::OK)
+			{
+				int idx = 0;
+				for each (Dog^ dog in dogList)
+				{
+					dogNames[idx++] = dog->getName();
+				}
+				dogCombo->Items->Clear();
+				dogCombo->Items->AddRange(dogNames);
+			}			
+		}
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -59,7 +76,7 @@ namespace TopDogShow {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Treadmil::typeid));
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Treadmill::typeid));
 			this->headerLabel = (gcnew System::Windows::Forms::Label());
 			this->dogCombo = (gcnew System::Windows::Forms::ComboBox());
 			this->dogLabel = (gcnew System::Windows::Forms::Label());
@@ -78,9 +95,9 @@ namespace TopDogShow {
 			this->headerLabel->AutoSize = true;
 			this->headerLabel->Location = System::Drawing::Point(238, 24);
 			this->headerLabel->Name = L"headerLabel";
-			this->headerLabel->Size = System::Drawing::Size(197, 44);
+			this->headerLabel->Size = System::Drawing::Size(209, 44);
 			this->headerLabel->TabIndex = 0;
-			this->headerLabel->Text = L"Treadmil";
+			this->headerLabel->Text = L"Treadmill";
 			// 
 			// dogCombo
 			// 
@@ -175,6 +192,7 @@ namespace TopDogShow {
 			this->cancelButton->TabIndex = 12;
 			this->cancelButton->Text = L"Cancel";
 			this->cancelButton->UseVisualStyleBackColor = false;
+			this->cancelButton->Click += gcnew System::EventHandler(this, &Treadmill::cancelButton_Click);
 			// 
 			// dogNameLabel
 			// 
@@ -183,11 +201,11 @@ namespace TopDogShow {
 			this->dogNameLabel->Font = (gcnew System::Drawing::Font(L"Verdana", 12, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic))));
 			this->dogNameLabel->Location = System::Drawing::Point(369, 417);
 			this->dogNameLabel->Name = L"dogNameLabel";
-			this->dogNameLabel->Size = System::Drawing::Size(227, 44);
+			this->dogNameLabel->Size = System::Drawing::Size(151, 29);
 			this->dogNameLabel->TabIndex = 13;
 			this->dogNameLabel->Text = L"Dog Name";
 			// 
-			// Treadmil
+			// Treadmill
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(25, 44);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
@@ -208,7 +226,7 @@ namespace TopDogShow {
 			this->ForeColor = System::Drawing::Color::White;
 			this->Margin = System::Windows::Forms::Padding(8, 7, 8, 7);
 			this->MinimumSize = System::Drawing::Size(665, 565);
-			this->Name = L"Treadmil";
+			this->Name = L"Treadmill";
 			this->Text = L"Top Dog Show";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dogPicture))->EndInit();
 			this->ResumeLayout(false);
@@ -221,5 +239,7 @@ namespace TopDogShow {
 
 
 
+private: System::Void cancelButton_Click(System::Object^ sender, System::EventArgs^ e) {
+}
 };
 }

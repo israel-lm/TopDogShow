@@ -2,7 +2,7 @@
 #include "WallClimb.h"
 #include "HighJump.h"
 #include "LongJump.h"
-#include "Treadmil.h"
+#include "Treadmill.h"
 
 TopDogShow::DisciplineFactory* TopDogShow::DisciplineFactory::instance = nullptr;
 
@@ -21,8 +21,8 @@ System::Windows::Forms::Form^ TopDogShow::DisciplineFactory::createDiscipline(Di
 			return (gcnew HighJump(dogName));
 		case DisciplineType::LongJump:
 			return (gcnew LongJump(dogName));
-		case DisciplineType::Treadmil:
-			return (gcnew Treadmil());
+		case DisciplineType::Treadmill:
+			return (gcnew Treadmill());
 	}
 	
 }

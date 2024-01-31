@@ -1,10 +1,13 @@
 #pragma once
 
+#include "PerformanceData.h"
+#include "DBHandler.h"
+
 namespace TopDogShow {
 
 	using namespace System;
 	using namespace System::ComponentModel;
-	using namespace System::Collections;
+	using namespace System::Collections::Generic;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
@@ -35,8 +38,11 @@ namespace TopDogShow {
 		System::Windows::Forms::Panel^ markPanel;
 		System::Windows::Forms::Button^ finishButton;
 		System::Windows::Forms::Button^ cancelButton;		
-	private: System::Windows::Forms::Label^ dogName;
-		   System::ComponentModel::Container^ components;
+		System::Windows::Forms::Label^ dogName;
+		System::ComponentModel::Container^ components;
+
+		List<TextBox^>^ allTexts;
+		DBHandler^ dbHandler;
 
 #pragma region Windows Form Designer generated code
 
@@ -45,5 +51,7 @@ namespace TopDogShow {
 		System::Void cancelButton_Click(System::Object^ sender, System::EventArgs^ e);
 	
 		System::Void finishButton_Click(System::Object^ sender, System::EventArgs^ e);
+
+		void resetFields();
 	};
 }

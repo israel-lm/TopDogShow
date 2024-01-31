@@ -186,9 +186,9 @@ DBErrorType  DBHandler::saveLongJumpResults(LongJumpPerformanceData^ data)
 	return this->saveResults(data, "LongJumpResults");
 }
 
-DBErrorType  DBHandler::saveTreadmillResults(TreadmillPerformanceData^ data)
+DBErrorType  DBHandler::saveTreadmilllResults(TreadmilllPerformanceData^ data)
 {
-	return this->saveResults(data, "TreadmillResults");
+	return this->saveResults(data, "TreadmilllResults");
 }
 
 DBErrorType DBHandler::createTableMarkTableResults(String^ tableName)

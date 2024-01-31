@@ -8,7 +8,6 @@ namespace TopDogShow
 	public ref class MarksData
 	{
 	public:
-		int mark;
 		bool result;
 		int attempts;
 	};
@@ -45,7 +44,7 @@ namespace TopDogShow
 	};
 
 	[Serializable]
-	public ref class TreadmillPerformanceData : PerformanceData
+	public ref class TreadmilllPerformanceData : PerformanceData
 	{
 	public:
 		int distance;

@@ -48,7 +48,7 @@ namespace TopDogShow
 		DBErrorType saveWallClimbResults(MarkTablePerformanceData^ data);
 		DBErrorType saveHighJumpResults(MarkTablePerformanceData^ data);
 		DBErrorType saveLongJumpResults(LongJumpPerformanceData^ data);
-		DBErrorType saveTreadmillResults(TreadmillPerformanceData^ data);
+		DBErrorType saveTreadmilllResults(TreadmilllPerformanceData^ data);
 		
 
 		static property DBHandler^ Instance 

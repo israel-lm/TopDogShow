@@ -13,7 +13,7 @@ namespace TopDogShow
 		WallClimb = 1,
 		HighJump,
 		LongJump,
-		Treadmil
+		Treadmill
 	};
 
 	public ref class Categories

@@ -136,7 +136,7 @@
     <ClCompile Include="PreDiscipline.cpp" />
     <ClCompile Include="Registration.cpp" />
     <ClCompile Include="Results.cpp" />
-    <ClCompile Include="Treadmil.cpp" />
+    <ClCompile Include="Treadmill.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Competitors.h" />
@@ -168,7 +168,7 @@
     <ClInclude Include="Results.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="Treadmil.h">
+    <ClInclude Include="Treadmill.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="User.h" />
@@ -196,8 +196,8 @@
     <EmbeddedResource Include="Results.resx">
       <DependentUpon>Results.h</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Treadmil.resx">
-      <DependentUpon>Treadmil.h</DependentUpon>
+    <EmbeddedResource Include="Treadmill.resx">
+      <DependentUpon>Treadmill.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

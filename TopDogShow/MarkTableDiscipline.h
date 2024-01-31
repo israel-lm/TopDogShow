@@ -19,6 +19,7 @@ namespace TopDogShow {
 		MarkTableDiscipline(String^ dogName)
 		{	
 			allCombos = gcnew List<ComboBox^>();
+			allTexts = gcnew List<TextBox^>();
 			InitializeComponent();
 			dogNameLabel->Text = dogName;
 			setComboHandlers();
@@ -109,6 +110,7 @@ namespace TopDogShow {
 		MarkTablePerformanceData^ performanceData = nullptr;
 		DBHandler^ dbHandler;
 		List<ComboBox^>^ allCombos;
+		List<TextBox^>^ allTexts;
 
 #pragma region Windows Form Designer generated code
 		
@@ -118,15 +120,25 @@ namespace TopDogShow {
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MarkTableDiscipline::typeid));
 			this->headerLabel = (gcnew System::Windows::Forms::Label());
 			this->mark10Box = (gcnew System::Windows::Forms::TextBox());
+			this->allTexts->Add(mark10Box);
 			this->mark9Box = (gcnew System::Windows::Forms::TextBox());
+			this->allTexts->Add(mark9Box);
 			this->mark8Box = (gcnew System::Windows::Forms::TextBox());
+			this->allTexts->Add(mark8Box);
 			this->mark7Box = (gcnew System::Windows::Forms::TextBox());
+			this->allTexts->Add(mark7Box);
 			this->mark6Box = (gcnew System::Windows::Forms::TextBox());
+			this->allTexts->Add(mark6Box);
 			this->mark5Box = (gcnew System::Windows::Forms::TextBox());
+			this->allTexts->Add(mark5Box);
 			this->mark4Box = (gcnew System::Windows::Forms::TextBox());
+			this->allTexts->Add(mark4Box);
 			this->mark3Box = (gcnew System::Windows::Forms::TextBox());
+			this->allTexts->Add(mark3Box);
 			this->mark2Box = (gcnew System::Windows::Forms::TextBox());
+			this->allTexts->Add(mark2Box);
 			this->mark1Box = (gcnew System::Windows::Forms::TextBox());
+			this->allTexts->Add(mark1Box);
 			this->marksLabel = (gcnew System::Windows::Forms::Label());
 			this->dogPicture = (gcnew System::Windows::Forms::PictureBox());
 			this->cancelButton = (gcnew System::Windows::Forms::Button());
@@ -1007,6 +1019,7 @@ namespace TopDogShow {
 	
 	System::Void cancelButton_Click(System::Object^ sender, System::EventArgs^ e) 
 	{
+		resetFields();
 		this->Close();
 	}
 
@@ -1026,10 +1039,17 @@ namespace TopDogShow {
 				MessageBoxButtons::OK
 			);
 		resetFields();
+		this->Close();
 	}
 
 	void resetFields()
 	{
+		for each (TextBox^ text in allTexts)
+		{
+			if (text)
+				text->Text = "";
+		}
+
 		for each (ComboBox^ box in allCombos)
 		{
 			if (box)
@@ -1039,7 +1059,7 @@ namespace TopDogShow {
 
 	System::Void setComboHandlers()
 	{
-		for each (ComboBox ^ box in allCombos)
+		for each (ComboBox^ box in allCombos)
 		{
 			if (box)
 				box->SelectedIndexChanged += gcnew System::EventHandler(this, &MarkTableDiscipline::enter_attempt);
@@ -1065,7 +1085,7 @@ namespace TopDogShow {
 					switch (controlIndex)
 					{
 					case 0: // read the mark
-						mark = (int)(Convert::ToDouble(control->Text)*10); //convert to cm
+						mark = (int)(Convert::ToDouble(control->Text)*100); //convert to cm
 						break;
 					case 1: // read result of 1st attempt
 					case 2: // read result of 2nd attempt
