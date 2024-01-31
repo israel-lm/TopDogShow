@@ -6,7 +6,6 @@ using namespace System;
 
 TopDogShow::Competitors::Competitors()
 {
-	this->loadCompetitors();
 }
 
 
@@ -14,9 +13,11 @@ void TopDogShow::Competitors::loadCompetitors()
 {
 	DBHandler^ handler = DBHandler::Instance;
 	List<TopDogShow::Dog^>^ dogs = gcnew List<TopDogShow::Dog^>;
+	
 
 	if (!competitors)
 		competitors = gcnew Dictionary<String^, List<Dog^>^>();
+	competitors->Clear();
 
 	if (handler)
 	{
@@ -45,5 +46,6 @@ void TopDogShow::Competitors::loadCompetitors()
 
 Dictionary<String^, List<TopDogShow::Dog^>^>^ TopDogShow::Competitors::getCompetitors()
 {
+	this->loadCompetitors();
 	return competitors;
 }

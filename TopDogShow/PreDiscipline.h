@@ -23,9 +23,6 @@ namespace TopDogShow {
 			disciplineType = DisciplineType::Undefined;
 			competitors = Competitors::Instance;
 			InitializeComponent();
-			updateCategoryList();
-			updatedogsByCategory();
-			setCategories();
 		}
 
 		void setDisciplineType(DisciplineType type)
@@ -234,6 +231,7 @@ namespace TopDogShow {
 			this->MinimumSize = System::Drawing::Size(560, 530);
 			this->Name = L"PreDiscipline";
 			this->Text = L"Top Dog Show";
+			this->Load += gcnew System::EventHandler(this, &PreDiscipline::PreDiscipline_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -304,5 +302,11 @@ namespace TopDogShow {
 			}
 			resetComboBoxes();
 		}
+private: System::Void PreDiscipline_Load(System::Object^ sender, System::EventArgs^ e) 
+{
+	updateCategoryList();
+	updatedogsByCategory();
+	setCategories();
+}
 };
 }

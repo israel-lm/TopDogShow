@@ -12,24 +12,24 @@ namespace TopDogShow
 	private:
 		String^ name;
 		String^ owner;
-		float weight;
 		String^ category;
+		String^ pictureFile;
 
-		void defineCategory();
 		String^ escapeChar(String^ original, String^ toEscape);
 	public:
 		Dog() {}
-		Dog(String^ dogName, String^ ownerName, float dogWeight);
+		Dog(String^ dogName, String^ ownerName, String^ category, String^ picturePath);
 
-		String^ getName() { return name; }
-		String^ getOwner() { return owner; }
+		String^ getName();
+		String^ getOwner();
+		String^ getCategory();
+		String^ getPictureFile();
 
-		void setName(String^ name) { this->name = name; }
-		void setOwner(String^ owner) { this->owner = owner; }
-		void setWeight(float weight) { this->weight = weight; defineCategory(); }
-
-		float getWeight() { return weight; }
-		String^ getCategory() { return category; }
+		void setName(String^ name);
+		void setOwner(String^ owner);
+		void setCategory(String^ category);
+		void setPictureFile(String^ path);
+		
 	};
 }
 

@@ -1,26 +1,56 @@
 #include "Dog.h"
 
-TopDogShow::Dog::Dog(String^ dogName, String^ ownerName, float dogWeight)
+TopDogShow::Dog::Dog(String^ dogName, String^ ownerName, String^ category, String^ picturePath)
 {
-	name = dogName;
-	escapeChar(name, "'");
-	owner = ownerName;
-	weight = dogWeight;
-	defineCategory();
+	this->name = dogName;
+	this->escapeChar(name, "'");
+	this->owner = ownerName;
+	this->category = category;
+	this->pictureFile = picturePath;
 }
 
-void TopDogShow::Dog::defineCategory()
-{
-	int weight_int = (int)(100 * weight);
-	if (weight_int  < 2000)
-		category = Categories::LIGHT_WEIGHT;
-	else if ((weight_int >= 2000) && (weight_int < 2500))
-		category = Categories::MIDDLE_WEIGHT;
-	else
-		category = Categories::HEAVY_WEIGHT;
-}
 
 System::String^ TopDogShow::Dog::escapeChar(String^ original, String^ toEscape)
 {
 	return original->Replace(toEscape, String::Format("\{0}", toEscape));
+}
+
+System::String^ TopDogShow::Dog::getName() 
+{ 
+	return name; 
+}
+
+System::String^ TopDogShow::Dog::getOwner() 
+{ 
+	return owner; 
+}
+
+System::String^ TopDogShow::Dog::getCategory() 
+{ 
+	return category; 
+}
+
+System::String^ TopDogShow::Dog::getPictureFile()
+{
+	return pictureFile;
+}
+
+void TopDogShow::Dog::setName(String^ name) 
+{ 
+	this->name = name; 
+}
+
+void TopDogShow::Dog::setOwner(String^ owner) 
+{ 
+	this->owner = owner; 
+}
+
+void TopDogShow::Dog::setCategory(String^ category) 
+{ 
+	this->category = category; 
+}
+
+void TopDogShow::Dog::setPictureFile(String^ path)
+{
+	this->pictureFile = path;
 }

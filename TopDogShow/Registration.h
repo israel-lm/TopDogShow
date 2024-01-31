@@ -26,6 +26,7 @@ namespace TopDogShow {
 		{
 			InitializeComponent();
 			dbHandler = DBHandler::Instance;
+			setCategories();
 		}
 
 	protected:
@@ -41,7 +42,6 @@ namespace TopDogShow {
 		}
 	private: System::Windows::Forms::Label^ headerLabel;
 	private: System::Windows::Forms::Button^ saveButton;
-	protected:
 
 
 
@@ -54,24 +54,20 @@ namespace TopDogShow {
 
 
 	private: System::Windows::Forms::TextBox^ nameBox;
-
-	private: System::Windows::Forms::Label^ weightLabel;
-	private: System::Windows::Forms::TextBox^ weightBox;
+	private: System::Windows::Forms::Label^ categoryLabel;
 
 
-
-	private: System::Windows::Forms::Label^ label4;
 	private: System::Windows::Forms::PictureBox^ dogPicture;
+	private: System::ComponentModel::IContainer^ components;
+		   System::Windows::Forms::ComboBox^ categoryCombo;
 
 	
 
-	private:
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		System::ComponentModel::Container ^components;
+	private:		
+		String^ dogPictureFile = "";
+	private: System::Windows::Forms::Label^ photoLabel;
 
-		DBHandler^ dbHandler;
+		   DBHandler^ dbHandler;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -87,10 +83,10 @@ namespace TopDogShow {
 			this->nameLabel = (gcnew System::Windows::Forms::Label());
 			this->ownerBox = (gcnew System::Windows::Forms::TextBox());
 			this->nameBox = (gcnew System::Windows::Forms::TextBox());
-			this->weightLabel = (gcnew System::Windows::Forms::Label());
-			this->weightBox = (gcnew System::Windows::Forms::TextBox());
-			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->categoryLabel = (gcnew System::Windows::Forms::Label());
 			this->dogPicture = (gcnew System::Windows::Forms::PictureBox());
+			this->categoryCombo = (gcnew System::Windows::Forms::ComboBox());
+			this->photoLabel = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dogPicture))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -131,6 +127,7 @@ namespace TopDogShow {
 			this->cancelButton->TabIndex = 1;
 			this->cancelButton->Text = L"Cancel";
 			this->cancelButton->UseVisualStyleBackColor = false;
+			this->cancelButton->Click += gcnew System::EventHandler(this, &Registration::cancelButton_Click);
 			// 
 			// ownerLabel
 			// 
@@ -178,50 +175,52 @@ namespace TopDogShow {
 			this->nameBox->Size = System::Drawing::Size(396, 35);
 			this->nameBox->TabIndex = 6;
 			// 
-			// weightLabel
+			// categoryLabel
 			// 
-			this->weightLabel->Anchor = System::Windows::Forms::AnchorStyles::Left;
-			this->weightLabel->AutoSize = true;
-			this->weightLabel->Font = (gcnew System::Drawing::Font(L"Verdana", 12, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+			this->categoryLabel->Anchor = System::Windows::Forms::AnchorStyles::Left;
+			this->categoryLabel->AutoSize = true;
+			this->categoryLabel->Font = (gcnew System::Drawing::Font(L"Verdana", 12, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->weightLabel->ForeColor = System::Drawing::Color::White;
-			this->weightLabel->Location = System::Drawing::Point(23, 331);
-			this->weightLabel->Name = L"weightLabel";
-			this->weightLabel->Size = System::Drawing::Size(176, 29);
-			this->weightLabel->TabIndex = 12;
-			this->weightLabel->Text = L"Weight (kg)";
-			// 
-			// weightBox
-			// 
-			this->weightBox->Anchor = System::Windows::Forms::AnchorStyles::Left;
-			this->weightBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->weightBox->Location = System::Drawing::Point(20, 375);
-			this->weightBox->Name = L"weightBox";
-			this->weightBox->Size = System::Drawing::Size(396, 35);
-			this->weightBox->TabIndex = 11;
-			// 
-			// label4
-			// 
-			this->label4->Anchor = System::Windows::Forms::AnchorStyles::Right;
-			this->label4->AutoSize = true;
-			this->label4->Font = (gcnew System::Drawing::Font(L"Verdana", 12, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->label4->ForeColor = System::Drawing::Color::White;
-			this->label4->Location = System::Drawing::Point(494, 95);
-			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(91, 29);
-			this->label4->TabIndex = 13;
-			this->label4->Text = L"Photo";
+			this->categoryLabel->ForeColor = System::Drawing::Color::White;
+			this->categoryLabel->Location = System::Drawing::Point(23, 331);
+			this->categoryLabel->Name = L"categoryLabel";
+			this->categoryLabel->Size = System::Drawing::Size(134, 29);
+			this->categoryLabel->TabIndex = 12;
+			this->categoryLabel->Text = L"Category";
 			// 
 			// dogPicture
 			// 
 			this->dogPicture->Anchor = System::Windows::Forms::AnchorStyles::Right;
+			this->dogPicture->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->dogPicture->Location = System::Drawing::Point(499, 140);
 			this->dogPicture->Name = L"dogPicture";
 			this->dogPicture->Size = System::Drawing::Size(242, 270);
 			this->dogPicture->TabIndex = 14;
 			this->dogPicture->TabStop = false;
+			this->dogPicture->DoubleClick += gcnew System::EventHandler(this, &Registration::dogPicture_DoubleClick);
+			// 
+			// categoryCombo
+			// 
+			this->categoryCombo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->categoryCombo->FormattingEnabled = true;
+			this->categoryCombo->Location = System::Drawing::Point(20, 372);
+			this->categoryCombo->Name = L"categoryCombo";
+			this->categoryCombo->Size = System::Drawing::Size(396, 37);
+			this->categoryCombo->TabIndex = 15;
+			// 
+			// photoLabel
+			// 
+			this->photoLabel->Anchor = System::Windows::Forms::AnchorStyles::Left;
+			this->photoLabel->AutoSize = true;
+			this->photoLabel->Font = (gcnew System::Drawing::Font(L"Verdana", 12, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->photoLabel->ForeColor = System::Drawing::Color::White;
+			this->photoLabel->Location = System::Drawing::Point(495, 95);
+			this->photoLabel->Name = L"photoLabel";
+			this->photoLabel->Size = System::Drawing::Size(91, 29);
+			this->photoLabel->TabIndex = 16;
+			this->photoLabel->Text = L"Photo";
 			// 
 			// Registration
 			// 
@@ -229,12 +228,12 @@ namespace TopDogShow {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::MenuHighlight;
 			this->ClientSize = System::Drawing::Size(778, 594);
+			this->Controls->Add(this->photoLabel);
+			this->Controls->Add(this->categoryCombo);
 			this->Controls->Add(this->saveButton);
 			this->Controls->Add(this->dogPicture);
 			this->Controls->Add(this->cancelButton);
-			this->Controls->Add(this->label4);
-			this->Controls->Add(this->weightLabel);
-			this->Controls->Add(this->weightBox);
+			this->Controls->Add(this->categoryLabel);
 			this->Controls->Add(this->ownerLabel);
 			this->Controls->Add(this->nameLabel);
 			this->Controls->Add(this->ownerBox);
@@ -252,59 +251,96 @@ namespace TopDogShow {
 
 private: 
 	
+	void setCategories()
+	{
+		array<String^>^ categoryList = gcnew array<String^>(3);
+		categoryList[0] = Categories::LIGHT_WEIGHT;
+		categoryList[1] = Categories::MIDDLE_WEIGHT;
+		categoryList[2] = Categories::HEAVY_WEIGHT;
 
-	void resetTextBoxes()
+		if (categoryCombo)
+		{
+			categoryCombo->Items->Clear();
+			categoryCombo->Items->AddRange(categoryList);
+		}
+	}
+	void resetFields()
 	{
 		if (nameBox)
 			nameBox->Text = "";
 		if (ownerBox)
 			ownerBox->Text = "";
-		if (weightBox)
-			weightBox->Text = "";
+		if (categoryCombo)
+			categoryCombo->SelectedIndex = -1;
 	}
 
 
 private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	float weightValue = 0;
 	String^ dogName = nameBox->Text;
 	String^ ownerName = ownerBox->Text;
-	String^ dogWeight = weightBox->Text;
+	String^ category = (String^)categoryCombo->SelectedItem;
 	
-	if (dogName->Length == 0 || ownerName->Length == 0 || dogWeight->Length == 0)
+	if (dogName->Length == 0 || ownerName->Length == 0 || category->Length == 0)
 	{
-		showMessage("Fill all fields", "registration error");
-	}
-
-	try
-	{
-		weightValue = (float)((Convert::ToDouble(dogWeight)));
-	}
-	catch (Exception^ e)
-	{
-		showMessage("Weight value not valid", "registration error");
+		showMessage("Fill all fields", "Registration process");
 		return;
 	}
 
 	Dog^ dog = gcnew Dog(
 		dogName, 
 		ownerName, 
-		weightValue 
+		category,
+		dogPictureFile
 	);
 	
 	DBErrorType result = dbHandler->saveDogInfo(dog);
 
 	if (result == DBErrorType::OK)
 	{
-		resetTextBoxes();
-		showMessage("Dog succesfully registered", "registration error");
+		resetFields();
+		showMessage("Dog succesfully registered", "Registration process");
 	}
 	else
 	{
-		resetTextBoxes();
-		showMessage(marshal_as<String^>(DBErrorString.at(result)), "registration error");
+		resetFields();
+		showMessage(marshal_as<String^>(DBErrorString.at(result)), "Registration process");
 	}
 		
+}	
+	
+	
+	System::Void dogPicture_DoubleClick(System::Object^ sender, System::EventArgs^ e) 
+	{
+		OpenFileDialog^ fileDialog = gcnew OpenFileDialog();
+
+		fileDialog->InitialDirectory = "c:\\";
+		fileDialog->Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.tif;...";
+		fileDialog->FilterIndex = 2;
+		fileDialog->RestoreDirectory = true;
+
+		dogPictureFile = nullptr;
+
+		if (fileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+		{
+			dogPictureFile = fileDialog->FileName;
+			if (dogPictureFile)
+			{
+				try
+				{
+					dogPicture->Image = Image::FromFile(dogPictureFile);
+				}
+				catch (const std::exception&)
+				{
+					showMessage("Error loading image", "Registration process");
+				}
+			}
+			
+		}
+	}
+
+private: System::Void cancelButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	this->Close();
 }
 };
 }

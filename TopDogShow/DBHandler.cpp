@@ -60,11 +60,13 @@ DBErrorType DBHandler::getDogInfo(String^ dogName, Dog^ dog)
 		{
 			String^ name = reader->GetString(0);
 			String^ owner = reader->GetString(1);
-			float weight = reader->GetFloat(2);
+			String^ category = reader->GetString(2);
+			String^ picture = reader->GetString(3);
 
 			dog->setName(name);
 			dog->setOwner(owner);
-			dog->setWeight(weight);
+			dog->setCategory(category);
+			dog->setPictureFile(picture);
 			return DBErrorType::OK;
 		}
 		else
@@ -90,11 +92,11 @@ DBErrorType DBHandler::saveDogInfo(Dog^ dog)
 	else
 	{
 		String^ sqlOperation = String::Format(
-			"INSERT INTO dogs (name, owner, weight, category) VALUES ('{0}', '{1}', {2}, {3})",
+			"INSERT INTO dogs (name, owner, category, picturePath) VALUES ('{0}', '{1}', '{2}', '{3}')",
 			dog->getName(),
 			dog->getOwner(),
-			dog->getWeight(),
-			dog->getCategory()
+			dog->getCategory(),
+			dog->getPictureFile()
 		);
 
 		return DBHandler::executeNonQuery(sqlOperation);
@@ -134,9 +136,10 @@ DBErrorType DBHandler::getAllDogs(List<Dog^>^ dogs)
 		{
 			String^ name = reader->GetString(0);
 			String^ owner = reader->GetString(1);
-			float weight = (float)reader->GetDouble(2);
+			String^ category = reader->GetString(2);
+			String^ picture = reader->GetString(3);
 
-			Dog^ dog = gcnew Dog(name, owner, weight);
+			Dog^ dog = gcnew Dog(name, owner, category, picture);
 			dogs->Add(dog);
 		}
 
