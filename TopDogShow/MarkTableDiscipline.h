@@ -1085,7 +1085,14 @@ namespace TopDogShow {
 					switch (controlIndex)
 					{
 					case 0: // read the mark
-						mark = (int)(Convert::ToDouble(control->Text)*100); //convert to cm
+						try
+						{
+							mark = (int)(Convert::ToDouble(control->Text) * 100); //convert to cm
+						}
+						catch (Exception^ e)
+						{
+
+						}						
 						break;
 					case 1: // read result of 1st attempt
 					case 2: // read result of 2nd attempt

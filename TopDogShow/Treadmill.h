@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DBHandler.h"
+#include "Utils.h"
 
 namespace TopDogShow {
 
@@ -55,10 +56,10 @@ namespace TopDogShow {
 		void updateDogList()
 		{
 			List<Dog^>^ dogList = gcnew List<Dog^>();
-			dogNames = gcnew array<Object^>(dogList->Count);
-
+			
 			if (dbHandler->getAllDogs(dogList) == DBErrorType::OK)
 			{
+				dogNames = gcnew array<Object^>(dogList->Count);
 				int idx = 0;
 				for each (Dog^ dog in dogList)
 				{
@@ -67,6 +68,15 @@ namespace TopDogShow {
 				dogCombo->Items->Clear();
 				dogCombo->Items->AddRange(dogNames);
 			}			
+		}
+
+		void resetFields()
+		{
+			if (dogCombo)
+				dogCombo->SelectedIndex = -1;
+			
+			if (markBox)
+				markBox->Text = "";
 		}
 
 #pragma region Windows Form Designer generated code
@@ -164,6 +174,7 @@ namespace TopDogShow {
 			this->saveButton->TabIndex = 10;
 			this->saveButton->Text = L"Save";
 			this->saveButton->UseVisualStyleBackColor = false;
+			this->saveButton->Click += gcnew System::EventHandler(this, &Treadmill::saveButton_Click);
 			// 
 			// finishButton
 			// 
@@ -178,6 +189,7 @@ namespace TopDogShow {
 			this->finishButton->TabIndex = 11;
 			this->finishButton->Text = L"Finish";
 			this->finishButton->UseVisualStyleBackColor = false;
+			this->finishButton->Click += gcnew System::EventHandler(this, &Treadmill::finishButton_Click);
 			// 
 			// cancelButton
 			// 
@@ -236,10 +248,50 @@ namespace TopDogShow {
 #pragma endregion
 
 
+	System::Void cancelButton_Click(System::Object^ sender, System::EventArgs^ e) 
+	{
+		this->Close();
+	}
 
+	System::Void saveButton_Click(System::Object^ sender, System::EventArgs^ e) 
+	{
+		int markValue = 0; //defined in cm
+		TreadmilllPerformanceData^ performanceData;
 
+		try
+		{
+			markValue = (int)(Convert::ToDouble(markBox->Text) * 100);
+		}
+		catch (Exception^ e)
+		{
+			showMessage("Invalid mark value", "Error saving data");
+			return;
+		}
 
-private: System::Void cancelButton_Click(System::Object^ sender, System::EventArgs^ e) {
-}
+		if (dogCombo->SelectedIndex < 0)
+		{
+			showMessage("No dog selected", "Error saving data");
+			return;
+		}
+
+		performanceData = gcnew TreadmilllPerformanceData();
+
+		performanceData->dogName = (String^)dogCombo->SelectedItem;
+		performanceData->distance = markValue;
+		if (dbHandler->saveTreadmilllResults(performanceData) == DBErrorType::OK)
+		{
+			showMessage("Results saved", "Save Treadmill results");
+			resetFields();
+		}
+		else
+		{
+			showMessage("Error saving results", "Save Treadmill results");
+		}			
+	}
+
+	System::Void finishButton_Click(System::Object^ sender, System::EventArgs^ e) 
+	{
+		this->Close();
+	}
 };
 }

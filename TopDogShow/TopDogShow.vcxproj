@@ -172,6 +172,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="User.h" />
+    <ClInclude Include="Utils.h" />
     <ClInclude Include="WallClimb.h" />
   </ItemGroup>
   <ItemGroup>

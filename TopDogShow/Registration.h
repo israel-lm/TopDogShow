@@ -2,6 +2,7 @@
 #include <msclr\marshal_cppstd.h>
 #include "Constants.h"
 #include "DBHandler.h"
+#include "Utils.h"
 
 
 namespace TopDogShow {
@@ -250,14 +251,7 @@ namespace TopDogShow {
 #pragma endregion
 
 private: 
-	System::Void showError(String^ message)
-	{
-		MessageBox::Show(
-			message,
-			"Registration error",
-			MessageBoxButtons::OK
-		);
-	}
+	
 
 	void resetTextBoxes()
 	{
@@ -279,7 +273,7 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 	
 	if (dogName->Length == 0 || ownerName->Length == 0 || dogWeight->Length == 0)
 	{
-		showError("Fill all fields");
+		showMessage("Fill all fields", "registration error");
 	}
 
 	try
@@ -288,7 +282,7 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 	}
 	catch (Exception^ e)
 	{
-		showError("Weight value not valid");
+		showMessage("Weight value not valid", "registration error");
 		return;
 	}
 
@@ -303,12 +297,12 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 	if (result == DBErrorType::OK)
 	{
 		resetTextBoxes();
-		showError("Dog succesfully registered");
+		showMessage("Dog succesfully registered", "registration error");
 	}
 	else
 	{
 		resetTextBoxes();
-		showError(marshal_as<String^>(DBErrorString.at(result)));
+		showMessage(marshal_as<String^>(DBErrorString.at(result)), "registration error");
 	}
 		
 }
