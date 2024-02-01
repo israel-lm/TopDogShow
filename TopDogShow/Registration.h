@@ -115,7 +115,7 @@ namespace TopDogShow {
 			this->saveButton->TabIndex = 0;
 			this->saveButton->Text = L"Save";
 			this->saveButton->UseVisualStyleBackColor = false;
-			this->saveButton->Click += gcnew System::EventHandler(this, &Registration::saveButton_Click);
+			this->saveButton->Click += gcnew System::EventHandler(this, &Registration::saveButtonClick);
 			// 
 			// cancelButton
 			// 
@@ -127,7 +127,7 @@ namespace TopDogShow {
 			this->cancelButton->TabIndex = 1;
 			this->cancelButton->Text = L"Cancel";
 			this->cancelButton->UseVisualStyleBackColor = false;
-			this->cancelButton->Click += gcnew System::EventHandler(this, &Registration::cancelButton_Click);
+			this->cancelButton->Click += gcnew System::EventHandler(this, &Registration::cancelButtonClick);
 			// 
 			// ownerLabel
 			// 
@@ -197,7 +197,7 @@ namespace TopDogShow {
 			this->dogPicture->Size = System::Drawing::Size(242, 270);
 			this->dogPicture->TabIndex = 14;
 			this->dogPicture->TabStop = false;
-			this->dogPicture->DoubleClick += gcnew System::EventHandler(this, &Registration::dogPicture_DoubleClick);
+			this->dogPicture->DoubleClick += gcnew System::EventHandler(this, &Registration::dogPictureDoubleClick);
 			// 
 			// categoryCombo
 			// 
@@ -274,43 +274,40 @@ private:
 			categoryCombo->SelectedIndex = -1;
 	}
 
-
-private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs^ e)
-{
-	String^ dogName = nameBox->Text;
-	String^ ownerName = ownerBox->Text;
-	String^ category = (String^)categoryCombo->SelectedItem;
-	
-	if (dogName->Length == 0 || ownerName->Length == 0 || category->Length == 0)
+	System::Void saveButtonClick(System::Object^ sender, System::EventArgs^ e)
 	{
-		showMessage("Fill all fields", "Registration process");
-		return;
-	}
+		String^ dogName = nameBox->Text;
+		String^ ownerName = ownerBox->Text;
+		String^ category = (String^)categoryCombo->SelectedItem;
+	
+		if (dogName->Length == 0 || ownerName->Length == 0 || category->Length == 0)
+		{
+			showMessage("Fill all fields", "Registration process");
+			return;
+		}
 
-	Dog^ dog = gcnew Dog(
-		dogName, 
-		ownerName, 
-		category,
-		dogPictureFile
-	);
+		Dog^ dog = gcnew Dog(
+			dogName, 
+			ownerName, 
+			category,
+			dogPictureFile
+		);
 	
-	DBErrorType result = dbHandler->saveDogInfo(dog);
+		DBErrorType result = dbHandler->saveDogInfo(dog);
 
-	if (result == DBErrorType::OK)
-	{
-		resetFields();
-		showMessage("Dog succesfully registered", "Registration process");
-	}
-	else
-	{
-		resetFields();
-		showMessage(marshal_as<String^>(DBErrorString.at(result)), "Registration process");
-	}
-		
-}	
+		if (result == DBErrorType::OK)
+		{
+			resetFields();
+			showMessage("Dog succesfully registered", "Registration process");
+		}
+		else
+		{
+			resetFields();
+			showMessage(marshal_as<String^>(DBErrorString.at(result)), "Registration process");
+		}		
+	}	
 	
-	
-	System::Void dogPicture_DoubleClick(System::Object^ sender, System::EventArgs^ e) 
+	System::Void dogPictureDoubleClick(System::Object^ sender, System::EventArgs^ e) 
 	{
 		OpenFileDialog^ fileDialog = gcnew OpenFileDialog();
 
@@ -339,8 +336,9 @@ private: System::Void saveButton_Click(System::Object^ sender, System::EventArgs
 		}
 	}
 
-private: System::Void cancelButton_Click(System::Object^ sender, System::EventArgs^ e) {
-	this->Close();
-}
+	System::Void cancelButtonClick(System::Object^ sender, System::EventArgs^ e) 
+	{
+		this->Close();
+	}
 };
 }
