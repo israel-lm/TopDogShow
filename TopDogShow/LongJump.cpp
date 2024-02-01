@@ -1,4 +1,5 @@
 #include "LongJump.h"
+#include "Utils.h"
 
 
 using namespace TopDogShow;
@@ -35,7 +36,17 @@ System::Void LongJump::finishButton_Click(System::Object^ sender, System::EventA
         performanceData->dogName = dogName->Text;
         for each (TextBox^ text in allTexts)
         {
-            performanceData->marks->Add((int)(Convert::ToDouble(text->Text) * 100)); //convert to cm
+            int markValue = 0;
+            try
+            {
+                markValue = (int)(Convert::ToDouble(text->Text) * 100); //convert to cm
+            }
+            catch (Exception^ e)
+            {
+                showMessage("Invalid mark value", "Long jump discipline");
+                return;
+            }
+            performanceData->marks->Add(markValue);
         }
         dbHandler->saveLongJumpResults(performanceData);
     }
