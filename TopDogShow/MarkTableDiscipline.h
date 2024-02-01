@@ -24,24 +24,11 @@ namespace TopDogShow {
 			dogNameLabel->Text = dogName;
 			setComboHandlers();
 			performanceData = gcnew MarkTablePerformanceData();
+			performanceData->dogName = dogName;
 			dbHandler = DBHandler::Instance;
 		}
 
 		virtual void saveMarks() {}
-	private: System::Windows::Forms::Label^ dogNameLabel;
-	private: System::Windows::Forms::TableLayoutPanel^ markPanel1;
-	private: System::Windows::Forms::TableLayoutPanel^ markPanel2;
-	private: System::Windows::Forms::TableLayoutPanel^ markPanel3;
-	private: System::Windows::Forms::TableLayoutPanel^ markPanel4;
-	private: System::Windows::Forms::TableLayoutPanel^ markPanel5;
-	private: System::Windows::Forms::TableLayoutPanel^ markPanel6;
-	private: System::Windows::Forms::TableLayoutPanel^ markPanel7;
-	private: System::Windows::Forms::TableLayoutPanel^ markPanel8;
-	private: System::Windows::Forms::TableLayoutPanel^ markPanel9;
-	private: System::Windows::Forms::TableLayoutPanel^ markPanel10;
-
-
-	public:
 
 	protected:
 		System::Windows::Forms::Label^ headerLabel;
@@ -54,8 +41,7 @@ namespace TopDogShow {
 			}
 		}
 
-	private:		
-
+	private:
 		System::Windows::Forms::PictureBox^ dogPicture;
 		System::Windows::Forms::Button^ cancelButton;
 		System::Windows::Forms::Button^ finishButton;
@@ -106,6 +92,18 @@ namespace TopDogShow {
 		System::Windows::Forms::ComboBox^ mark6Attempt1Combo;
 		System::Windows::Forms::ComboBox^ mark5Attempt3Combo;
 		System::ComponentModel::Container ^components;
+
+		System::Windows::Forms::Label^ dogNameLabel;
+		System::Windows::Forms::TableLayoutPanel^ markPanel1;
+		System::Windows::Forms::TableLayoutPanel^ markPanel2;
+		System::Windows::Forms::TableLayoutPanel^ markPanel3;
+		System::Windows::Forms::TableLayoutPanel^ markPanel4;
+		System::Windows::Forms::TableLayoutPanel^ markPanel5;
+		System::Windows::Forms::TableLayoutPanel^ markPanel6;
+		System::Windows::Forms::TableLayoutPanel^ markPanel7;
+		System::Windows::Forms::TableLayoutPanel^ markPanel8;
+		System::Windows::Forms::TableLayoutPanel^ markPanel9;
+		System::Windows::Forms::TableLayoutPanel^ markPanel10;
 
 		MarkTablePerformanceData^ performanceData = nullptr;
 		DBHandler^ dbHandler;
@@ -1062,11 +1060,37 @@ namespace TopDogShow {
 		for each (ComboBox^ box in allCombos)
 		{
 			if (box)
-				box->SelectedIndexChanged += gcnew System::EventHandler(this, &MarkTableDiscipline::enter_attempt);
+				box->SelectedIndexChanged += gcnew System::EventHandler(this, &MarkTableDiscipline::enterAttempt);
 		}	
 	}
 
-	System::Void enter_attempt(System::Object^ sender, System::EventArgs^ e)
+	int getMarkFromControl(Control^ control)
+	{
+		int mark = 0;
+		try
+		{
+			mark = (int)(Convert::ToDouble(control->Text) * 100); //convert to cm
+		}
+		catch (Exception^ e) {}
+		return mark;
+	}
+
+	void updateAttemptsAndResult(Control^ control, int& attempts, bool& result)
+	{
+		ComboBox^ currentBox = (ComboBox^)control;
+		int selectedIndex = currentBox->SelectedIndex;
+		if (selectedIndex > -1)
+		{
+			attempts++;
+			if (selectedIndex == 0)
+			{
+				result = true;
+				return;
+			}
+		}
+	}
+
+	System::Void enterAttempt(System::Object^ sender, System::EventArgs^ e)
 	{
 		ComboBox^ box = (ComboBox^)sender;
 
@@ -1080,36 +1104,25 @@ namespace TopDogShow {
 				int attempts = 0;
 				bool positiveResult = false;
 
-				for each (Control^ control in currentPanel->Controls)
+				for each (Control ^ control in currentPanel->Controls)
 				{
-					switch (controlIndex)
+					if (control->Text != "")
 					{
-					case 0: // read the mark
-						try
+						switch (controlIndex)
 						{
-							mark = (int)(Convert::ToDouble(control->Text) * 100); //convert to cm
+						case 0: // read the mark
+							mark = getMarkFromControl(control);
+							break;
+						case 1: // read result of 1st attempt
+						case 2: // read result of 2nd attempt
+						case 3: //read result of 3rd attempt
+							updateAttemptsAndResult(control, attempts, positiveResult);
+							break;
 						}
-						catch (Exception^ e)
-						{
-
-						}						
-						break;
-					case 1: // read result of 1st attempt
-					case 2: // read result of 2nd attempt
-					case 3: //read result of 3rd attempt
-						ComboBox^ currentBox = (ComboBox^)control;
-						int selectedIndex = currentBox->SelectedIndex;
-						if (selectedIndex > -1)
-						{
-							attempts++;
-							if (selectedIndex == 0)
-								positiveResult = true;
-						}
-							
-						break;
 					}
 					controlIndex++;
 				}
+
 				if (performanceData)
 				{
 					if (!performanceData->marks->ContainsKey(mark))
@@ -1117,10 +1130,9 @@ namespace TopDogShow {
 						MarksData^ data = gcnew MarksData();
 						performanceData->marks[mark] = data;
 					}
-					performanceData->dogName = dogNameLabel->Text;
 					performanceData->marks[mark]->attempts = attempts;
 					performanceData->marks[mark]->result = positiveResult;
-				}				
+				}
 			}
 		}
 	}
