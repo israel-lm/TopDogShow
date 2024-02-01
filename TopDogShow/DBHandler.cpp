@@ -159,7 +159,12 @@ DBErrorType DBHandler::getAllDogs(List<Dog^>^ dogs)
 
 DBErrorType DBHandler::saveResults(PerformanceData^ data, String^ fileNameAppend)
 {
-	String^ filePath = String::Format("C:\\WINDOWS\\Temp\\{0}_{1}.json", data->dogName, fileNameAppend);
+	String^ filePath = String::Format(
+		"{0}\\{1}_{2}.json", 
+		marshal_as<String^>(RESULT_FILES_LOCATION), 
+		data->dogName, 
+		fileNameAppend
+	);
 	
 	try
 	{

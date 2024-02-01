@@ -23,5 +23,7 @@ namespace TopDogShow
 		literal String^ MIDDLE_WEIGHT = "Middleweight";
 		literal String^ HEAVY_WEIGHT = "Heavyweight";
 	};
+
+	static std::string RESULT_FILES_LOCATION = "C:\\WINDOWS\\Temp";
 }
 
