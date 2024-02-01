@@ -12,9 +12,7 @@ namespace TopDogShow {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	/// <summary>
-	/// Summary for Treadmill
-	/// </summary>
+	
 	public ref class Treadmill : public System::Windows::Forms::Form
 	{
 	public:
@@ -26,9 +24,6 @@ namespace TopDogShow {
 		}
 
 	protected:
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
 		~Treadmill()
 		{
 			if (components)
@@ -174,7 +169,7 @@ namespace TopDogShow {
 			this->saveButton->TabIndex = 10;
 			this->saveButton->Text = L"Save";
 			this->saveButton->UseVisualStyleBackColor = false;
-			this->saveButton->Click += gcnew System::EventHandler(this, &Treadmill::saveButton_Click);
+			this->saveButton->Click += gcnew System::EventHandler(this, &Treadmill::saveButtonClick);
 			// 
 			// finishButton
 			// 
@@ -189,7 +184,7 @@ namespace TopDogShow {
 			this->finishButton->TabIndex = 11;
 			this->finishButton->Text = L"Finish";
 			this->finishButton->UseVisualStyleBackColor = false;
-			this->finishButton->Click += gcnew System::EventHandler(this, &Treadmill::finishButton_Click);
+			this->finishButton->Click += gcnew System::EventHandler(this, &Treadmill::finishButtonClick);
 			// 
 			// cancelButton
 			// 
@@ -204,7 +199,7 @@ namespace TopDogShow {
 			this->cancelButton->TabIndex = 12;
 			this->cancelButton->Text = L"Cancel";
 			this->cancelButton->UseVisualStyleBackColor = false;
-			this->cancelButton->Click += gcnew System::EventHandler(this, &Treadmill::cancelButton_Click);
+			this->cancelButton->Click += gcnew System::EventHandler(this, &Treadmill::cancelButtonClick);
 			// 
 			// dogNameLabel
 			// 
@@ -248,12 +243,13 @@ namespace TopDogShow {
 #pragma endregion
 
 
-	System::Void cancelButton_Click(System::Object^ sender, System::EventArgs^ e) 
+	System::Void cancelButtonClick(System::Object^ sender, System::EventArgs^ e) 
 	{
+		resetFields();
 		this->Close();
 	}
 
-	System::Void saveButton_Click(System::Object^ sender, System::EventArgs^ e) 
+	System::Void saveButtonClick(System::Object^ sender, System::EventArgs^ e) 
 	{
 		int markValue = 0; //defined in cm
 		TreadmilllPerformanceData^ performanceData;
@@ -289,8 +285,9 @@ namespace TopDogShow {
 		}			
 	}
 
-	System::Void finishButton_Click(System::Object^ sender, System::EventArgs^ e) 
+	System::Void finishButtonClick(System::Object^ sender, System::EventArgs^ e) 
 	{
+		resetFields();
 		this->Close();
 	}
 };
