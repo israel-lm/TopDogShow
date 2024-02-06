@@ -84,41 +84,52 @@ DBErrorType DBHandler::getDogInfo(String^ dogName, Dog^ dog)
 
 DBErrorType DBHandler::saveDogInfo(Dog^ dog)
 {
+	String^ sqlOperation;
 
 	if (DBHandler::checkDogExists(dog->getName()))
 	{
-		return DBErrorType::DOG_ALREADY_EXISTS;
+		sqlOperation = String::Format(
+			"UPDATE dogs SET owner = '{0}', category = '{1}', picturePath = '{2}' WHERE name = '{3}';",
+			dog->getOwner(),
+			dog->getCategory(),
+			dog->getPictureFile(),
+			dog->getName()
+		);
 	}
 	else
 	{
-		String^ sqlOperation = String::Format(
+		sqlOperation = String::Format(
 			"INSERT INTO dogs (name, owner, category, picturePath) VALUES ('{0}', '{1}', '{2}', '{3}')",
 			dog->getName(),
 			dog->getOwner(),
 			dog->getCategory(),
 			dog->getPictureFile()
 		);
-
-		return DBHandler::executeNonQuery(sqlOperation);
-	}	
+	}
+	return DBHandler::executeNonQuery(sqlOperation);
 }
 
 DBErrorType DBHandler::saveUserInfo(User^ user)
 {
+	String^ sqlOperation;
+
 	if (DBHandler::checkUserExists(user->getName()))
 	{
-		return DBErrorType::USER_ALREADY_EXISTS;
+		sqlOperation = String::Format(
+			"UPDATE users SET password = '{0}' WHERE name = '{1}';",
+			user->getPassword(),
+			user->getName()
+		);
 	}
 	else
 	{
-		String^ sqlOperation = String::Format(
+		sqlOperation = String::Format(
 			"INSERT INTO users (name, password) VALUES ('{0}', '{1}')",
 			(user->getName()),
 			(user->getPassword())
 		);
-
-		return DBHandler::executeNonQuery(sqlOperation);
-	}		
+	}
+	return DBHandler::executeNonQuery(sqlOperation);
 }
 
 DBErrorType DBHandler::getAllDogs(List<Dog^>^ dogs)
