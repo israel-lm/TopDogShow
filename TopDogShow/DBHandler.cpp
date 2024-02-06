@@ -157,56 +157,153 @@ DBErrorType DBHandler::getAllDogs(List<Dog^>^ dogs)
 	return DBErrorType::OK;
 }
 
-DBErrorType DBHandler::saveResults(PerformanceData^ data, String^ fileNameAppend)
+
+DBErrorType DBHandler::checkTableAndCreate(String^ tableName)
 {
-	String^ filePath = String::Format(
-		"{0}\\{1}_{2}.json", 
-		marshal_as<String^>(RESULT_FILES_LOCATION), 
-		data->dogName, 
-		fileNameAppend
-	);
-	
-	try
+	if (!checkTableExists(tableName))
 	{
-		String^ jsonData = JsonConvert::SerializeObject(data);
-		File::WriteAllText(filePath, jsonData);
-	}
-	catch (Exception^ e)
-	{
-		return DBErrorType::UNKNOWN;
-	}
+		if (tableName->Contains("WallClimb") || tableName->Contains("HighJump"))
+			return createMarkTable(tableName);
 	
+		else if (tableName->Contains("LongJump"))
+			return createTableLongJump();
+		
+		else if (tableName->Contains("Treadmill"))
+			return createTableTreadmill();
+	}
 	return DBErrorType::OK;
+}
+
+DBErrorType DBHandler::saveMarkTableResults(String^ tableName, MarkTablePerformanceData^ data)
+{
+	DBErrorType res = checkTableAndCreate(tableName);
+
+	if (res == DBErrorType::OK)
+	{
+		for each (KeyValuePair<int, MarksData^> ^ kvp in data->marks)
+		{
+			int mark = kvp->Key;
+			int attempts = kvp->Value->attempts;
+			bool result = kvp->Value->result;
+
+			String^ sqlOperation = String::Format(
+				"INSERT INTO {0} (mark, attempts, result) VALUES ({1}, {2}, {3})",
+				tableName,
+				mark,
+				attempts,
+				int(result)
+			);
+
+			res = DBHandler::executeNonQuery(sqlOperation);
+			if (res != DBErrorType::OK)
+				break;
+		}
+	}
+
+	return res;
 }
 
 DBErrorType  DBHandler::saveWallClimbResults(MarkTablePerformanceData^ data)
 {
-	return this->saveResults(data, "WallClimbResults");
+	String^ tableName = String::Format("{0}_WallClimb", data->dogName);	
+	return saveMarkTableResults(tableName, data);
 }
 
 DBErrorType  DBHandler::saveHighJumpResults(MarkTablePerformanceData^ data)
 {
-	return this->saveResults(data, "HighJumpResults");
+	String^ tableName = String::Format("{0}_HighJump", data->dogName);
+	return saveMarkTableResults(tableName, data);
 }
 
 DBErrorType  DBHandler::saveLongJumpResults(LongJumpPerformanceData^ data)
 {
-	return this->saveResults(data, "LongJumpResults");
+	DBErrorType res = checkTableAndCreate("LongJumpResults");
+
+	if (res == DBErrorType::OK)
+	{
+		String^ sqlOperation = String::Format(
+			"INSERT INTO LongJumpResults (dogname, mark1, mark2, mark3, mark4, mark5) VALUES ({0}, {1}, {2}, {3}, {4}, {5})",
+			data->dogName,
+			data->marks[0],
+			data->marks[1],
+			data->marks[2],
+			data->marks[3],
+			data->marks[4]
+		);
+
+		return DBHandler::executeNonQuery(sqlOperation);
+	}
+
+	return res;
 }
 
 DBErrorType  DBHandler::saveTreadmilllResults(TreadmilllPerformanceData^ data)
 {
-	return this->saveResults(data, "TreadmilllResults");
+	DBErrorType res = checkTableAndCreate("TreadmillResults");
+
+	if (res == DBErrorType::OK)
+	{
+		String^ sqlOperation = String::Format(
+			"INSERT INTO TreadmillResults (dogname, mark) VALUES ({0}, {1})",
+			data->dogName,
+			data->distance
+		);
+
+		return DBHandler::executeNonQuery(sqlOperation);
+	}
+
+	return res;
 }
 
-DBErrorType DBHandler::createTableMarkTableResults(String^ tableName)
+
+DBErrorType DBHandler::createMarkTable(String^ tableName)
 {
 	String^ sqlOperation = String::Format(
-		"CREATE TABLE {0} (\
-			mark int,\
-			attempts int,\
-			result int\
-		);",
+		"CREATE TABLE {0} ("
+			"mark INT NOT NULL PRIMARY KEY,"
+			"attempts INT NOT NULL,"
+			"result BIT NOT NULL"
+		");",
+		tableName
+	);
+
+	return DBHandler::executeNonQuery(sqlOperation);
+}
+
+
+DBErrorType DBHandler::createTableLongJump()
+{
+	String^ sqlOperation = String::Format(
+		"CREATE TABLE LongJumpResults (\
+			dogName TEXT NOT NULL PRIMARY KEY\
+			mark1 INT NOT NULL,\
+			mark2 INT NOT NULL,\
+			mark3 INT NOT NULL,\
+			mark4 INT NOT NULL,\
+			mark5 INT NOT NULL\
+		);"
+	);
+
+	return DBHandler::executeNonQuery(sqlOperation);
+}
+
+
+DBErrorType DBHandler::createTableTreadmill()
+{
+	String^ sqlOperation = 
+		"CREATE TABLE TreadmillResults (\
+			dogName TEXT NOT NULL PRIMARY KEY,\
+			mark INT NOT NULL,\
+		);";
+
+	return DBHandler::executeNonQuery(sqlOperation);
+}
+
+
+DBErrorType DBHandler::deleteTable(String^ tableName)
+{
+	String^ sqlOperation = String::Format(
+		"DROP TABLE {0};",
 		tableName
 	);
 
@@ -222,13 +319,7 @@ DBErrorType DBHandler::createTableMarkTableResults(String^ tableName)
 
 		SqlCommand command(operation, % sqlConnection);
 
-		int result = command.ExecuteNonQuery();
-
-		if (result < 1)
-		{
-			//TODO: log error
-			return DBErrorType::UNKNOWN;
-		}
+		command.ExecuteNonQuery();
 
 	}
 	catch (Exception^ e)

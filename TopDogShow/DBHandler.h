@@ -60,18 +60,20 @@ namespace TopDogShow
 		}
 		static String^ connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=top_dog_show;Integrated Security=True;Encrypt=False";
 
-	private:
-		
+	private:		
 		static DBHandler^ instance = gcnew DBHandler;
-
 		static DBErrorType executeNonQuery(String^ operation);
 
 		static bool checkEntryExists(String^ query);
 		static bool checkDogExists(String^ dogName);
 		static bool checkUserExists(String^ username);
 		static bool checkTableExists(String^ tableName);
-		DBErrorType createTableMarkTableResults(String^ tableName);
-		DBErrorType saveResults(PerformanceData^ data, String^ fileNameAppend);
+		DBErrorType createMarkTable(String^ tableName);
+		DBErrorType createTableLongJump();
+		DBErrorType createTableTreadmill();
+		DBErrorType deleteTable(String^ tableName);
+		DBErrorType checkTableAndCreate(String^ tableName);
+		DBErrorType saveMarkTableResults(String^ tableName, MarkTablePerformanceData^ data);
 
 		DBHandler();
 	};

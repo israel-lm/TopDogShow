@@ -1,4 +1,5 @@
 #pragma once
+#include <msclr\marshal_cppstd.h>
 
 #include "IDiscipline.h"
 #include "PerformanceData.h"
@@ -12,6 +13,7 @@ namespace TopDogShow {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace msclr::interop;
 	
 	public ref class MarkTableDiscipline : public Form
 	{
@@ -1023,12 +1025,20 @@ namespace TopDogShow {
 
 	System::Void finishButton_Click(System::Object^ sender, System::EventArgs^ e) 
 	{
+		DBErrorType res;
 		if (performanceData)
 		{
 			if (headerLabel->Text == L"High Jump")
-				dbHandler->saveHighJumpResults(performanceData);
+				res = dbHandler->saveHighJumpResults(performanceData);
 			else
-				dbHandler->saveWallClimbResults(performanceData);
+				res = dbHandler->saveWallClimbResults(performanceData);
+			
+			if(res != DBErrorType::OK)
+				MessageBox::Show(
+					marshal_as<String^>(DBErrorString[res]),
+					"Information error",
+					MessageBoxButtons::OK
+				);
 		}
 		else
 			MessageBox::Show(
