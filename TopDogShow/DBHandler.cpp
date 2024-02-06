@@ -222,7 +222,7 @@ DBErrorType  DBHandler::saveLongJumpResults(LongJumpPerformanceData^ data)
 	if (res == DBErrorType::OK)
 	{
 		String^ sqlOperation = String::Format(
-			"INSERT INTO LongJumpResults (dogname, mark1, mark2, mark3, mark4, mark5) VALUES ({0}, {1}, {2}, {3}, {4}, {5})",
+			"INSERT INTO LongJumpResults (dogName, mark1, mark2, mark3, mark4, mark5) VALUES ('{0}', {1}, {2}, {3}, {4}, {5})",
 			data->dogName,
 			data->marks[0],
 			data->marks[1],
@@ -244,7 +244,7 @@ DBErrorType  DBHandler::saveTreadmilllResults(TreadmilllPerformanceData^ data)
 	if (res == DBErrorType::OK)
 	{
 		String^ sqlOperation = String::Format(
-			"INSERT INTO TreadmillResults (dogname, mark) VALUES ({0}, {1})",
+			"INSERT INTO TreadmillResults (dogName, mark) VALUES ('{0}', {1})",
 			data->dogName,
 			data->distance
 		);
@@ -275,7 +275,7 @@ DBErrorType DBHandler::createTableLongJump()
 {
 	String^ sqlOperation = String::Format(
 		"CREATE TABLE LongJumpResults (\
-			dogName TEXT NOT NULL PRIMARY KEY\
+			dogName VARCHAR(100) NOT NULL PRIMARY KEY\
 			mark1 INT NOT NULL,\
 			mark2 INT NOT NULL,\
 			mark3 INT NOT NULL,\
@@ -292,7 +292,7 @@ DBErrorType DBHandler::createTableTreadmill()
 {
 	String^ sqlOperation = 
 		"CREATE TABLE TreadmillResults (\
-			dogName TEXT NOT NULL PRIMARY KEY,\
+			dogName VARCHAR(100) NOT NULL PRIMARY KEY,\
 			mark INT NOT NULL,\
 		);";
 
