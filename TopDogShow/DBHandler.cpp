@@ -274,14 +274,14 @@ DBErrorType DBHandler::createMarkTable(String^ tableName)
 DBErrorType DBHandler::createTableLongJump()
 {
 	String^ sqlOperation = String::Format(
-		"CREATE TABLE LongJumpResults (\
-			dogName VARCHAR(100) NOT NULL PRIMARY KEY\
-			mark1 INT NOT NULL,\
-			mark2 INT NOT NULL,\
-			mark3 INT NOT NULL,\
-			mark4 INT NOT NULL,\
-			mark5 INT NOT NULL\
-		);"
+		"CREATE TABLE LongJumpResults ("
+			"dogName VARCHAR(100) NOT NULL PRIMARY KEY,"
+			"mark1 INT NOT NULL,"
+			"mark2 INT NOT NULL,"
+			"mark3 INT NOT NULL,"
+			"mark4 INT NOT NULL,"
+			"mark5 INT NOT NULL"
+		");"
 	);
 
 	return DBHandler::executeNonQuery(sqlOperation);
@@ -291,10 +291,10 @@ DBErrorType DBHandler::createTableLongJump()
 DBErrorType DBHandler::createTableTreadmill()
 {
 	String^ sqlOperation = 
-		"CREATE TABLE TreadmillResults (\
-			dogName VARCHAR(100) NOT NULL PRIMARY KEY,\
-			mark INT NOT NULL,\
-		);";
+		"CREATE TABLE TreadmillResults ("
+			"dogName VARCHAR(100) NOT NULL PRIMARY KEY,"
+			"mark INT NOT NULL,"
+		");";
 
 	return DBHandler::executeNonQuery(sqlOperation);
 }
