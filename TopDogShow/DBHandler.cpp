@@ -254,7 +254,7 @@ DBErrorType  DBHandler::saveLongJumpResults(LongJumpPerformanceData^ data)
 		else
 		{
 			sqlOperation = String::Format(
-				"INSERT INTO {6} (dogName, mark1, mark2, mark3, mark4, mark5) VALUES ('{0}', {1}, {2}, {3}, {4}, {5})",
+				"INSERT INTO {6} (name, mark1, mark2, mark3, mark4, mark5) VALUES ('{0}', {1}, {2}, {3}, {4}, {5})",
 				data->dogName,
 				data->marks[0],
 				data->marks[1],
@@ -281,7 +281,7 @@ DBErrorType  DBHandler::saveTreadmilllResults(TreadmilllPerformanceData^ data)
 		if (checkDogExists(data->dogName, TREADMILL_TABLE_NAME))
 		{
 			sqlOperation = String::Format(
-				"UPDATE {1} SET  mark = {1} WHERE dogName = '{0}'",
+				"UPDATE {2} SET  mark = {1} WHERE name = '{0}'",
 				data->dogName,
 				data->distance,
 				TREADMILL_TABLE_NAME
@@ -290,7 +290,7 @@ DBErrorType  DBHandler::saveTreadmilllResults(TreadmilllPerformanceData^ data)
 		else
 		{
 			sqlOperation = String::Format(
-				"INSERT INTO {2} (dogName, mark) VALUES ('{0}', {1})",
+				"INSERT INTO {2} (name, mark) VALUES ('{0}', {1})",
 				data->dogName,
 				data->distance,
 				TREADMILL_TABLE_NAME
@@ -323,7 +323,7 @@ DBErrorType DBHandler::createTableLongJump()
 {
 	String^ sqlOperation = String::Format(
 		"CREATE TABLE {0} ("
-			"dogName VARCHAR(100) NOT NULL PRIMARY KEY,"
+			"name VARCHAR(100) NOT NULL PRIMARY KEY,"
 			"mark1 INT NOT NULL,"
 			"mark2 INT NOT NULL,"
 			"mark3 INT NOT NULL,"
@@ -341,7 +341,7 @@ DBErrorType DBHandler::createTableTreadmill()
 {
 	String^ sqlOperation = String::Format(
 		"CREATE TABLE {0} ("
-		"dogName VARCHAR(100) NOT NULL PRIMARY KEY,"
+		"name VARCHAR(100) NOT NULL PRIMARY KEY,"
 		"mark INT NOT NULL,"
 		");",
 		TREADMILL_TABLE_NAME
