@@ -58,14 +58,23 @@ namespace TopDogShow
 				return instance; 
 			}
 		}
+		
+		
+	private:	
+		literal String^ LONG_JUMP_TABLE_NAME = "LongJumpResults";
+		literal String^ TREADMILL_TABLE_NAME = "TreadmillResults";
+		literal String^ WALL_CLIMB_TABLE_NAME = "WallClimbResults";
+		literal String^ HIGH_JUMP_TABLE_NAME = "HighJumpResults";
+		literal String^ REGISTRATION_TABLE_NAME = "dogs";
+		literal String^ USERS_TABLE_NAME = "users";
+
 		static String^ connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=top_dog_show;Integrated Security=True;Encrypt=False";
 
-	private:		
 		static DBHandler^ instance = gcnew DBHandler;
 		static DBErrorType executeNonQuery(String^ operation);
 
 		static bool checkEntryExists(String^ query);
-		static bool checkDogExists(String^ dogName);
+		static bool checkDogExists(String^ dogName, String^ tableName);
 		static bool checkUserExists(String^ username);
 		static bool checkTableExists(String^ tableName);
 		DBErrorType createMarkTable(String^ tableName);

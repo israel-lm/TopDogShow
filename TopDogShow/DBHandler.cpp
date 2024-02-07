@@ -14,7 +14,7 @@ DBHandler::~DBHandler(){}
 
 DBErrorType DBHandler::getUserInfo(String^ username, User^ user)
 {
-	String^ sqlQuery = String::Format("SELECT * from users WHERE name='{0}'", username);
+	String^ sqlQuery = String::Format("SELECT * from {1} WHERE name='{0}'", username, USERS_TABLE_NAME);
 	SqlConnection sqlConnection(DBHandler::connectionString);
 	SqlCommand command(sqlQuery, % sqlConnection);
 	
@@ -47,7 +47,7 @@ DBErrorType DBHandler::getUserInfo(String^ username, User^ user)
 
 DBErrorType DBHandler::getDogInfo(String^ dogName, Dog^ dog)
 {
-	String^ sqlQuery = String::Format("SELECT * from dogs WHERE name='{0}'", dogName);
+	String^ sqlQuery = String::Format("SELECT * from {1} WHERE name='{0}'", dogName, REGISTRATION_TABLE_NAME);
 	SqlConnection sqlConnection(DBHandler::connectionString);
 	SqlCommand command(sqlQuery, % sqlConnection);
 
@@ -86,24 +86,26 @@ DBErrorType DBHandler::saveDogInfo(Dog^ dog)
 {
 	String^ sqlOperation;
 
-	if (DBHandler::checkDogExists(dog->getName()))
+	if (DBHandler::checkDogExists(dog->getName(), "dogs"))
 	{
 		sqlOperation = String::Format(
-			"UPDATE dogs SET owner = '{0}', category = '{1}', picturePath = '{2}' WHERE name = '{3}';",
+			"UPDATE {4} SET owner = '{0}', category = '{1}', picturePath = '{2}' WHERE name = '{3}';",
 			dog->getOwner(),
 			dog->getCategory(),
 			dog->getPictureFile(),
-			dog->getName()
+			dog->getName(),
+			REGISTRATION_TABLE_NAME
 		);
 	}
 	else
 	{
 		sqlOperation = String::Format(
-			"INSERT INTO dogs (name, owner, category, picturePath) VALUES ('{0}', '{1}', '{2}', '{3}')",
+			"INSERT INTO {4} (name, owner, category, picturePath) VALUES ('{0}', '{1}', '{2}', '{3}')",
 			dog->getName(),
 			dog->getOwner(),
 			dog->getCategory(),
-			dog->getPictureFile()
+			dog->getPictureFile(),
+			REGISTRATION_TABLE_NAME
 		);
 	}
 	return DBHandler::executeNonQuery(sqlOperation);
@@ -116,17 +118,19 @@ DBErrorType DBHandler::saveUserInfo(User^ user)
 	if (DBHandler::checkUserExists(user->getName()))
 	{
 		sqlOperation = String::Format(
-			"UPDATE users SET password = '{0}' WHERE name = '{1}';",
+			"UPDATE {2} SET password = '{0}' WHERE name = '{1}';",
 			user->getPassword(),
-			user->getName()
+			user->getName(),
+			USERS_TABLE_NAME
 		);
 	}
 	else
 	{
 		sqlOperation = String::Format(
-			"INSERT INTO users (name, password) VALUES ('{0}', '{1}')",
-			(user->getName()),
-			(user->getPassword())
+			"INSERT INTO {2} (name, password) VALUES ('{0}', '{1}')",
+			user->getName(),
+			user->getPassword(),
+			USERS_TABLE_NAME
 		);
 	}
 	return DBHandler::executeNonQuery(sqlOperation);
@@ -134,7 +138,7 @@ DBErrorType DBHandler::saveUserInfo(User^ user)
 
 DBErrorType DBHandler::getAllDogs(List<Dog^>^ dogs)
 {
-	String^ sqlQuery = "SELECT * from dogs";
+	String^ sqlQuery = String::Format("SELECT * from {0}", REGISTRATION_TABLE_NAME);
 	SqlConnection sqlConnection(DBHandler::connectionString);
 	SqlCommand command(sqlQuery, % sqlConnection);
 
@@ -173,13 +177,13 @@ DBErrorType DBHandler::checkTableAndCreate(String^ tableName)
 {
 	if (!checkTableExists(tableName))
 	{
-		if (tableName->Contains("WallClimb") || tableName->Contains("HighJump"))
+		if (tableName->Contains(WALL_CLIMB_TABLE_NAME) || tableName->Contains(HIGH_JUMP_TABLE_NAME))
 			return createMarkTable(tableName);
 	
-		else if (tableName->Contains("LongJump"))
+		else if (tableName->Contains(LONG_JUMP_TABLE_NAME))
 			return createTableLongJump();
 		
-		else if (tableName->Contains("Treadmill"))
+		else if (tableName->Contains(TREADMILL_TABLE_NAME))
 			return createTableTreadmill();
 	}
 	return DBErrorType::OK;
@@ -216,31 +220,50 @@ DBErrorType DBHandler::saveMarkTableResults(String^ tableName, MarkTablePerforma
 
 DBErrorType  DBHandler::saveWallClimbResults(MarkTablePerformanceData^ data)
 {
-	String^ tableName = String::Format("{0}_WallClimb", data->dogName);	
+	String^ tableName = String::Format("{0}_{1}", data->dogName, WALL_CLIMB_TABLE_NAME);	
 	return saveMarkTableResults(tableName, data);
 }
 
 DBErrorType  DBHandler::saveHighJumpResults(MarkTablePerformanceData^ data)
 {
-	String^ tableName = String::Format("{0}_HighJump", data->dogName);
+	String^ tableName = String::Format("{0}_{1}", data->dogName, HIGH_JUMP_TABLE_NAME);
 	return saveMarkTableResults(tableName, data);
 }
 
 DBErrorType  DBHandler::saveLongJumpResults(LongJumpPerformanceData^ data)
 {
-	DBErrorType res = checkTableAndCreate("LongJumpResults");
+	DBErrorType res = checkTableAndCreate(LONG_JUMP_TABLE_NAME);
 
 	if (res == DBErrorType::OK)
 	{
-		String^ sqlOperation = String::Format(
-			"INSERT INTO LongJumpResults (dogName, mark1, mark2, mark3, mark4, mark5) VALUES ('{0}', {1}, {2}, {3}, {4}, {5})",
-			data->dogName,
-			data->marks[0],
-			data->marks[1],
-			data->marks[2],
-			data->marks[3],
-			data->marks[4]
-		);
+		String^ sqlOperation;
+
+		if (checkDogExists(data->dogName, LONG_JUMP_TABLE_NAME))
+		{
+			sqlOperation = String::Format(
+				"UPDATE {6} SET mark1 = {0}, mark2 = {1}, mark3 = {2}, mark4 = {3}, mark5 = {4} WHERE name = '{5}';",
+				data->marks[0],
+				data->marks[1],
+				data->marks[2],
+				data->marks[3],
+				data->marks[4],
+				data->dogName,
+				LONG_JUMP_TABLE_NAME
+			);
+		}
+		else
+		{
+			sqlOperation = String::Format(
+				"INSERT INTO {6} (dogName, mark1, mark2, mark3, mark4, mark5) VALUES ('{0}', {1}, {2}, {3}, {4}, {5})",
+				data->dogName,
+				data->marks[0],
+				data->marks[1],
+				data->marks[2],
+				data->marks[3],
+				data->marks[4],
+				LONG_JUMP_TABLE_NAME
+			);
+		}
 
 		return DBHandler::executeNonQuery(sqlOperation);
 	}
@@ -250,15 +273,29 @@ DBErrorType  DBHandler::saveLongJumpResults(LongJumpPerformanceData^ data)
 
 DBErrorType  DBHandler::saveTreadmilllResults(TreadmilllPerformanceData^ data)
 {
-	DBErrorType res = checkTableAndCreate("TreadmillResults");
+	DBErrorType res = checkTableAndCreate(TREADMILL_TABLE_NAME);
 
 	if (res == DBErrorType::OK)
 	{
-		String^ sqlOperation = String::Format(
-			"INSERT INTO TreadmillResults (dogName, mark) VALUES ('{0}', {1})",
-			data->dogName,
-			data->distance
-		);
+		String^ sqlOperation;
+		if (checkDogExists(data->dogName, TREADMILL_TABLE_NAME))
+		{
+			sqlOperation = String::Format(
+				"UPDATE {1} SET  mark = {1} WHERE dogName = '{0}'",
+				data->dogName,
+				data->distance,
+				TREADMILL_TABLE_NAME
+			);
+		}
+		else
+		{
+			sqlOperation = String::Format(
+				"INSERT INTO {2} (dogName, mark) VALUES ('{0}', {1})",
+				data->dogName,
+				data->distance,
+				TREADMILL_TABLE_NAME
+			);
+		}		
 
 		return DBHandler::executeNonQuery(sqlOperation);
 	}
@@ -285,14 +322,15 @@ DBErrorType DBHandler::createMarkTable(String^ tableName)
 DBErrorType DBHandler::createTableLongJump()
 {
 	String^ sqlOperation = String::Format(
-		"CREATE TABLE LongJumpResults ("
+		"CREATE TABLE {0} ("
 			"dogName VARCHAR(100) NOT NULL PRIMARY KEY,"
 			"mark1 INT NOT NULL,"
 			"mark2 INT NOT NULL,"
 			"mark3 INT NOT NULL,"
 			"mark4 INT NOT NULL,"
 			"mark5 INT NOT NULL"
-		");"
+		");",
+		LONG_JUMP_TABLE_NAME
 	);
 
 	return DBHandler::executeNonQuery(sqlOperation);
@@ -301,11 +339,13 @@ DBErrorType DBHandler::createTableLongJump()
 
 DBErrorType DBHandler::createTableTreadmill()
 {
-	String^ sqlOperation = 
-		"CREATE TABLE TreadmillResults ("
-			"dogName VARCHAR(100) NOT NULL PRIMARY KEY,"
-			"mark INT NOT NULL,"
-		");";
+	String^ sqlOperation = String::Format(
+		"CREATE TABLE {0} ("
+		"dogName VARCHAR(100) NOT NULL PRIMARY KEY,"
+		"mark INT NOT NULL,"
+		");",
+		TREADMILL_TABLE_NAME
+	);
 
 	return DBHandler::executeNonQuery(sqlOperation);
 }
@@ -376,9 +416,9 @@ bool DBHandler::checkTableExists(String^ tableName)
 	return DBHandler::checkEntryExists(operation);
 }
 
-bool DBHandler::checkDogExists(String^ dogName)
+bool DBHandler::checkDogExists(String^ dogName, String^ tableName)
 {
-	String^ operation = String::Format("SELECT * FROM dogs WHERE name LIKE '{0}'", dogName);
+	String^ operation = String::Format("SELECT * FROM {1} WHERE name LIKE '{0}'", dogName, tableName);
 	return DBHandler::checkEntryExists(operation);	
 }
 
