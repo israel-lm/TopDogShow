@@ -278,9 +278,9 @@ private:
 	{
 		String^ dogName = nameBox->Text;
 		String^ ownerName = ownerBox->Text;
-		String^ category = (String^)categoryCombo->SelectedItem;
+		Categories^ category = (Categories^)categoryCombo->SelectedItem;
 	
-		if (dogName->Length == 0 || ownerName->Length == 0 || category->Length == 0)
+		if (dogName->Length == 0 || ownerName->Length == 0 || categoryCombo->SelectedIndex == -1)
 		{
 			showMessage("Fill all fields", "Registration process");
 			return;

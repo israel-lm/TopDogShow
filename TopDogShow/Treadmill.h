@@ -2,6 +2,7 @@
 
 #include "DBHandler.h"
 #include "Utils.h"
+#include "Competitors.h"
 
 namespace TopDogShow {
 
@@ -270,10 +271,11 @@ namespace TopDogShow {
 			return;
 		}
 
-		performanceData = gcnew TreadmilllPerformanceData();
-
-		performanceData->dogName = (String^)dogCombo->SelectedItem;
-		performanceData->distance = markValue;
+		Competitors^ competitors = Competitors::Instance;
+		Dictionary<String^, Dog^>^ dogs = competitors->getCompetitorsByName();
+		String^ dogName = (String^)dogCombo->SelectedItem;
+		performanceData = gcnew TreadmilllPerformanceData(dogs[dogName], markValue);		
+		
 		if (dbHandler->saveTreadmilllResults(performanceData) == DBErrorType::OK)
 		{
 			showMessage("Results saved", "Save Treadmill results");

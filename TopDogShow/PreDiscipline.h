@@ -53,18 +53,18 @@ namespace TopDogShow {
 		DisciplineFactory* disciplineFactory = nullptr;
 		DisciplineType disciplineType;
 		Competitors^ competitors = nullptr;
-		Dictionary<String^, array<Object^>^>^ dogsByCategory = nullptr;
+		Dictionary<Categories^, array<Object^>^>^ dogsByCategory = nullptr;
 		array<Object^>^ categoryList = nullptr;
 		String^ selectedDog = nullptr;
 
 		void updateCategoryList()
 		{
-			Dictionary<String^, List<Dog^>^>^ categoriesAndDogs = competitors->getCompetitors();
+			Dictionary<Categories^, List<Dog^>^>^ categoriesAndDogs = competitors->getCompetitorsByCategory();
 			categoryList = gcnew array<Object^>(categoriesAndDogs->Count);
-			Dictionary<String^, List<Dog^>^>::KeyCollection^ keys = categoriesAndDogs->Keys;
+			Dictionary<Categories^, List<Dog^>^>::KeyCollection^ keys = categoriesAndDogs->Keys;
 			int idx = 0;
 
-			for each (String^ key in keys)
+			for each (Categories^ key in keys)
 			{
 				categoryList[idx++] = key;
 			}
@@ -72,12 +72,12 @@ namespace TopDogShow {
 
 		void updatedogsByCategory()
 		{
-			Dictionary<String^, List<Dog^>^>^ categoriesAndDogs = competitors->getCompetitors();
-			dogsByCategory = gcnew Dictionary<String^, array<Object^>^>();
+			Dictionary<Categories^, List<Dog^>^>^ categoriesAndDogs = competitors->getCompetitorsByCategory();
+			dogsByCategory = gcnew Dictionary<Categories^, array<Object^>^>();
 
-			for each (KeyValuePair<String^, List<Dog^>^> item in categoriesAndDogs)
+			for each (KeyValuePair<Categories^, List<Dog^>^> item in categoriesAndDogs)
 			{
-				String^ currentKey = item.Key;
+				Categories^ currentKey = item.Key;
 				if (!dogsByCategory->ContainsKey(currentKey))
 				{
 					dogsByCategory[currentKey] = gcnew array<Object^>(item.Value->Count);
@@ -102,7 +102,7 @@ namespace TopDogShow {
 				
 		}
 
-		void setDogs(String^ category)
+		void setDogs(Categories^ category)
 		{
 			if (dogsByCategory)
 			{
@@ -252,7 +252,7 @@ namespace TopDogShow {
 			ComboBox^ box = (ComboBox^)sender;
 			if (box->SelectedIndex >= 0)
 			{
-				String^ selectedCategory = (String^)box->SelectedItem;
+				Categories^ selectedCategory = (Categories^)box->SelectedItem;
 				setDogs(selectedCategory);
 				selectedDog = nullptr;
 			}			

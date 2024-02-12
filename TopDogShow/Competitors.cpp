@@ -6,6 +6,7 @@ using namespace System;
 
 TopDogShow::Competitors::Competitors()
 {
+	this->loadCompetitors();
 }
 
 
@@ -15,9 +16,13 @@ void TopDogShow::Competitors::loadCompetitors()
 	List<TopDogShow::Dog^>^ dogs = gcnew List<TopDogShow::Dog^>;
 	
 
-	if (!competitors)
-		competitors = gcnew Dictionary<String^, List<Dog^>^>();
-	competitors->Clear();
+	if (!competitorsByCategory)
+		competitorsByCategory = gcnew Dictionary<Categories^, List<Dog^>^>();
+	if (!competitorsByName)
+		competitorsByName = gcnew Dictionary<String^, Dog^>();
+	
+	competitorsByCategory->Clear();
+	competitorsByName->Clear();
 
 	if (handler)
 	{
@@ -34,18 +39,23 @@ void TopDogShow::Competitors::loadCompetitors()
 		{
 			for each (Dog^ dog in dogs)
 			{
-				if (!competitors->ContainsKey(dog->getCategory()))
+				if (!competitorsByCategory->ContainsKey(dog->getCategory()))
 				{
-					competitors[dog->getCategory()] = gcnew List<TopDogShow::Dog^>;
+					competitorsByCategory[dog->getCategory()] = gcnew List<TopDogShow::Dog^>;
 				}
-				competitors[dog->getCategory()]->Add(dog);
+				competitorsByCategory[dog->getCategory()]->Add(dog);
+				competitorsByName[dog->getName()] = dog;
 			}
 		}		
 	}
 }
 
-Dictionary<String^, List<TopDogShow::Dog^>^>^ TopDogShow::Competitors::getCompetitors()
+Dictionary<TopDogShow::Categories^, List<TopDogShow::Dog^>^>^ TopDogShow::Competitors::getCompetitorsByCategory()
 {
-	this->loadCompetitors();
-	return competitors;
+	return competitorsByCategory;
+}
+
+Dictionary<String^, TopDogShow::Dog^>^ TopDogShow::Competitors::getCompetitorsByName()
+{
+	return competitorsByName;
 }

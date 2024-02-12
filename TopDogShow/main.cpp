@@ -28,7 +28,7 @@ void main(array<String^>^ args)
 
 	/*Competitors^ competitors = Competitors::Instance;
 
-	Dictionary<Categories, List<Dog^>^>^ dogsBYCategory = competitors->getCompetitors();
+	Dictionary<Categories, List<Dog^>^>^ dogsBYCategory = competitors->getCompetitorsByCategory();
 
 	String^ toPrint;
 	for each (KeyValuePair< Categories, List<Dog^>^> item in dogsBYCategory)

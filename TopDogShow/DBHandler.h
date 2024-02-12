@@ -20,7 +20,9 @@ namespace TopDogShow
 		USER_ALREADY_EXISTS = 10,
 		USER_DOESNT_EXIST,
 		DOG_ALREADY_EXISTS,
-		DOG_DOESNT_EXIST
+		DOG_DOESNT_EXIST,
+		NO_TABLE,
+		NO_DOG
 	};
 
 	static std::map<DBErrorType, std::string> DBErrorString = {
@@ -28,7 +30,9 @@ namespace TopDogShow
 			{DBErrorType::USER_ALREADY_EXISTS, "User already exists."},
 			{DBErrorType::USER_DOESNT_EXIST, "User doesn't exist."},
 			{DBErrorType::DOG_ALREADY_EXISTS, "Dog already registered."},
-			{DBErrorType::DOG_DOESNT_EXIST, "Dog not registered."}
+			{DBErrorType::DOG_DOESNT_EXIST, "Dog not registered."},
+			{DBErrorType::NO_TABLE, "Table does not exist"},
+			{DBErrorType::NO_DOG, "Dog does not exist"}
 	};
 
 	
@@ -49,7 +53,11 @@ namespace TopDogShow
 		DBErrorType saveHighJumpResults(MarkTablePerformanceData^ data);
 		DBErrorType saveLongJumpResults(LongJumpPerformanceData^ data);
 		DBErrorType saveTreadmilllResults(TreadmilllPerformanceData^ data);
-		
+
+		Dictionary<String^, MarkTablePerformanceData^>^ getWallClimbResults();
+		Dictionary<String^, MarkTablePerformanceData^>^ getHighJumpResults();
+		Dictionary<String^, LongJumpPerformanceData^>^ getLongJumpResults();
+		Dictionary<String^, TreadmilllPerformanceData^>^ getTreadmillResults();
 
 		static property DBHandler^ Instance 
 		{ 
@@ -57,8 +65,7 @@ namespace TopDogShow
 			{ 
 				return instance; 
 			}
-		}
-		
+		}		
 		
 	private:	
 		literal String^ LONG_JUMP_TABLE_NAME = "LongJumpResults";
@@ -83,6 +90,7 @@ namespace TopDogShow
 		DBErrorType deleteTable(String^ tableName);
 		DBErrorType checkTableAndCreate(String^ tableName);
 		DBErrorType saveMarkTableResults(String^ tableName, MarkTablePerformanceData^ data);
+		MarkTablePerformanceData^ getMarkTableResults(String^ tableName);
 
 		DBHandler();
 	};

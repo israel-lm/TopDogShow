@@ -1,4 +1,5 @@
 #pragma once
+#include "Dog.h"
 
 namespace TopDogShow
 {
@@ -10,44 +11,57 @@ namespace TopDogShow
 	public:
 		bool result;
 		int attempts;
+
+		MarksData(int attempts, bool result)
+		{
+			this->attempts = attempts;
+			this->result = result;
+		}
 	};
 
-	[Serializable]
+
 	public ref class PerformanceData
 	{
 	public:
-		String^ dogName;
+		Dog^ dog;
 	};
 
-	[Serializable]
+
 	public ref class MarkTablePerformanceData : public PerformanceData
 	{
 	public:
 		Dictionary<int, MarksData^>^ marks;
 
-		MarkTablePerformanceData()
+		MarkTablePerformanceData(Dog^ dog, Dictionary<int, MarksData^>^ marks)
 		{
-			marks = gcnew Dictionary<int, MarksData^>();
+			this->dog = dog;
+			this->marks = marks;
 		}		
 	};
 
-	[Serializable]
+	
 	public ref class LongJumpPerformanceData : PerformanceData
 	{
 	public:
 		List<int>^ marks;
 
-		LongJumpPerformanceData()
+		LongJumpPerformanceData(Dog^ dog, List<int>^ markValues)
 		{
-			marks = gcnew List<int>();
+			this->dog = dog;
+			marks = markValues;
 		}
 	};
 
-	[Serializable]
+	
 	public ref class TreadmilllPerformanceData : PerformanceData
 	{
 	public:
 		int distance;
+
+		TreadmilllPerformanceData(Dog^ dog, int distance)
+		{
+			this->distance = distance;
+		}
 	};
 }
 

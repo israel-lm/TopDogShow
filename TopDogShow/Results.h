@@ -1,5 +1,8 @@
 #pragma once
 
+#include "DBHandler.h"
+#include "Competitors.h"
+
 namespace TopDogShow {
 
 	using namespace System;
@@ -9,18 +12,49 @@ namespace TopDogShow {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	/// <summary>
-	/// Summary for Results
-	/// </summary>
+	enum class ResultType
+	{
+		GENERAL = 1,
+		CATEGORY = 10
+	};
+
+	private ref class Rank
+	{
+	public:
+		String^ name;
+		int place;
+		int points;
+	};
+
 	public ref class Results : public System::Windows::Forms::Form
 	{
 	public:
-		Results(void)
+		Results()
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+			dbHandler = DBHandler::Instance;
+			competitors = Competitors::Instance;
+
+			if (dbHandler)
+			{
+				wallClimbResults = dbHandler->getWallClimbResults();
+				highJumpResults = dbHandler->getHighJumpResults();
+				longJumpResults = dbHandler->getLongJumpResults();
+				treadmillResults = dbHandler->getTreadmillResults();
+			}
+		}
+
+		void showResults(ResultType type, Categories^ category)
+		{
+			switch (type)
+			{
+			case ResultType::GENERAL:
+				showGeneralResults();
+				break;
+			case ResultType::CATEGORY:
+				showResultsByCategory(category);
+				break;
+			}
 		}
 
 	protected:
@@ -34,32 +68,41 @@ namespace TopDogShow {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Label^ headerLabel;
-
-	private: System::Windows::Forms::Button^ printButton;
-
-	private: System::Windows::Forms::Button^ exitButton;
-	private: System::Windows::Forms::DataGridView^ resultGrid;
-
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ placing;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dogName;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ points;
-
-
-
-
-
-	private:
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
+	private: 
+		System::Windows::Forms::Label^ headerLabel;
+		System::Windows::Forms::Button^ printButton;
+		System::Windows::Forms::Button^ exitButton;
+		System::Windows::Forms::DataGridView^ resultGrid;
+		System::Windows::Forms::DataGridViewTextBoxColumn^ placing;
+		System::Windows::Forms::DataGridViewTextBoxColumn^ dogName;
+		System::Windows::Forms::DataGridViewTextBoxColumn^ points;
 		System::ComponentModel::Container ^components;
 
+		DBHandler^ dbHandler = nullptr;
+		Competitors^ competitors = nullptr;
+		Dictionary<String^, MarkTablePerformanceData^>^ wallClimbResults = nullptr;
+		Dictionary<String^, MarkTablePerformanceData^>^ highJumpResults = nullptr;
+		Dictionary<String^, LongJumpPerformanceData^>^ longJumpResults = nullptr;
+		Dictionary<String^, TreadmilllPerformanceData^>^ treadmillResults = nullptr;
+
+
+		void showGeneralResults()
+		{
+
+		}
+
+		void showResultsByCategory(Categories^ category)
+		{
+
+		}
+
+		List<Rank^>^ calculateResultsByCategory(Categories^ category)
+		{
+			Dictionary<Categories^, List<Dog^>^>^ dogsByCategory = competitors->getCompetitorsByCategory();
+			return nullptr;
+		}
+
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		void InitializeComponent(void)
 		{
 			this->headerLabel = (gcnew System::Windows::Forms::Label());
@@ -172,7 +215,5 @@ namespace TopDogShow {
 
 		}
 #pragma endregion
-
-
 };
 }

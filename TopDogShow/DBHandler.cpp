@@ -60,7 +60,7 @@ DBErrorType DBHandler::getDogInfo(String^ dogName, Dog^ dog)
 		{
 			String^ name = reader->GetString(0);
 			String^ owner = reader->GetString(1);
-			String^ category = reader->GetString(2);
+			Categories^ category = (Categories^)reader->GetString(2);
 			String^ picture = reader->GetString(3);
 
 			dog->setName(name);
@@ -151,7 +151,7 @@ DBErrorType DBHandler::getAllDogs(List<Dog^>^ dogs)
 		{
 			String^ name = reader->GetString(0);
 			String^ owner = reader->GetString(1);
-			String^ category = reader->GetString(2);
+			Categories^ category = (Categories^)reader->GetString(2);
 			String^ picture = reader->GetString(3);
 
 			Dog^ dog = gcnew Dog(name, owner, category, picture);
@@ -220,13 +220,13 @@ DBErrorType DBHandler::saveMarkTableResults(String^ tableName, MarkTablePerforma
 
 DBErrorType  DBHandler::saveWallClimbResults(MarkTablePerformanceData^ data)
 {
-	String^ tableName = String::Format("{0}_{1}", data->dogName, WALL_CLIMB_TABLE_NAME);	
+	String^ tableName = String::Format("{0}_{1}", data->dog->getName(), WALL_CLIMB_TABLE_NAME);
 	return saveMarkTableResults(tableName, data);
 }
 
 DBErrorType  DBHandler::saveHighJumpResults(MarkTablePerformanceData^ data)
 {
-	String^ tableName = String::Format("{0}_{1}", data->dogName, HIGH_JUMP_TABLE_NAME);
+	String^ tableName = String::Format("{0}_{1}", data->dog->getName(), HIGH_JUMP_TABLE_NAME);
 	return saveMarkTableResults(tableName, data);
 }
 
@@ -238,7 +238,7 @@ DBErrorType  DBHandler::saveLongJumpResults(LongJumpPerformanceData^ data)
 	{
 		String^ sqlOperation;
 
-		if (checkDogExists(data->dogName, LONG_JUMP_TABLE_NAME))
+		if (checkDogExists(data->dog->getName(), LONG_JUMP_TABLE_NAME))
 		{
 			sqlOperation = String::Format(
 				"UPDATE {6} SET mark1 = {0}, mark2 = {1}, mark3 = {2}, mark4 = {3}, mark5 = {4} WHERE name = '{5}';",
@@ -247,7 +247,7 @@ DBErrorType  DBHandler::saveLongJumpResults(LongJumpPerformanceData^ data)
 				data->marks[2],
 				data->marks[3],
 				data->marks[4],
-				data->dogName,
+				data->dog->getName(),
 				LONG_JUMP_TABLE_NAME
 			);
 		}
@@ -255,7 +255,7 @@ DBErrorType  DBHandler::saveLongJumpResults(LongJumpPerformanceData^ data)
 		{
 			sqlOperation = String::Format(
 				"INSERT INTO {6} (name, mark1, mark2, mark3, mark4, mark5) VALUES ('{0}', {1}, {2}, {3}, {4}, {5})",
-				data->dogName,
+				data->dog->getName(),
 				data->marks[0],
 				data->marks[1],
 				data->marks[2],
@@ -278,11 +278,11 @@ DBErrorType  DBHandler::saveTreadmilllResults(TreadmilllPerformanceData^ data)
 	if (res == DBErrorType::OK)
 	{
 		String^ sqlOperation;
-		if (checkDogExists(data->dogName, TREADMILL_TABLE_NAME))
+		if (checkDogExists(data->dog->getName(), TREADMILL_TABLE_NAME))
 		{
 			sqlOperation = String::Format(
 				"UPDATE {2} SET  mark = {1} WHERE name = '{0}'",
-				data->dogName,
+				data->dog->getName(),
 				data->distance,
 				TREADMILL_TABLE_NAME
 			);
@@ -291,7 +291,7 @@ DBErrorType  DBHandler::saveTreadmilllResults(TreadmilllPerformanceData^ data)
 		{
 			sqlOperation = String::Format(
 				"INSERT INTO {2} (name, mark) VALUES ('{0}', {1})",
-				data->dogName,
+				data->dog->getName(),
 				data->distance,
 				TREADMILL_TABLE_NAME
 			);
@@ -303,6 +303,191 @@ DBErrorType  DBHandler::saveTreadmilllResults(TreadmilllPerformanceData^ data)
 	return res;
 }
 
+
+Dictionary<String^, MarkTablePerformanceData^>^ DBHandler::getWallClimbResults()
+{
+	List<Dog^>^ dogs = gcnew  List<Dog^>();
+	Dictionary<String^, MarkTablePerformanceData^>^ results = gcnew Dictionary<String^, MarkTablePerformanceData^>();
+
+	if (getAllDogs(dogs) == DBErrorType::OK)
+	{
+		for each (Dog^ dog in dogs)
+		{
+			String^ tableName = String::Format("{0}_{1}", dog->getName(), WALL_CLIMB_TABLE_NAME);
+			results[dog->getName()] = getMarkTableResults(tableName);
+		}
+	}
+	else
+	{ 
+		results = nullptr;
+	}
+
+	return results;
+}
+
+
+Dictionary<String^, MarkTablePerformanceData^>^ DBHandler::getHighJumpResults()
+{
+	List<Dog^>^ dogs = gcnew  List<Dog^>();
+	Dictionary<String^, MarkTablePerformanceData^>^ results = gcnew Dictionary<String^, MarkTablePerformanceData^>();
+
+	if (getAllDogs(dogs) == DBErrorType::OK)
+	{
+		for each (Dog^ dog in dogs)
+		{
+			String^ tableName = String::Format("{0}_{1}", dog->getName(), HIGH_JUMP_TABLE_NAME);
+			results[dog->getName()] = getMarkTableResults(tableName);
+		}
+	}
+	else
+	{
+		results = nullptr;
+	}
+
+	return results;
+}
+
+
+Dictionary<String^, LongJumpPerformanceData^>^ DBHandler::getLongJumpResults()
+{
+	Dictionary<String^, LongJumpPerformanceData^>^ ret = nullptr;
+
+	if (checkTableExists(LONG_JUMP_TABLE_NAME))
+	{
+		String^ operation = String::Format("SELECT * FROM {0}", LONG_JUMP_TABLE_NAME);
+		SqlConnection sqlConnection(DBHandler::connectionString);
+		SqlCommand command(operation, % sqlConnection);
+
+		try
+		{
+			sqlConnection.Open();
+			SqlDataReader^ reader = command.ExecuteReader();
+			ret = gcnew Dictionary<String^, LongJumpPerformanceData^>();
+
+			while (reader->Read())
+			{
+				String^ name = reader->GetString(0);
+				int mark1 = reader->GetInt32(1);
+				int mark2 = reader->GetInt32(2);
+				int mark3 = reader->GetInt32(3);
+				int mark4 = reader->GetInt32(4);
+				int mark5 = reader->GetInt32(5);
+
+				array<int>^ values = gcnew array<int> {mark1, mark2, mark3, mark4, mark5};
+				List<int>^ marks = gcnew List<int>(values);
+				Dog^ dog = gcnew Dog();
+				if (getDogInfo(name, dog) == DBErrorType::OK)
+				{
+					LongJumpPerformanceData^ data = gcnew LongJumpPerformanceData(dog, marks);
+					ret[name] = data;
+				}				
+			}	
+		}
+		catch (Exception^ e)
+		{
+			ret = nullptr;
+
+			MessageBox::Show(
+				e->StackTrace,
+				e->Message,
+				MessageBoxButtons::OK
+			);
+		}
+	}
+
+	return ret;
+}
+
+
+Dictionary<String^, TreadmilllPerformanceData^>^ DBHandler::getTreadmillResults()
+{
+	Dictionary<String^, TreadmilllPerformanceData^>^ ret = nullptr;
+
+	if (checkTableExists(TREADMILL_TABLE_NAME))
+	{
+		String^ operation = String::Format("SELECT * FROM {0}", TREADMILL_TABLE_NAME);
+		SqlConnection sqlConnection(DBHandler::connectionString);
+		SqlCommand command(operation, % sqlConnection);
+
+		ret = gcnew Dictionary<String^, TreadmilllPerformanceData^>();
+		try
+		{
+			sqlConnection.Open();
+			SqlDataReader^ reader = command.ExecuteReader();
+
+			while (reader->Read())
+			{
+				String^ name = reader->GetString(0);
+				int mark = reader->GetInt32(1);
+
+				Dog^ dog = gcnew Dog();
+
+				if (getDogInfo(name, dog) == DBErrorType::OK)
+				{
+					TreadmilllPerformanceData^ data = gcnew TreadmilllPerformanceData(dog, mark);
+					ret[name] = data;
+				}	
+			}
+		}
+		catch (Exception^ e)
+		{
+			ret = nullptr;
+
+			MessageBox::Show(
+				e->StackTrace,
+				e->Message,
+				MessageBoxButtons::OK
+			);
+		}
+	}
+
+	return ret;
+}
+
+
+MarkTablePerformanceData^ DBHandler::getMarkTableResults(String^ tableName)
+{
+	MarkTablePerformanceData^ ret = nullptr;
+
+	if (checkTableExists(tableName))
+	{
+		String^ operation = String::Format("SELECT * FROM {0}", tableName);
+		SqlConnection sqlConnection(DBHandler::connectionString);
+		SqlCommand command(operation, % sqlConnection);
+
+		try
+		{
+			sqlConnection.Open();
+			SqlDataReader^ reader = command.ExecuteReader();
+
+			Dog^ dog = gcnew Dog();
+			array<String^>^ substrings = tableName->Split('_');
+			String^ dogName = substrings[0];
+			getDogInfo(dogName, dog);
+			ret = gcnew MarkTablePerformanceData(dog, gcnew Dictionary<int, MarksData^>());
+
+			while (reader->Read())
+			{
+				int mark = reader->GetInt32(0);
+				int attempts = reader->GetInt32(1);
+				bool result = (bool)reader->GetInt32(2);
+				ret->marks[mark] = gcnew MarksData(attempts, result);
+			}
+
+		}
+		catch (Exception^ e)
+		{
+			//TODO: log error
+			MessageBox::Show(
+				e->StackTrace,
+				e->Message,
+				MessageBoxButtons::OK
+			);
+		}
+	}
+
+	return ret;
+}
 
 DBErrorType DBHandler::createMarkTable(String^ tableName)
 {

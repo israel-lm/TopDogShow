@@ -4,6 +4,8 @@
 #include "IDiscipline.h"
 #include "PerformanceData.h"
 #include "DBHandler.h"
+#include "Competitors.h"
+#include "Dog.h"
 
 namespace TopDogShow {
 
@@ -20,14 +22,12 @@ namespace TopDogShow {
 	public:
 		MarkTableDiscipline(String^ dogName)
 		{	
+			this->dogName = dogName;
 			allCombos = gcnew List<ComboBox^>();
 			allTexts = gcnew List<TextBox^>();
 			InitializeComponent();
 			dogNameLabel->Text = dogName;
 			setComboHandlers();
-			performanceData = gcnew MarkTablePerformanceData();
-			performanceData->dogName = dogName;
-			dbHandler = DBHandler::Instance;
 		}
 
 		virtual void saveMarks() {}
@@ -108,9 +108,9 @@ namespace TopDogShow {
 		System::Windows::Forms::TableLayoutPanel^ markPanel10;
 
 		MarkTablePerformanceData^ performanceData = nullptr;
-		DBHandler^ dbHandler;
 		List<ComboBox^>^ allCombos;
 		List<TextBox^>^ allTexts;
+		String^ dogName;
 
 #pragma region Windows Form Designer generated code
 		
@@ -1028,6 +1028,7 @@ namespace TopDogShow {
 		DBErrorType res;
 		if (performanceData)
 		{
+			DBHandler^ dbHandler = DBHandler::Instance;
 			if (headerLabel->Text == L"High Jump")
 				res = dbHandler->saveHighJumpResults(performanceData);
 			else
@@ -1100,6 +1101,14 @@ namespace TopDogShow {
 		}
 	}
 
+	void allocatePerformanceData()
+	{
+		Competitors^ competitors = Competitors::Instance;
+		Dictionary<String^, Dog^>^ dogs = competitors->getCompetitorsByName();
+
+		performanceData = gcnew MarkTablePerformanceData(dogs[dogName], gcnew Dictionary<int, MarksData^>());
+	}
+
 	System::Void enterAttempt(System::Object^ sender, System::EventArgs^ e)
 	{
 		ComboBox^ box = (ComboBox^)sender;
@@ -1133,11 +1142,14 @@ namespace TopDogShow {
 					controlIndex++;
 				}
 
+				if (!performanceData)
+					allocatePerformanceData();
+			
 				if (performanceData)
 				{
 					if (!performanceData->marks->ContainsKey(mark))
 					{
-						MarksData^ data = gcnew MarksData();
+						MarksData^ data = gcnew MarksData(attempts, positiveResult);
 						performanceData->marks[mark] = data;
 					}
 					performanceData->marks[mark]->attempts = attempts;

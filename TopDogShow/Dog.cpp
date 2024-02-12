@@ -1,6 +1,6 @@
 #include "Dog.h"
 
-TopDogShow::Dog::Dog(String^ dogName, String^ ownerName, String^ category, String^ picturePath)
+TopDogShow::Dog::Dog(String^ dogName, String^ ownerName, Categories^ category, String^ picturePath)
 {
 	this->name = dogName;
 	this->escapeChar(name, "'");
@@ -25,7 +25,7 @@ System::String^ TopDogShow::Dog::getOwner()
 	return owner; 
 }
 
-System::String^ TopDogShow::Dog::getCategory() 
+TopDogShow::Categories^ TopDogShow::Dog::getCategory()
 { 
 	return category; 
 }
@@ -45,7 +45,7 @@ void TopDogShow::Dog::setOwner(String^ owner)
 	this->owner = owner; 
 }
 
-void TopDogShow::Dog::setCategory(String^ category) 
+void TopDogShow::Dog::setCategory(Categories^ category)
 { 
 	this->category = category; 
 }

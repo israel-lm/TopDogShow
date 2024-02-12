@@ -1,5 +1,6 @@
 #include "LongJump.h"
 #include "Utils.h"
+#include "Competitors.h"
 
 
 using namespace TopDogShow;
@@ -32,8 +33,8 @@ System::Void LongJump::finishButton_Click(System::Object^ sender, System::EventA
 {
     if (allTexts)
     {
-        LongJumpPerformanceData^ performanceData = gcnew LongJumpPerformanceData();
-        performanceData->dogName = dogName->Text;
+        List<int>^ marks = gcnew List<int>();
+
         for each (TextBox^ text in allTexts)
         {
             int markValue = 0;
@@ -46,8 +47,12 @@ System::Void LongJump::finishButton_Click(System::Object^ sender, System::EventA
                 showMessage("Invalid mark value", "Long jump discipline");
                 return;
             }
-            performanceData->marks->Add(markValue);
+            marks->Add(markValue);
         }
+
+        Competitors^ competitors = Competitors::Instance;
+        Dictionary<String^, Dog^>^ dogs = competitors->getCompetitorsByName();
+        LongJumpPerformanceData^ performanceData = gcnew LongJumpPerformanceData(dogs[dogName->Text], marks);
         dbHandler->saveLongJumpResults(performanceData);
     }
     resetFields();
@@ -56,7 +61,7 @@ System::Void LongJump::finishButton_Click(System::Object^ sender, System::EventA
 
 void LongJump::resetFields()
 {
-    for each (TextBox ^ text in allTexts)
+    for each (TextBox^ text in allTexts)
     {
         text->Text = "";
     }
