@@ -12,22 +12,22 @@ namespace TopDogShow
 	private:
 		String^ name;
 		String^ owner;
-		Categories^ category;
+		String^ category;
 		String^ pictureFile;
 
 		String^ escapeChar(String^ original, String^ toEscape);
 	public:
 		Dog() {}
-		Dog(String^ dogName, String^ ownerName, Categories^ category, String^ picturePath);
+		Dog(String^ dogName, String^ ownerName, String^ category, String^ picturePath);
 
 		String^ getName();
 		String^ getOwner();
-		Categories^ getCategory();
+		String^ getCategory();
 		String^ getPictureFile();
 
 		void setName(String^ name);
 		void setOwner(String^ owner);
-		void setCategory(Categories^ category);
+		void setCategory(String^ category);
 		void setPictureFile(String^ path);
 		
 	};

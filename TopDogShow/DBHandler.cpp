@@ -60,7 +60,7 @@ DBErrorType DBHandler::getDogInfo(String^ dogName, Dog^ dog)
 		{
 			String^ name = reader->GetString(0);
 			String^ owner = reader->GetString(1);
-			Categories^ category = (Categories^)reader->GetString(2);
+			String^ category = (String^)reader->GetString(2);
 			String^ picture = reader->GetString(3);
 
 			dog->setName(name);
@@ -151,7 +151,7 @@ DBErrorType DBHandler::getAllDogs(List<Dog^>^ dogs)
 		{
 			String^ name = reader->GetString(0);
 			String^ owner = reader->GetString(1);
-			Categories^ category = (Categories^)reader->GetString(2);
+			String^ category = (String^)reader->GetString(2);
 			String^ picture = reader->GetString(3);
 
 			Dog^ dog = gcnew Dog(name, owner, category, picture);
@@ -470,7 +470,8 @@ MarkTablePerformanceData^ DBHandler::getMarkTableResults(String^ tableName)
 			{
 				int mark = reader->GetInt32(0);
 				int attempts = reader->GetInt32(1);
-				bool result = (bool)reader->GetInt32(2);
+				int tmp = reader->GetInt32(2);
+				bool result = (tmp > 0) ? true : false;
 				ret->marks[mark] = gcnew MarksData(attempts, result);
 			}
 
@@ -495,7 +496,7 @@ DBErrorType DBHandler::createMarkTable(String^ tableName)
 		"CREATE TABLE {0} ("
 			"mark INT NOT NULL PRIMARY KEY,"
 			"attempts INT NOT NULL,"
-			"result BIT NOT NULL"
+			"result INT NOT NULL"
 		");",
 		tableName
 	);

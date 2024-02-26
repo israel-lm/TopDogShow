@@ -18,7 +18,7 @@ namespace TopDogShow
 	{
 	private:
 		static Competitors^ instance = gcnew Competitors();
-		Dictionary<Categories^, List<Dog^>^>^ competitorsByCategory;
+		Dictionary<String^, List<Dog^>^>^ competitorsByCategory;
 		Dictionary<String^, Dog^>^ competitorsByName;
 
 		Competitors();
@@ -33,7 +33,7 @@ namespace TopDogShow
 			}
 		}
 
-		Dictionary<Categories^, List<Dog^>^>^ getCompetitorsByCategory();
+		Dictionary<String^, List<Dog^>^>^ getCompetitorsByCategory();
 		Dictionary<String^, Dog^>^ getCompetitorsByName();
 	};
 }

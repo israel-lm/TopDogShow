@@ -278,7 +278,7 @@ private:
 	{
 		String^ dogName = nameBox->Text;
 		String^ ownerName = ownerBox->Text;
-		Categories^ category = (Categories^)categoryCombo->SelectedItem;
+		String^ category = (String^)categoryCombo->SelectedItem;
 	
 		if (dogName->Length == 0 || ownerName->Length == 0 || categoryCombo->SelectedIndex == -1)
 		{

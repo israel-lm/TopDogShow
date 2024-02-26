@@ -2,61 +2,33 @@
 
 #include "DBHandler.h"
 #include "Competitors.h"
+#include "Comparator.h"
 
 namespace TopDogShow {
 
 	using namespace System;
 	using namespace System::ComponentModel;
-	using namespace System::Collections;
+	using namespace System::Collections::Generic;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Text;
+	using namespace System::Diagnostics;
 
-	enum class ResultType
-	{
-		GENERAL = 1,
-		CATEGORY = 10
-	};
-
-	private ref class Rank
-	{
-	public:
-		String^ name;
-		int place;
-		int points;
-	};
 
 	public ref class Results : public System::Windows::Forms::Form
 	{
 	public:
-		Results()
+		Results(ResultType type, String^ category)
 		{
 			InitializeComponent();
+			gridDataSource = gcnew BindingSource();
 			dbHandler = DBHandler::Instance;
 			competitors = Competitors::Instance;
-
-			if (dbHandler)
-			{
-				wallClimbResults = dbHandler->getWallClimbResults();
-				highJumpResults = dbHandler->getHighJumpResults();
-				longJumpResults = dbHandler->getLongJumpResults();
-				treadmillResults = dbHandler->getTreadmillResults();
-			}
+			showResults(type, category);
 		}
 
-		void showResults(ResultType type, Categories^ category)
-		{
-			switch (type)
-			{
-			case ResultType::GENERAL:
-				showGeneralResults();
-				break;
-			case ResultType::CATEGORY:
-				showResultsByCategory(category);
-				break;
-			}
-		}
-
+		
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
@@ -73,11 +45,13 @@ namespace TopDogShow {
 		System::Windows::Forms::Button^ printButton;
 		System::Windows::Forms::Button^ exitButton;
 		System::Windows::Forms::DataGridView^ resultGrid;
+		System::Windows::Forms::BindingSource^ gridDataSource;
 		System::Windows::Forms::DataGridViewTextBoxColumn^ placing;
 		System::Windows::Forms::DataGridViewTextBoxColumn^ dogName;
 		System::Windows::Forms::DataGridViewTextBoxColumn^ points;
 		System::ComponentModel::Container ^components;
 
+		
 		DBHandler^ dbHandler = nullptr;
 		Competitors^ competitors = nullptr;
 		Dictionary<String^, MarkTablePerformanceData^>^ wallClimbResults = nullptr;
@@ -85,21 +59,182 @@ namespace TopDogShow {
 		Dictionary<String^, LongJumpPerformanceData^>^ longJumpResults = nullptr;
 		Dictionary<String^, TreadmilllPerformanceData^>^ treadmillResults = nullptr;
 
+		void showResults(ResultType type, String^ category)
+		{
+			updateResultsData();
+			switch (type)
+			{
+			case ResultType::GENERAL:
+				showGeneralResults();
+				break;
+			case ResultType::CATEGORY:
+				showResultsByCategory(category);
+				break;
+			}
+		}
+		
+		void updateResultsData()
+		{
+			if (dbHandler)
+			{
+				wallClimbResults = dbHandler->getWallClimbResults();
+				highJumpResults = dbHandler->getHighJumpResults();
+				longJumpResults = dbHandler->getLongJumpResults();
+				treadmillResults = dbHandler->getTreadmillResults();
+			}
+		}
 
 		void showGeneralResults()
 		{
 
 		}
 
-		void showResultsByCategory(Categories^ category)
+		void showResultsByCategory(String^ category)
 		{
+			List<Rank^>^ ranking = calculateResultsByCategory(category);
+			for each (Rank^ rank in ranking)
+				gridDataSource->Add(rank);
 
+			resultGrid->AutoGenerateColumns = true;
+			resultGrid->DefaultCellStyle->ForeColor = Color::Black;
+			resultGrid->DataSource = gridDataSource;
 		}
 
-		List<Rank^>^ calculateResultsByCategory(Categories^ category)
+		void assignMarkTablePlacing(List<Rank^>^ ranking, Dictionary<String^, MarkTablePerformanceData^>^ performanceData)
 		{
-			Dictionary<Categories^, List<Dog^>^>^ dogsByCategory = competitors->getCompetitorsByCategory();
-			return nullptr;
+			int place = 1;
+			for (int i = (ranking->Count - 1); i >= 0; i--)
+			{				
+				if ((i > 0) && (ranking[i]->bestMark == ranking[i - 1]->bestMark))
+				{
+					String^ dogName1 = ranking[i]->name;
+					String^ dogName2 = ranking[i - 1]->name;
+
+					MarkTablePerformanceData^ results1 = performanceData[dogName1];
+					MarkTablePerformanceData^ results2 = performanceData[dogName2];
+					int totalAttempts1 = results1->getTotalAttempts();
+					int totalAttempts2 = results2->getTotalAttempts();
+
+
+					if (totalAttempts1 < totalAttempts2)
+					{
+						ranking[i]->place = place;
+						ranking[i - 1]->place = place + 1;
+						ranking[i]->points = assignPoints(i);
+						ranking[i - 1]->points = assignPoints(i + 1);
+					}
+					else
+					{
+						ranking[i]->place = place + 1;
+						ranking[i - 1]->place = place;
+						ranking[i]->points = assignPoints(i + 1);
+						ranking[i - 1]->points = assignPoints(i);
+					}
+					i--;
+					place += 2;
+				}
+				else
+				{
+					ranking[i]->place = place;
+					ranking[i]->points = assignPoints(place);
+					place++;
+				}
+				
+			}
+		}
+
+		int assignPoints(int placing)
+		{
+			int points = 0;
+			switch (placing)
+			{
+			case 1:
+				points = 25;
+				break;
+			case 2:
+				points = 20;
+				break;
+			case 3:
+				points = 15;
+				break;
+			case 4:
+				points = 12;
+				break;
+			case 5:
+				points = 10;
+				break;
+			default:
+				points = 0;
+			}
+			return points;
+		}
+
+		void assignPlacing(List<Rank^>^ ranking)
+		{
+			for (int i = ranking->Count; i > 0; i--)
+			{
+				ranking[i - 1]->place = i;
+				ranking[i - 1]->points = assignPoints(i);
+					
+			}
+		}
+
+		String^ printRanking(List<Rank^>^ ranking)
+		{
+			StringBuilder^ stringBuilder = gcnew StringBuilder("Name \tBest Mark \tPlace \tPoints\n");
+
+			for each (Rank^ item in ranking)
+			{
+				stringBuilder->Append(String::Format("{0} \t{1} \t{2} \t{3}\n", item->name, item->bestMark, item->place, item->points));
+			}
+
+			return stringBuilder->ToString();
+		}
+		
+		List<Rank^>^ calculateResultsByCategory(String^ category)
+		{
+			
+			Dictionary<String^, List<Dog^>^>^ dogsByCategory = competitors->getCompetitorsByCategory();
+			List<Rank^>^ wallClimBestresults = gcnew List<Rank^>();
+			List<Rank^>^ highJumpBestresults = gcnew List<Rank^>();
+			List<Rank^>^ longJumpBestresults = gcnew List<Rank^>();
+			List<Rank^>^ treadmillBestresults = gcnew List<Rank^>();
+
+			List<Rank^>^ categoryRank = gcnew List<Rank^>();
+
+			for each (Dog^ dog in dogsByCategory[category])
+			{
+				PerformanceData^ wallClimb = wallClimbResults[dog->getName()];
+				/*PerformanceData^ highJump = highJumpResults[dog->getName()];
+				PerformanceData^ longJump = longJumpResults[dog->getName()];
+				PerformanceData^ treadmill = treadmillResults[dog->getName()];*/
+				if (wallClimb)
+					wallClimBestresults->Add(gcnew Rank(dog->getName(), wallClimb->getBestResult()));
+				/*highJumpBestresults->Add(gcnew Rank(dog->getName(), highJump->getBestResult()));
+				longJumpBestresults->Add(gcnew Rank(dog->getName(), longJump->getBestResult()));
+				treadmillBestresults->Add(gcnew Rank(dog->getName(), treadmill->getBestResult()));*/
+			}
+
+			wallClimBestresults->Sort(gcnew CompareByElement(Element::MARK));
+			Debug::WriteLine("Before assignMarkTablePlacing");
+			
+			Debug::WriteLine(printRanking(wallClimBestresults));
+			/*highJumpBestresults->Sort(gcnew CompareByElement(Element::MARK));
+			longJumpBestresults->Sort(gcnew CompareByElement(Element::MARK));
+			treadmillBestresults->Sort(gcnew CompareByElement(Element::MARK));*/
+
+			assignMarkTablePlacing(wallClimBestresults, wallClimbResults);
+			Debug::WriteLine("After assignMarkTablePlacing");
+			Debug::WriteLine(printRanking(wallClimBestresults));
+			/*assignMarkTablePlacing(highJumpBestresults, highJumpResults);
+			assignPlacing(longJumpBestresults);
+			assignPlacing(treadmillBestresults);*/
+			wallClimBestresults->Sort(gcnew CompareByElement(Element::PLACE));
+			/*highJumpBestresults->Sort(gcnew CompareByElement(Element::PLACE));*/
+
+			//TODO: calculate the rank for the category
+
+			return wallClimBestresults;
 		}
 
 #pragma region Windows Form Designer generated code
@@ -158,16 +293,14 @@ namespace TopDogShow {
 			// 
 			this->resultGrid->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::ColumnHeader;
 			this->resultGrid->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->resultGrid->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
-				this->placing, this->dogName,
-					this->points
-			});
 			this->resultGrid->Location = System::Drawing::Point(91, 106);
 			this->resultGrid->Name = L"resultGrid";
 			this->resultGrid->RowHeadersWidth = 62;
 			this->resultGrid->RowTemplate->Height = 28;
 			this->resultGrid->Size = System::Drawing::Size(712, 779);
 			this->resultGrid->TabIndex = 15;
+			this->resultGrid->AutoSizeRowsMode = DataGridViewAutoSizeRowsMode::AllCells;
+			this->resultGrid->AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode::AllCells;
 			// 
 			// placing
 			// 
@@ -216,4 +349,6 @@ namespace TopDogShow {
 		}
 #pragma endregion
 };
+
+	
 }

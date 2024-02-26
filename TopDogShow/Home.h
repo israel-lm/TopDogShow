@@ -23,10 +23,10 @@ namespace TopDogShow {
 		{
 			InitializeComponent();
 			preDisciplineScreen = gcnew PreDiscipline();
-			resultsScreen = gcnew Results();
 			disciplineFactory = DisciplineFactory::getInstance();
 			dbHandler = DBHandler::Instance;
 			competitors = Competitors::Instance;
+			setResultOptions();
 		}
 
 	protected:
@@ -55,13 +55,12 @@ namespace TopDogShow {
 		System::Windows::Forms::Button^ registrationButton;
 		System::Windows::Forms::Button^ configButton;
 		System::Windows::Forms::Button^ leaveButton;
-		System::Windows::Forms::ComboBox^ comboBox1;
+		System::Windows::Forms::ComboBox^ resultsBox;
 		System::Windows::Forms::Label^ resultsLabel;
 		System::ComponentModel::Container ^components;
 
 		PreDiscipline^ preDisciplineScreen;
 		Form^ TreadmillScreen;
-		Results^ resultsScreen;
 		Registration^ registrationScreen;
 
 		DisciplineFactory* disciplineFactory;
@@ -98,6 +97,49 @@ namespace TopDogShow {
 			registrationScreen = gcnew Registration();
 			registrationScreen->Show();
 		}
+
+		void setResultOptions()
+		{
+			array<Object^>^ options = gcnew array<Object^>(4);
+			options[0] = "General";
+			options[1] = "Category Lightweight";
+			options[2] = "Category Mediumweight";
+			options[3] = "Category Heavyweight";
+
+			resultsBox->Items->AddRange(options);
+		}
+
+		System::Void resultsBox_SelectedValueChanged(System::Object^ sender, System::EventArgs^ e)
+		{
+			ComboBox^ box = (ComboBox^)sender;
+			if (box && box->SelectedIndex >= 0)
+			{
+				String^ option = (String^)box->SelectedItem;
+				ResultType resultType;
+				String^ category = nullptr;
+				switch (box->SelectedIndex)
+				{
+				case 0:
+					resultType = ResultType::GENERAL;
+					break;
+				case 1:
+					resultType = ResultType::CATEGORY;
+					category = Categories::LIGHT_WEIGHT;
+					break;
+				case 2:
+					resultType = ResultType::CATEGORY;
+					category = Categories::MIDDLE_WEIGHT;
+					break;
+				case 3:
+					resultType = ResultType::CATEGORY;
+					category = Categories::HEAVY_WEIGHT;
+					break;
+				}
+				Results^ resultsScreen = gcnew Results(resultType, category);
+				resultsScreen->ShowDialog();
+			}
+		}
+
 		void InitializeComponent(void)
 		{
 			this->headerLabel = (gcnew System::Windows::Forms::Label());
@@ -108,7 +150,7 @@ namespace TopDogShow {
 			this->registrationButton = (gcnew System::Windows::Forms::Button());
 			this->configButton = (gcnew System::Windows::Forms::Button());
 			this->leaveButton = (gcnew System::Windows::Forms::Button());
-			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
+			this->resultsBox = (gcnew System::Windows::Forms::ComboBox());
 			this->resultsLabel = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
@@ -205,14 +247,15 @@ namespace TopDogShow {
 			this->leaveButton->UseVisualStyleBackColor = false;
 			this->leaveButton->Click += gcnew System::EventHandler(this, &Home::leaveButton_Click);
 			// 
-			// comboBox1
+			// resultsBox
 			// 
-			this->comboBox1->Anchor = System::Windows::Forms::AnchorStyles::Left;
-			this->comboBox1->FormattingEnabled = true;
-			this->comboBox1->Location = System::Drawing::Point(20, 414);
-			this->comboBox1->Name = L"comboBox1";
-			this->comboBox1->Size = System::Drawing::Size(273, 28);
-			this->comboBox1->TabIndex = 10;
+			this->resultsBox->Anchor = System::Windows::Forms::AnchorStyles::Left;
+			this->resultsBox->FormattingEnabled = true;
+			this->resultsBox->Location = System::Drawing::Point(20, 414);
+			this->resultsBox->Name = L"resultsBox";
+			this->resultsBox->Size = System::Drawing::Size(273, 28);
+			this->resultsBox->TabIndex = 10;
+			this->resultsBox->SelectedValueChanged += gcnew System::EventHandler(this, &Home::resultsBox_SelectedValueChanged);
 			// 
 			// resultsLabel
 			// 
@@ -234,7 +277,7 @@ namespace TopDogShow {
 			this->BackColor = System::Drawing::Color::DodgerBlue;
 			this->ClientSize = System::Drawing::Size(578, 544);
 			this->Controls->Add(this->resultsLabel);
-			this->Controls->Add(this->comboBox1);
+			this->Controls->Add(this->resultsBox);
 			this->Controls->Add(this->leaveButton);
 			this->Controls->Add(this->configButton);
 			this->Controls->Add(this->registrationButton);

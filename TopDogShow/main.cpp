@@ -28,10 +28,10 @@ void main(array<String^>^ args)
 
 	/*Competitors^ competitors = Competitors::Instance;
 
-	Dictionary<Categories, List<Dog^>^>^ dogsBYCategory = competitors->getCompetitorsByCategory();
+	Dictionary<String, List<Dog^>^>^ dogsBYCategory = competitors->getCompetitorsByCategory();
 
 	String^ toPrint;
-	for each (KeyValuePair< Categories, List<Dog^>^> item in dogsBYCategory)
+	for each (KeyValuePair< String, List<Dog^>^> item in dogsBYCategory)
 	{
 		String^ category = marshal_as<String^>(CategoryString.at((int)item.Key));
 		toPrint += String::Format("{0}\n", category);

@@ -124,6 +124,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Comparator.cpp" />
     <ClCompile Include="Competitors.cpp" />
     <ClCompile Include="DBHandler.cpp" />
     <ClCompile Include="DisciplineFactory.cpp" />
@@ -135,11 +136,13 @@
     <ClCompile Include="MarkTableDiscipline.cpp" />
     <ClCompile Include="PerformanceData.cpp" />
     <ClCompile Include="PreDiscipline.cpp" />
+    <ClCompile Include="Rank.cpp" />
     <ClCompile Include="Registration.cpp" />
     <ClCompile Include="Results.cpp" />
     <ClCompile Include="Treadmill.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Comparator.h" />
     <ClInclude Include="Competitors.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DBHandler.h" />
@@ -163,6 +166,7 @@
     <ClInclude Include="PreDiscipline.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Rank.h" />
     <ClInclude Include="Registration.h">
       <FileType>CppForm</FileType>
     </ClInclude>

@@ -17,7 +17,7 @@ void TopDogShow::Competitors::loadCompetitors()
 	
 
 	if (!competitorsByCategory)
-		competitorsByCategory = gcnew Dictionary<Categories^, List<Dog^>^>();
+		competitorsByCategory = gcnew Dictionary<String^, List<Dog^>^>();
 	if (!competitorsByName)
 		competitorsByName = gcnew Dictionary<String^, Dog^>();
 	
@@ -50,7 +50,7 @@ void TopDogShow::Competitors::loadCompetitors()
 	}
 }
 
-Dictionary<TopDogShow::Categories^, List<TopDogShow::Dog^>^>^ TopDogShow::Competitors::getCompetitorsByCategory()
+Dictionary<TopDogShow::String^, List<TopDogShow::Dog^>^>^ TopDogShow::Competitors::getCompetitorsByCategory()
 {
 	return competitorsByCategory;
 }
