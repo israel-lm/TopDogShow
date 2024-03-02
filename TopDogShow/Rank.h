@@ -15,14 +15,17 @@ namespace TopDogShow {
 
 		[System::ComponentModel::DisplayName("Place")]
 		property int place;
-		int bestMark;
 
-		Rank(String^ name, int bestMark)
+		int bestMark;
+		int totalAttempts;
+
+		Rank(String^ name, int bestMark, int points, int totalAttempts)
 		{
 			this->name = name;
 			this->bestMark = bestMark;
 			this->place = 0;
-			this->points = 0;
+			this->points = points;
+			this->totalAttempts = totalAttempts;
 		}
 	};
 }

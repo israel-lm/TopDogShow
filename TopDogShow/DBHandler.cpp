@@ -271,7 +271,7 @@ DBErrorType  DBHandler::saveLongJumpResults(LongJumpPerformanceData^ data)
 	return res;
 }
 
-DBErrorType  DBHandler::saveTreadmilllResults(TreadmilllPerformanceData^ data)
+DBErrorType  DBHandler::saveTreadmilllResults(TreadmillPerformanceData^ data)
 {
 	DBErrorType res = checkTableAndCreate(TREADMILL_TABLE_NAME);
 
@@ -399,9 +399,9 @@ Dictionary<String^, LongJumpPerformanceData^>^ DBHandler::getLongJumpResults()
 }
 
 
-Dictionary<String^, TreadmilllPerformanceData^>^ DBHandler::getTreadmillResults()
+Dictionary<String^, TreadmillPerformanceData^>^ DBHandler::getTreadmillResults()
 {
-	Dictionary<String^, TreadmilllPerformanceData^>^ ret = nullptr;
+	Dictionary<String^, TreadmillPerformanceData^>^ ret = nullptr;
 
 	if (checkTableExists(TREADMILL_TABLE_NAME))
 	{
@@ -409,7 +409,7 @@ Dictionary<String^, TreadmilllPerformanceData^>^ DBHandler::getTreadmillResults(
 		SqlConnection sqlConnection(DBHandler::connectionString);
 		SqlCommand command(operation, % sqlConnection);
 
-		ret = gcnew Dictionary<String^, TreadmilllPerformanceData^>();
+		ret = gcnew Dictionary<String^, TreadmillPerformanceData^>();
 		try
 		{
 			sqlConnection.Open();
@@ -424,7 +424,7 @@ Dictionary<String^, TreadmilllPerformanceData^>^ DBHandler::getTreadmillResults(
 
 				if (getDogInfo(name, dog) == DBErrorType::OK)
 				{
-					TreadmilllPerformanceData^ data = gcnew TreadmilllPerformanceData(dog, mark);
+					TreadmillPerformanceData^ data = gcnew TreadmillPerformanceData(dog, mark);
 					ret[name] = data;
 				}	
 			}

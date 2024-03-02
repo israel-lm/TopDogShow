@@ -15,7 +15,8 @@ namespace TopDogShow {
 	{
 		MARK,
 		PLACE,
-		POINT
+		POINT,
+		ATTEMPTS
 	};
 
 	public ref class CompareByElement : System::Collections::Generic::Comparer<Rank^>
@@ -35,13 +36,18 @@ namespace TopDogShow {
 			switch (comparator)
 			{
 			case Element::MARK:
-				result = a->bestMark.CompareTo(b->bestMark);
+				result = (a->bestMark > b->bestMark)? -1: 1;
 				break;
 			case Element::PLACE:
-				result = a->place.CompareTo(b->place);
+				result = (a->place < b->place)? -1: 1;
 				break;
 			case Element::POINT:
-				result = a->points.CompareTo(b->points);
+				result = (a->points > b->points) ? -1 : 1;
+				break;
+			case Element::ATTEMPTS:
+				result = 0;
+				if (a->bestMark == b->bestMark)
+					result = (a->totalAttempts < b->totalAttempts)? -1: 1;
 				break;
 			}
 			return result;

@@ -15,15 +15,6 @@ void TopDogShow::Competitors::loadCompetitors()
 	DBHandler^ handler = DBHandler::Instance;
 	List<TopDogShow::Dog^>^ dogs = gcnew List<TopDogShow::Dog^>;
 	
-
-	if (!competitorsByCategory)
-		competitorsByCategory = gcnew Dictionary<String^, List<Dog^>^>();
-	if (!competitorsByName)
-		competitorsByName = gcnew Dictionary<String^, Dog^>();
-	
-	competitorsByCategory->Clear();
-	competitorsByName->Clear();
-
 	if (handler)
 	{
 		DBErrorType result = handler->getAllDogs(dogs);
@@ -37,6 +28,14 @@ void TopDogShow::Competitors::loadCompetitors()
 		}
 		else
 		{
+			if (!competitorsByCategory)
+				competitorsByCategory = gcnew Dictionary<String^, List<Dog^>^>();
+			if (!competitorsByName)
+				competitorsByName = gcnew Dictionary<String^, Dog^>();
+
+			competitorsByCategory->Clear();
+			competitorsByName->Clear();
+			
 			for each (Dog^ dog in dogs)
 			{
 				if (!competitorsByCategory->ContainsKey(dog->getCategory()))

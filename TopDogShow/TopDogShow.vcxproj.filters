@@ -63,9 +63,6 @@
     <ClCompile Include="Comparator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResultScreen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Login.h">
@@ -87,9 +84,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Treadmill.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Results.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DisciplineFactory.h">
@@ -131,7 +125,7 @@
     <ClInclude Include="Comparator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ResultScreen.h">
+    <ClInclude Include="Results.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -253,7 +253,7 @@ namespace TopDogShow {
 	System::Void saveButtonClick(System::Object^ sender, System::EventArgs^ e) 
 	{
 		int markValue = 0; //defined in cm
-		TreadmilllPerformanceData^ performanceData;
+		TreadmillPerformanceData^ performanceData;
 
 		try
 		{
@@ -274,7 +274,7 @@ namespace TopDogShow {
 		Competitors^ competitors = Competitors::Instance;
 		Dictionary<String^, Dog^>^ dogs = competitors->getCompetitorsByName();
 		String^ dogName = (String^)dogCombo->SelectedItem;
-		performanceData = gcnew TreadmilllPerformanceData(dogs[dogName], markValue);		
+		performanceData = gcnew TreadmillPerformanceData(dogs[dogName], markValue);		
 		
 		if (dbHandler->saveTreadmilllResults(performanceData) == DBErrorType::OK)
 		{

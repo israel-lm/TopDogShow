@@ -28,7 +28,7 @@ namespace TopDogShow {
 			showResults(type, category);
 		}
 
-		
+
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
@@ -40,7 +40,7 @@ namespace TopDogShow {
 				delete components;
 			}
 		}
-	private: 
+	private:
 		System::Windows::Forms::Label^ headerLabel;
 		System::Windows::Forms::Button^ printButton;
 		System::Windows::Forms::Button^ exitButton;
@@ -49,15 +49,15 @@ namespace TopDogShow {
 		System::Windows::Forms::DataGridViewTextBoxColumn^ placing;
 		System::Windows::Forms::DataGridViewTextBoxColumn^ dogName;
 		System::Windows::Forms::DataGridViewTextBoxColumn^ points;
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
-		
+
 		DBHandler^ dbHandler = nullptr;
 		Competitors^ competitors = nullptr;
 		Dictionary<String^, MarkTablePerformanceData^>^ wallClimbResults = nullptr;
 		Dictionary<String^, MarkTablePerformanceData^>^ highJumpResults = nullptr;
 		Dictionary<String^, LongJumpPerformanceData^>^ longJumpResults = nullptr;
-		Dictionary<String^, TreadmilllPerformanceData^>^ treadmillResults = nullptr;
+		Dictionary<String^, TreadmillPerformanceData^>^ treadmillResults = nullptr;
 
 		void showResults(ResultType type, String^ category)
 		{
@@ -72,7 +72,7 @@ namespace TopDogShow {
 				break;
 			}
 		}
-		
+
 		void updateResultsData()
 		{
 			if (dbHandler)
@@ -92,55 +92,13 @@ namespace TopDogShow {
 		void showResultsByCategory(String^ category)
 		{
 			List<Rank^>^ ranking = calculateResultsByCategory(category);
-			for each (Rank^ rank in ranking)
+		
+			for each (Rank ^ rank in ranking)
 				gridDataSource->Add(rank);
 
 			resultGrid->AutoGenerateColumns = true;
 			resultGrid->DefaultCellStyle->ForeColor = Color::Black;
 			resultGrid->DataSource = gridDataSource;
-		}
-
-		void assignMarkTablePlacing(List<Rank^>^ ranking, Dictionary<String^, MarkTablePerformanceData^>^ performanceData)
-		{
-			int place = 1;
-			for (int i = (ranking->Count - 1); i >= 0; i--)
-			{				
-				if ((i > 0) && (ranking[i]->bestMark == ranking[i - 1]->bestMark))
-				{
-					String^ dogName1 = ranking[i]->name;
-					String^ dogName2 = ranking[i - 1]->name;
-
-					MarkTablePerformanceData^ results1 = performanceData[dogName1];
-					MarkTablePerformanceData^ results2 = performanceData[dogName2];
-					int totalAttempts1 = results1->getTotalAttempts();
-					int totalAttempts2 = results2->getTotalAttempts();
-
-
-					if (totalAttempts1 < totalAttempts2)
-					{
-						ranking[i]->place = place;
-						ranking[i - 1]->place = place + 1;
-						ranking[i]->points = assignPoints(i);
-						ranking[i - 1]->points = assignPoints(i + 1);
-					}
-					else
-					{
-						ranking[i]->place = place + 1;
-						ranking[i - 1]->place = place;
-						ranking[i]->points = assignPoints(i + 1);
-						ranking[i - 1]->points = assignPoints(i);
-					}
-					i--;
-					place += 2;
-				}
-				else
-				{
-					ranking[i]->place = place;
-					ranking[i]->points = assignPoints(place);
-					place++;
-				}
-				
-			}
 		}
 
 		int assignPoints(int placing)
@@ -169,72 +127,183 @@ namespace TopDogShow {
 			return points;
 		}
 
-		void assignPlacing(List<Rank^>^ ranking)
+		void assignPlace(List<Rank^>^ ranking, bool givePoints)
 		{
-			for (int i = ranking->Count; i > 0; i--)
+			int placing = 0;
+			for (int i = 0; i < ranking->Count; i++)
 			{
-				ranking[i - 1]->place = i;
-				ranking[i - 1]->points = assignPoints(i);
-					
+				placing = i + 1;
+				ranking[i]->place = placing;
+				if (givePoints)
+					ranking[i]->points = assignPoints(placing);
 			}
 		}
 
 		String^ printRanking(List<Rank^>^ ranking)
 		{
-			StringBuilder^ stringBuilder = gcnew StringBuilder("Name \tBest Mark \tPlace \tPoints\n");
+			StringBuilder^ stringBuilder = gcnew StringBuilder("Name      | Best Mark | Attempts | Place | Points\n");
 
-			for each (Rank^ item in ranking)
+			for each (Rank ^ item in ranking)
 			{
-				stringBuilder->Append(String::Format("{0} \t{1} \t{2} \t{3}\n", item->name, item->bestMark, item->place, item->points));
+				stringBuilder->Append(String::Format(
+					"{0, -9} | {1, -9} | {2, 8} |{3, 5} | {4, 6}\n", 
+					item->name, 
+					item->bestMark,
+					item->totalAttempts,
+					item->place, 
+					item->points
+				));
 			}
 
 			return stringBuilder->ToString();
 		}
-		
-		List<Rank^>^ calculateResultsByCategory(String^ category)
+
+		template<typename T>
+		List<Rank^>^ getListOfBestMarks(List<Dog^>^ dogs, Dictionary<String^, T>^ performanceData)
 		{
-			
-			Dictionary<String^, List<Dog^>^>^ dogsByCategory = competitors->getCompetitorsByCategory();
-			List<Rank^>^ wallClimBestresults = gcnew List<Rank^>();
-			List<Rank^>^ highJumpBestresults = gcnew List<Rank^>();
-			List<Rank^>^ longJumpBestresults = gcnew List<Rank^>();
-			List<Rank^>^ treadmillBestresults = gcnew List<Rank^>();
+			List<Rank^>^ bestMarks = gcnew List<Rank^>();
+			PerformanceData^ data = nullptr;
 
-			List<Rank^>^ categoryRank = gcnew List<Rank^>();
-
-			for each (Dog^ dog in dogsByCategory[category])
+			for each (Dog^ dog in dogs)
 			{
-				PerformanceData^ wallClimb = wallClimbResults[dog->getName()];
-				/*PerformanceData^ highJump = highJumpResults[dog->getName()];
-				PerformanceData^ longJump = longJumpResults[dog->getName()];
-				PerformanceData^ treadmill = treadmillResults[dog->getName()];*/
-				if (wallClimb)
-					wallClimBestresults->Add(gcnew Rank(dog->getName(), wallClimb->getBestResult()));
-				/*highJumpBestresults->Add(gcnew Rank(dog->getName(), highJump->getBestResult()));
-				longJumpBestresults->Add(gcnew Rank(dog->getName(), longJump->getBestResult()));
-				treadmillBestresults->Add(gcnew Rank(dog->getName(), treadmill->getBestResult()));*/
+				try
+				{
+					data = performanceData[dog->getName()];
+				}							
+				catch (Exception^ e)
+				{
+					continue;
+				}
+				
+				if (data)
+					bestMarks->Add(gcnew Rank(dog->getName(), data->getBestResult(), 0, data->getTotalAttempts()));
 			}
 
-			wallClimBestresults->Sort(gcnew CompareByElement(Element::MARK));
-			Debug::WriteLine("Before assignMarkTablePlacing");
-			
-			Debug::WriteLine(printRanking(wallClimBestresults));
-			/*highJumpBestresults->Sort(gcnew CompareByElement(Element::MARK));
+			return bestMarks;
+		}
+
+
+		List<Rank^>^ getOverallRanking(List<List<Rank^>^>^ ranks)
+		{
+			List<Rank^>^ general = gcnew List<Rank^>();
+			Dictionary<String^, Rank^>^ dogsAndPoints = gcnew Dictionary<String^, Rank^>();
+
+			for each (List<Rank^>^ item in ranks)
+			{
+				for each (Rank^ rank in item)
+				{
+					if (dogsAndPoints->ContainsKey(rank->name))
+					{
+						Rank^ currentValues = dogsAndPoints[rank->name];
+						currentValues->points += rank->points;
+						currentValues->totalAttempts += rank->totalAttempts;
+					}
+					else
+					{
+						dogsAndPoints[rank->name] = gcnew Rank(rank->name, -1, rank->points, rank->totalAttempts);
+					}
+				}
+			}
+
+			for each (KeyValuePair<String^, Rank^>^ kvp in dogsAndPoints)
+			{
+				general->Add(kvp->Value);
+			}
+
+			general->Sort(gcnew CompareByElement(Element::POINT));
+			general->Sort(gcnew CompareByElement(Element::ATTEMPTS));
+			assignPlace(general, false);
+
+			return general;
+		}
+
+		List<Rank^>^ calculateResultsByCategory(String^ category)
+		{
+			List<Rank^>^ categoryRank = nullptr;
+
+			Dictionary<String^, List<Dog^>^>^ dogsByCategory = competitors->getCompetitorsByCategory();
+			if (!dogsByCategory)
+			{
+				//TODO: show error
+				return nullptr;
+			}
+			List<Dog^>^ dogs = nullptr;
+
+			try
+			{
+				dogs = dogsByCategory[category];
+			}
+			catch (Exception^ e)
+			{
+				//TODO: show error
+				return nullptr;
+			}
+
+			List<Rank^>^ wallClimBestresults = getListOfBestMarks<MarkTablePerformanceData^>(
+				dogs, 
+				wallClimbResults
+			);
+
+			List<Rank^>^ highJumpBestresults = getListOfBestMarks<MarkTablePerformanceData^>(
+				dogs,
+				highJumpResults
+			);
+
+			List<Rank^>^ longJumpBestresults = getListOfBestMarks<LongJumpPerformanceData^>(
+				dogs,
+				longJumpResults
+			);
+
+			List<Rank^>^ treadmillBestresults = getListOfBestMarks<TreadmillPerformanceData^>(
+				dogs,
+				treadmillResults
+			);
+
+			wallClimBestresults->Sort(gcnew CompareByElement(Element::MARK));			
+			highJumpBestresults->Sort(gcnew CompareByElement(Element::MARK));
 			longJumpBestresults->Sort(gcnew CompareByElement(Element::MARK));
-			treadmillBestresults->Sort(gcnew CompareByElement(Element::MARK));*/
+			treadmillBestresults->Sort(gcnew CompareByElement(Element::MARK));
+			
+			Debug::WriteLine("Before sorting by attempts");
+			Debug::WriteLine(String::Format("wallClimBestresults:\n{0}", printRanking(wallClimBestresults)));
+			Debug::WriteLine(String::Format("highJumpBestresults:\n{0}", printRanking(highJumpBestresults)));
+			Debug::WriteLine(String::Format("longJumpBestresults:\n{0}", printRanking(longJumpBestresults)));
+			Debug::WriteLine(String::Format("treadmillBestresults:\n{0}", printRanking(treadmillBestresults)));
 
-			assignMarkTablePlacing(wallClimBestresults, wallClimbResults);
-			Debug::WriteLine("After assignMarkTablePlacing");
-			Debug::WriteLine(printRanking(wallClimBestresults));
-			/*assignMarkTablePlacing(highJumpBestresults, highJumpResults);
-			assignPlacing(longJumpBestresults);
-			assignPlacing(treadmillBestresults);*/
-			wallClimBestresults->Sort(gcnew CompareByElement(Element::PLACE));
-			/*highJumpBestresults->Sort(gcnew CompareByElement(Element::PLACE));*/
+			/*sortByAttempts(wallClimBestresults);
+			sortByAttempts(highJumpBestresults);*/
 
-			//TODO: calculate the rank for the category
+			wallClimBestresults->Sort(gcnew CompareByElement(Element::ATTEMPTS));
+			highJumpBestresults->Sort(gcnew CompareByElement(Element::ATTEMPTS));
 
-			return wallClimBestresults;
+			Debug::WriteLine("After sorting by attempts");
+			Debug::WriteLine(String::Format("wallClimBestresults:\n{0}", printRanking(wallClimBestresults)));
+			Debug::WriteLine(String::Format("highJumpBestresults:\n{0}", printRanking(highJumpBestresults)));
+			Debug::WriteLine(String::Format("longJumpBestresults:\n{0}", printRanking(longJumpBestresults)));
+			Debug::WriteLine(String::Format("treadmillBestresults:\n{0}", printRanking(treadmillBestresults)));
+
+			assignPlace(wallClimBestresults, true);
+			assignPlace(highJumpBestresults, true);
+			assignPlace(longJumpBestresults, true);
+			assignPlace(treadmillBestresults, true);
+
+			Debug::WriteLine("After assigning places");
+			Debug::WriteLine(String::Format("wallClimBestresults:\n{0}", printRanking(wallClimBestresults)));
+			Debug::WriteLine(String::Format("highJumpBestresults:\n{0}", printRanking(highJumpBestresults)));
+			Debug::WriteLine(String::Format("longJumpBestresults:\n{0}", printRanking(longJumpBestresults)));
+			Debug::WriteLine(String::Format("treadmillBestresults:\n{0}", printRanking(treadmillBestresults)));
+
+
+			List<List<Rank^>^>^ rankList = gcnew List<List<Rank^>^>();
+			rankList->Add(wallClimBestresults);
+			rankList->Add(highJumpBestresults);
+			rankList->Add(longJumpBestresults);
+			rankList->Add(treadmillBestresults);
+
+			categoryRank = getOverallRanking(rankList);
+
+
+			return categoryRank;
 		}
 
 #pragma region Windows Form Designer generated code
@@ -291,16 +360,22 @@ namespace TopDogShow {
 			// 
 			// resultGrid
 			// 
-			this->resultGrid->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::ColumnHeader;
+			this->resultGrid->AllowUserToAddRows = false;
+			this->resultGrid->AllowUserToDeleteRows = false;
+			this->resultGrid->AllowUserToResizeColumns = false;
+			this->resultGrid->AllowUserToResizeRows = false;
+			this->resultGrid->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
+				| System::Windows::Forms::AnchorStyles::Left));
+			this->resultGrid->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::AllCells;
+			this->resultGrid->AutoSizeRowsMode = System::Windows::Forms::DataGridViewAutoSizeRowsMode::AllCells;
 			this->resultGrid->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->resultGrid->Location = System::Drawing::Point(91, 106);
 			this->resultGrid->Name = L"resultGrid";
-			this->resultGrid->RowHeadersWidth = 62;
+			this->resultGrid->RowHeadersWidthSizeMode = System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::AutoSizeToAllHeaders;
 			this->resultGrid->RowTemplate->Height = 28;
 			this->resultGrid->Size = System::Drawing::Size(712, 779);
 			this->resultGrid->TabIndex = 15;
-			this->resultGrid->AutoSizeRowsMode = DataGridViewAutoSizeRowsMode::AllCells;
-			this->resultGrid->AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode::AllCells;
+			this->resultGrid->DefaultCellStyle->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
 			// 
 			// placing
 			// 
@@ -308,7 +383,7 @@ namespace TopDogShow {
 			this->placing->HeaderText = L"Placing";
 			this->placing->MinimumWidth = 8;
 			this->placing->Name = L"placing";
-			this->placing->Width = 201;
+			this->placing->Width = 150;
 			// 
 			// dogName
 			// 
@@ -316,7 +391,7 @@ namespace TopDogShow {
 			this->dogName->HeaderText = L"Dog Name";
 			this->dogName->MinimumWidth = 8;
 			this->dogName->Name = L"dogName";
-			this->dogName->Width = 263;
+			this->dogName->Width = 150;
 			// 
 			// points
 			// 
@@ -324,7 +399,7 @@ namespace TopDogShow {
 			this->points->HeaderText = L"Points";
 			this->points->MinimumWidth = 8;
 			this->points->Name = L"points";
-			this->points->Width = 181;
+			this->points->Width = 150;
 			// 
 			// Results
 			// 
@@ -348,7 +423,7 @@ namespace TopDogShow {
 
 		}
 #pragma endregion
-};
+	};
 
-	
+
 }

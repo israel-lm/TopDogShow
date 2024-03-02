@@ -99,13 +99,14 @@ namespace TopDogShow
 	};
 
 	
-	public ref class TreadmilllPerformanceData : PerformanceData
+	public ref class TreadmillPerformanceData : PerformanceData
 	{
 	public:
 		int distance;
 
-		TreadmilllPerformanceData(Dog^ dog, int distance)
+		TreadmillPerformanceData(Dog^ dog, int distance)
 		{
+			this->dog = dog;
 			this->distance = distance;
 		}
 

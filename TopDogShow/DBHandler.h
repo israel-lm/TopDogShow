@@ -52,12 +52,12 @@ namespace TopDogShow
 		DBErrorType saveWallClimbResults(MarkTablePerformanceData^ data);
 		DBErrorType saveHighJumpResults(MarkTablePerformanceData^ data);
 		DBErrorType saveLongJumpResults(LongJumpPerformanceData^ data);
-		DBErrorType saveTreadmilllResults(TreadmilllPerformanceData^ data);
+		DBErrorType saveTreadmilllResults(TreadmillPerformanceData^ data);
 
 		Dictionary<String^, MarkTablePerformanceData^>^ getWallClimbResults();
 		Dictionary<String^, MarkTablePerformanceData^>^ getHighJumpResults();
 		Dictionary<String^, LongJumpPerformanceData^>^ getLongJumpResults();
-		Dictionary<String^, TreadmilllPerformanceData^>^ getTreadmillResults();
+		Dictionary<String^, TreadmillPerformanceData^>^ getTreadmillResults();
 
 		static property DBHandler^ Instance 
 		{ 

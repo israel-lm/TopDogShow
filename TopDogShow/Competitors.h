@@ -18,8 +18,8 @@ namespace TopDogShow
 	{
 	private:
 		static Competitors^ instance = gcnew Competitors();
-		Dictionary<String^, List<Dog^>^>^ competitorsByCategory;
-		Dictionary<String^, Dog^>^ competitorsByName;
+		Dictionary<String^, List<Dog^>^>^ competitorsByCategory = nullptr;
+		Dictionary<String^, Dog^>^ competitorsByName = nullptr;
 
 		Competitors();
 		void loadCompetitors();
