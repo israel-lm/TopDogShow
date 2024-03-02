@@ -22,7 +22,7 @@ namespace TopDogShow {
 		Results(ResultType type, String^ category)
 		{
 			InitializeComponent();
-			gridDataSource = gcnew BindingSource();
+			
 			dbHandler = DBHandler::Instance;
 			competitors = Competitors::Instance;
 			showResults(type, category);
@@ -45,7 +45,7 @@ namespace TopDogShow {
 		System::Windows::Forms::Button^ printButton;
 		System::Windows::Forms::Button^ exitButton;
 		System::Windows::Forms::DataGridView^ resultGrid;
-		System::Windows::Forms::BindingSource^ gridDataSource;
+		System::Windows::Forms::BindingSource^ gridDataSource = nullptr;
 		System::Windows::Forms::DataGridViewTextBoxColumn^ placing;
 		System::Windows::Forms::DataGridViewTextBoxColumn^ dogName;
 		System::Windows::Forms::DataGridViewTextBoxColumn^ points;
@@ -58,6 +58,7 @@ namespace TopDogShow {
 		Dictionary<String^, MarkTablePerformanceData^>^ highJumpResults = nullptr;
 		Dictionary<String^, LongJumpPerformanceData^>^ longJumpResults = nullptr;
 		Dictionary<String^, TreadmillPerformanceData^>^ treadmillResults = nullptr;
+
 
 		void showResults(ResultType type, String^ category)
 		{
@@ -86,19 +87,27 @@ namespace TopDogShow {
 
 		void showGeneralResults()
 		{
+			addGridViewDataSource(calculateGeneralResults());
+		}
 
+		void addGridViewDataSource(List<Rank^>^ rank)
+		{
+			if (!gridDataSource)
+			{
+				gridDataSource = gcnew BindingSource();
+				resultGrid->DataSource = gridDataSource;
+			}				
+
+			gridDataSource->Clear();			
+
+			for each (Rank^ item in rank)
+				gridDataSource->Add(item);
+			resultGrid->DefaultCellStyle->ForeColor = System::Drawing::Color::Black;
 		}
 
 		void showResultsByCategory(String^ category)
 		{
-			List<Rank^>^ ranking = calculateResultsByCategory(category);
-		
-			for each (Rank ^ rank in ranking)
-				gridDataSource->Add(rank);
-
-			resultGrid->AutoGenerateColumns = true;
-			resultGrid->DefaultCellStyle->ForeColor = Color::Black;
-			resultGrid->DataSource = gridDataSource;
+			addGridViewDataSource(calculateResultsByCategory(category));
 		}
 
 		int assignPoints(int placing)
@@ -182,10 +191,24 @@ namespace TopDogShow {
 			return bestMarks;
 		}
 
-
-		List<Rank^>^ getOverallRanking(List<List<Rank^>^>^ ranks)
+		void setOverallRanking(List<Rank^>^ rank)
 		{
-			List<Rank^>^ general = gcnew List<Rank^>();
+			Debug::WriteLine("Before sorting by point");
+			Debug::WriteLine(printRanking(rank));
+			rank->Sort(gcnew CompareByElement(Element::POINT));
+			Debug::WriteLine("After sorting by point");
+			Debug::WriteLine(printRanking(rank));
+			
+			rank->Sort(gcnew CompareByElement(Element::ATTEMPTS));
+			Debug::WriteLine("After sorting by attempts");
+			Debug::WriteLine(printRanking(rank));
+			assignPlace(rank, false);
+		}
+
+
+		List<Rank^>^ getCategoryRanking(List<List<Rank^>^>^ ranks)
+		{
+			List<Rank^>^ categoryRank = gcnew List<Rank^>();
 			Dictionary<String^, Rank^>^ dogsAndPoints = gcnew Dictionary<String^, Rank^>();
 
 			for each (List<Rank^>^ item in ranks)
@@ -207,14 +230,23 @@ namespace TopDogShow {
 
 			for each (KeyValuePair<String^, Rank^>^ kvp in dogsAndPoints)
 			{
-				general->Add(kvp->Value);
+				categoryRank->Add(kvp->Value);
 			}
 
-			general->Sort(gcnew CompareByElement(Element::POINT));
-			general->Sort(gcnew CompareByElement(Element::ATTEMPTS));
-			assignPlace(general, false);
+			setOverallRanking(categoryRank);
 
-			return general;
+			return categoryRank;
+		}
+
+		List<Rank^>^ calculateGeneralResults()
+		{
+			List<Rank^>^ generalRank = calculateResultsByCategory(Categories::LIGHT_WEIGHT);
+			generalRank->AddRange(calculateResultsByCategory(Categories::MIDDLE_WEIGHT));			
+			generalRank->AddRange(calculateResultsByCategory(Categories::HEAVY_WEIGHT));
+			
+			setOverallRanking(generalRank);
+
+			return generalRank;
 		}
 
 		List<Rank^>^ calculateResultsByCategory(String^ category)
@@ -264,11 +296,11 @@ namespace TopDogShow {
 			longJumpBestresults->Sort(gcnew CompareByElement(Element::MARK));
 			treadmillBestresults->Sort(gcnew CompareByElement(Element::MARK));
 			
-			Debug::WriteLine("Before sorting by attempts");
+			/*Debug::WriteLine("Before sorting by attempts");
 			Debug::WriteLine(String::Format("wallClimBestresults:\n{0}", printRanking(wallClimBestresults)));
 			Debug::WriteLine(String::Format("highJumpBestresults:\n{0}", printRanking(highJumpBestresults)));
 			Debug::WriteLine(String::Format("longJumpBestresults:\n{0}", printRanking(longJumpBestresults)));
-			Debug::WriteLine(String::Format("treadmillBestresults:\n{0}", printRanking(treadmillBestresults)));
+			Debug::WriteLine(String::Format("treadmillBestresults:\n{0}", printRanking(treadmillBestresults)));*/
 
 			/*sortByAttempts(wallClimBestresults);
 			sortByAttempts(highJumpBestresults);*/
@@ -276,22 +308,22 @@ namespace TopDogShow {
 			wallClimBestresults->Sort(gcnew CompareByElement(Element::ATTEMPTS));
 			highJumpBestresults->Sort(gcnew CompareByElement(Element::ATTEMPTS));
 
-			Debug::WriteLine("After sorting by attempts");
+			/*Debug::WriteLine("After sorting by attempts");
 			Debug::WriteLine(String::Format("wallClimBestresults:\n{0}", printRanking(wallClimBestresults)));
 			Debug::WriteLine(String::Format("highJumpBestresults:\n{0}", printRanking(highJumpBestresults)));
 			Debug::WriteLine(String::Format("longJumpBestresults:\n{0}", printRanking(longJumpBestresults)));
-			Debug::WriteLine(String::Format("treadmillBestresults:\n{0}", printRanking(treadmillBestresults)));
+			Debug::WriteLine(String::Format("treadmillBestresults:\n{0}", printRanking(treadmillBestresults)));*/
 
 			assignPlace(wallClimBestresults, true);
 			assignPlace(highJumpBestresults, true);
 			assignPlace(longJumpBestresults, true);
 			assignPlace(treadmillBestresults, true);
 
-			Debug::WriteLine("After assigning places");
+			/*Debug::WriteLine("After assigning places");
 			Debug::WriteLine(String::Format("wallClimBestresults:\n{0}", printRanking(wallClimBestresults)));
 			Debug::WriteLine(String::Format("highJumpBestresults:\n{0}", printRanking(highJumpBestresults)));
 			Debug::WriteLine(String::Format("longJumpBestresults:\n{0}", printRanking(longJumpBestresults)));
-			Debug::WriteLine(String::Format("treadmillBestresults:\n{0}", printRanking(treadmillBestresults)));
+			Debug::WriteLine(String::Format("treadmillBestresults:\n{0}", printRanking(treadmillBestresults)));*/
 
 
 			List<List<Rank^>^>^ rankList = gcnew List<List<Rank^>^>();
@@ -300,7 +332,7 @@ namespace TopDogShow {
 			rankList->Add(longJumpBestresults);
 			rankList->Add(treadmillBestresults);
 
-			categoryRank = getOverallRanking(rankList);
+			categoryRank = getCategoryRanking(rankList);
 
 
 			return categoryRank;
@@ -309,6 +341,7 @@ namespace TopDogShow {
 #pragma region Windows Form Designer generated code
 		void InitializeComponent(void)
 		{
+			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->headerLabel = (gcnew System::Windows::Forms::Label());
 			this->printButton = (gcnew System::Windows::Forms::Button());
 			this->exitButton = (gcnew System::Windows::Forms::Button());
@@ -324,7 +357,7 @@ namespace TopDogShow {
 			this->headerLabel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->headerLabel->AutoSize = true;
-			this->headerLabel->Location = System::Drawing::Point(300, 31);
+			this->headerLabel->Location = System::Drawing::Point(233, 32);
 			this->headerLabel->Name = L"headerLabel";
 			this->headerLabel->Size = System::Drawing::Size(270, 44);
 			this->headerLabel->TabIndex = 0;
@@ -337,7 +370,7 @@ namespace TopDogShow {
 			this->printButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->printButton->ForeColor = System::Drawing::SystemColors::ControlText;
-			this->printButton->Location = System::Drawing::Point(31, 928);
+			this->printButton->Location = System::Drawing::Point(31, 388);
 			this->printButton->Name = L"printButton";
 			this->printButton->Size = System::Drawing::Size(133, 43);
 			this->printButton->TabIndex = 14;
@@ -351,7 +384,7 @@ namespace TopDogShow {
 			this->exitButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->exitButton->ForeColor = System::Drawing::SystemColors::ControlText;
-			this->exitButton->Location = System::Drawing::Point(724, 928);
+			this->exitButton->Location = System::Drawing::Point(466, 388);
 			this->exitButton->Name = L"exitButton";
 			this->exitButton->Size = System::Drawing::Size(133, 43);
 			this->exitButton->TabIndex = 13;
@@ -366,16 +399,24 @@ namespace TopDogShow {
 			this->resultGrid->AllowUserToResizeRows = false;
 			this->resultGrid->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
 				| System::Windows::Forms::AnchorStyles::Left));
-			this->resultGrid->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::AllCells;
-			this->resultGrid->AutoSizeRowsMode = System::Windows::Forms::DataGridViewAutoSizeRowsMode::AllCells;
+			this->resultGrid->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
+			this->resultGrid->AutoSizeRowsMode = System::Windows::Forms::DataGridViewAutoSizeRowsMode::DisplayedCells;
 			this->resultGrid->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->resultGrid->Location = System::Drawing::Point(91, 106);
+			dataGridViewCellStyle1->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
+			dataGridViewCellStyle1->BackColor = System::Drawing::SystemColors::Window;
+			dataGridViewCellStyle1->Font = (gcnew System::Drawing::Font(L"Verdana", 18, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			dataGridViewCellStyle1->ForeColor = System::Drawing::Color::Black;
+			dataGridViewCellStyle1->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle1->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->resultGrid->DefaultCellStyle = dataGridViewCellStyle1;
+			this->resultGrid->Location = System::Drawing::Point(31, 109);
 			this->resultGrid->Name = L"resultGrid";
 			this->resultGrid->RowHeadersWidthSizeMode = System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::AutoSizeToAllHeaders;
 			this->resultGrid->RowTemplate->Height = 28;
-			this->resultGrid->Size = System::Drawing::Size(712, 779);
+			this->resultGrid->Size = System::Drawing::Size(568, 250);
 			this->resultGrid->TabIndex = 15;
-			this->resultGrid->DefaultCellStyle->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
 			// 
 			// placing
 			// 
@@ -406,7 +447,7 @@ namespace TopDogShow {
 			this->AutoScaleDimensions = System::Drawing::SizeF(25, 44);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::DodgerBlue;
-			this->ClientSize = System::Drawing::Size(894, 994);
+			this->ClientSize = System::Drawing::Size(650, 454);
 			this->Controls->Add(this->resultGrid);
 			this->Controls->Add(this->printButton);
 			this->Controls->Add(this->exitButton);
